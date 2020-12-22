@@ -1,0 +1,47 @@
+{
+  "name": "react-helloworld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "checkType": "tsc",
+    "checkTypeSrc": "tsc -P ./src",
+    "eslint": "eslint --cache .",
+    "eslintSrc": "eslint --cache ./src",
+    "stylelint": "stylelint \"./src/**/*.less\"",
+    "checkCode": "yarn checkType & yarn checkTypeSrc & yarn eslint & yarn eslintSrc",
+    "build": "cross-env NODE_ENV=production node build/build.js",
+    "start": "yarn checkCode && cross-env NODE_ENV=development node build/start.js"
+  },
+  "browserslist": [
+    "ie >= 11"
+  ],
+  "author": "",
+  "license": "ISC",
+  "resolutions": {
+    "@types/react": "~16.9.23",
+    "@types/react-dom": "~16.9.5",
+    "@types/jest": "~26.0.3"
+  },
+  "dependencies": {
+    "@medux/react-web-router": "~2.0.0-beta.2.0",
+    "axios": "~0.21.0",
+    "react": "~17.0.1",
+    "react-dom": "~17.0.1",
+    "safe-require": "^1.0.4"
+  },
+  "devDependencies": {
+    "@medux/dev-pkg": "~2.0.3",
+    "@medux/dev-webpack": "~1.0.6",
+    "@types/jest": "~26.0.3",
+    "@types/react": "~16.9.23",
+    "@types/react-dom": "~16.9.5",
+    "husky": "~4.3.0",
+    "jest": "~26.6.3",
+    "less": "~3.12.2",
+    "less-loader": "~7.1.0",
+    "lint-staged": "~10.5.1",
+    "nanoid": "~3.1.20",
+    "typescript": "~4.0.5"
+  }
+}
