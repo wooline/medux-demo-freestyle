@@ -1,21 +1,34 @@
 const path = require('path');
-
+const chalk = require('chalk');
+const deepExtend = require('deep-extend');
 const webpack = require('webpack');
 const {patchRequire} = require('fs-monkey');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const {getSsrInjectPlugin} = require('@medux/dev-webpack/dist/plugin/ssr-inject');
 
-const envMode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
-const isProdModel = envMode === 'production';
-
 const SsrPlugin = getSsrInjectPlugin();
+const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
+const isProdModel = nodeEnv === 'production';
+const projEnv = process.env.PROJ_ENV || 'common';
+
 const rootPath = path.join(__dirname, '../');
 const srcPath = path.join(rootPath, './src');
-const distPath = path.join(rootPath, './dist');
+const distPath = path.join(rootPath, './dist', projEnv);
 const staticPath = path.join(rootPath, './public');
+const envPath = path.join(rootPath, './env');
+const configPath = path.join(envPath, projEnv);
+const commonConfig = require(path.join(envPath, 'common', 'config'));
+const currentConfig = require(path.join(configPath, 'config'));
+
+const projConfig = deepExtend({}, commonConfig[nodeEnv], currentConfig[nodeEnv]);
+
+console.log(`USE ENV:\n ${chalk.green(configPath)} \n ${chalk.blue(JSON.stringify(projConfig))}`);
+
+const {clientPublicPath} = projConfig;
 
 const modulesResolve = {
   extensions: ['.js', '.ts', '.tsx', '.json'],
@@ -29,7 +42,6 @@ const modulesResolve = {
  * devServer先查找静态资源，如果找不到会执行onAfterSetupMiddleware
  */
 
-const ClientPublicPath = '/client';
 const mediaPath = 'media';
 
 const fileLoader = {
@@ -37,6 +49,7 @@ const fileLoader = {
   loader: 'url-loader',
   options: {
     limit: 1024,
+    publicPath: clientPublicPath,
     name: `${mediaPath}/[name]${isProdModel ? '.[hash:8]' : ''}.[ext]`,
   },
 };
@@ -95,18 +108,21 @@ function getStyleLoader(cssModule, isServer, isLess) {
 
 const clientConfig = {
   name: 'client',
-  mode: envMode,
+  mode: nodeEnv,
   target: 'web',
   stats: 'minimal',
   // devtool: 'cheap-module-eval-source-map',
   entry: path.join(srcPath, './client'),
   output: {
-    publicPath: ClientPublicPath,
+    publicPath: clientPublicPath,
     path: path.join(distPath, './client'),
     hashDigestLength: 8,
     filename: isProdModel ? '[name].[contenthash].js' : '[name].js',
   },
   resolve: modulesResolve,
+  optimization: {
+    minimizer: ['...', new CssMinimizerPlugin()],
+  },
   module: {
     rules: [
       {
@@ -140,9 +156,13 @@ const clientConfig = {
     ],
   },
   plugins: [
+    new webpack.ProgressPlugin(),
     new ESLintPlugin(),
     new StylelintPlugin({files: 'src/**/*.less', cache: true}),
-    new HtmlWebpackPlugin({minify: false, template: path.join(staticPath, './index.html')}),
+    new webpack.DefinePlugin({
+      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
+    }),
+    new HtmlWebpackPlugin({minify: false, template: path.join(staticPath, './client/index.html')}),
     isProdModel &&
       new MiniCssExtractPlugin({
         ignoreOrder: true,
@@ -154,7 +174,7 @@ const clientConfig = {
 
 const serverConfig = {
   name: 'server',
-  mode: envMode,
+  mode: nodeEnv,
   target: 'node',
   stats: 'minimal',
   optimization: {
@@ -197,27 +217,34 @@ const serverConfig = {
       },
     ],
   },
-  plugins: [SsrPlugin],
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
+    }),
+    SsrPlugin,
+  ],
 };
 
 const devServerConfig = {
   port: 8080,
-  static: {serveIndex: false, publicPath: ClientPublicPath, directory: path.join(staticPath, './client')},
+  static: {serveIndex: false, publicPath: '/client', directory: path.join(staticPath, './client')},
   dev: {
-    publicPath: ClientPublicPath,
+    publicPath: '/client',
     serverSideRender: true,
   },
   onAfterSetupMiddleware: (server) => {
     server.use((req, res, next) => {
       const serverBundle = require(SsrPlugin.getEntryPath(res));
-      try {
-        serverBundle.default(req, res).then((str) => {
+      serverBundle
+        .default(req, res)
+        .then((str) => {
           res.end(str);
+        })
+        .catch((e) => {
+          res.status(500).end(e.toString());
         });
-      } catch (e) {
-        res.end(e.toString());
-      }
     });
   },
 };
-module.exports = {clientConfig, serverConfig, devServerConfig, distPath, mediaPath};
+module.exports = {clientConfig, serverConfig, devServerConfig, distPath, mediaPath, staticPath, configPath};

@@ -19,12 +19,14 @@ export const defaultRouteParams = {
 };
 export type RouteParams = typeof defaultRouteParams;
 
+function redirectOnServer(url: string) {
+  App.response.redirect(301, url);
+  throw 'redirect';
+}
+
 const pathnameRules: PathnameRules<RouteParams> = {
   '/$': () => {
-    if (isServer()) {
-      App.response.redirect(301, '/photos');
-      throw 'redirect';
-    }
+    App.response && redirectOnServer('/photos');
     return '/photos';
   },
   '/:page(photos|videos|myCenter)$': ({page}: {page: string}, params) => {

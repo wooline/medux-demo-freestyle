@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from '@medux/react-web-router';
+import Loading from 'assets/imgs/loading48x48.gif';
 
 interface StoreProps {
   subView: RouteState['params'];
@@ -11,7 +12,10 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView})
   return (
     <div>
       <div>header</div>
-      <div>main</div>
+      <div>
+        {Project.clientPublicPath}
+        <img src={Loading} alt="loading" />
+      </div>
       <div>footer</div>
     </div>
   );

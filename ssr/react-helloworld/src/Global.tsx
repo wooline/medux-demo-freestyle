@@ -3,6 +3,8 @@ import {exportApp, RootModuleFacade, FacadeExports} from '@medux/react-web-route
 import {ModuleGetter, RouteParams} from 'modules/config';
 import Loading from 'assets/imgs/loading48x48.gif';
 
+// @ts-ignore
+const Project = process.env.PROJ_CONFIG;
 interface Response {
   redirect(status: 301 | 302, path: string);
 }
@@ -29,6 +31,7 @@ declare global {
   type RouteState = APP['App']['state']['route'];
   const App: APP['App'];
   const Modules: APP['Modules'];
+  const Project: {clientPublicPath: string};
 
   // 初始环境变量放在/public/index.html中, 以防止被 webpack 打包
   const initEnv: {
@@ -45,4 +48,4 @@ declare global {
   Object.keys(data).forEach((key) => {
     g[key] = data[key];
   });
-})({App, Modules});
+})({App, Modules, Project});
