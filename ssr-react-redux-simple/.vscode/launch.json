@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "runDist",
+        "request": "launch",
+        "runtimeArgs": [
+          "run-script",
+          "runDist"
+        ],
+        "runtimeExecutable": "npm",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node"
+      },
+      {
+        "name": "debug",
+        "request": "launch",
+        "runtimeArgs": [
+          "run-script",
+          "debug"
+        ],
+        "runtimeExecutable": "npm",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node"
+      },
+      {
+        "name": "build",
+        "request": "launch",
+        "runtimeArgs": [
+          "run-script",
+          "build"
+        ],
+        "runtimeExecutable": "npm",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node"
+      },
+        {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/build/build.js",
+            "request": "launch",
+            "type": "node"
+        },
+    ]
+}
