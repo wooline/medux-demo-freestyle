@@ -1,10 +1,7 @@
 import React from 'react';
-import {connect, DocumentHead, Dispatch} from '@medux/react-web-router';
-import Loading from 'assets/imgs/loading48x48.gif';
+import {DocumentHead, Dispatch} from '@medux/react-web-router';
 
 interface StoreProps {
-  count: number;
-  age: number;
   subView: RouteState['params'];
 }
 interface OwnerProps {}
@@ -12,23 +9,21 @@ interface DispatchProps {
   dispatch: Dispatch;
 }
 
-const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({dispatch, count, age}) => {
+const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({dispatch}) => {
   return (
     <div>
       <DocumentHead>
         <title>photos</title>
         <style>{`body{background:blue}`}</style>
       </DocumentHead>
-      <div onClick={() => dispatch(Modules.photos.actions.add())}>
-        photos{count}, {age}
-      </div>
+      photos
     </div>
   );
 };
 
 function mapStateToProps(appState: APPState): StoreProps {
   const thisModule = appState.photos!;
-  return {subView: appState.route.params, count: thisModule.count, age: thisModule.age};
+  return {subView: appState.route.params};
 }
 
 export default connect(mapStateToProps)(React.memo(Component));

@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect, Switch, DocumentHead} from '@medux/react-web-router';
+import {Switch} from '@medux/react-web-router';
 import NotFound from 'components/NotFound';
 
 const Photos = App.loadView('photos', 'main');

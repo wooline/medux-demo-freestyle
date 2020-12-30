@@ -1,5 +1,5 @@
 import React from 'react';
-import {LoadingState, connect} from '@medux/react-web-router';
+import {LoadingState} from '@medux/react-web-router';
 import Loading from 'assets/imgs/loading48x48.gif';
 import styles from './index.m.less';
 

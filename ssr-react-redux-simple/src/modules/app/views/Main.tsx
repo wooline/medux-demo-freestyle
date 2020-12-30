@@ -1,7 +1,8 @@
 import React from 'react';
-import {connect, Switch} from '@medux/react-web-router';
+import {Switch} from '@medux/react-web-router';
 import GlobalLoading from 'components/GlobalLoading';
 import NotFound from 'components/NotFound';
+import {Provider} from 'react-redux';
 
 const MainLayout = App.loadView('mainLayout', 'main');
 
@@ -24,4 +25,12 @@ function mapStateToProps(appState: APPState): StoreProps {
   return {subView: appState.route.params};
 }
 
-export default connect(mapStateToProps)(React.memo(Component));
+const APP = connect(mapStateToProps)(React.memo(Component));
+
+export default function Root({store}) {
+  return (
+    <Provider store={store}>
+      <APP />
+    </Provider>
+  );
+}
