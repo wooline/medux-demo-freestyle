@@ -8,9 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
-const {getSsrInjectPlugin} = require('@medux/dev-webpack/dist/plugin/ssr-inject');
 
-const SsrPlugin = getSsrInjectPlugin();
 const debugMode = !!process.env.DEBUG;
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const isProdModel = nodeEnv === 'production';
@@ -36,13 +34,6 @@ const modulesResolve = {
   extensions: ['.js', '.ts', '.tsx', '.json'],
   modules: [srcPath, 'node_modules'],
 };
-/**
- * output.path 决定生成文件的物理path ,output.publicPath 仅决定html中引入的url
- * devServer只将第一个配置中的output.path设置为生成目录
- * devServer.dev.publicPath，为生成目录设置访问路径，默认为'/'，该参数直接传递给webpack-dev-middleware
- * devServer.static.publicPath 为静态目录设置访问路径，默认为'/'
- * devServer先查找静态资源，如果找不到会执行onAfterSetupMiddleware
- */
 
 const mediaPath = 'media';
 
@@ -73,11 +64,8 @@ function getLocalIdent(context, localIdentName, localName) {
   return generateScopedName(localName, context.resourcePath);
 }
 
-function getStyleLoader(cssModule, isServer, isLess) {
-  let base = [];
-  if (!isServer) {
-    base = isProdModel ? [{loader: MiniCssExtractPlugin.loader}] : [{loader: 'style-loader'}];
-  }
+function getStyleLoader(cssModule, isLess) {
+  const base = isProdModel ? [{loader: MiniCssExtractPlugin.loader}] : [{loader: 'style-loader'}];
   base.push({
     loader: 'css-loader',
     options: {
@@ -87,14 +75,11 @@ function getStyleLoader(cssModule, isServer, isLess) {
             // localIdentName: '[path][name]_[local]',
             getLocalIdent,
             localIdentContext: srcPath,
-            exportOnlyLocals: isServer,
           }
         : false,
     },
   });
-  if (!isServer) {
-    base.push('postcss-loader');
-  }
+  base.push('postcss-loader');
   if (isLess) {
     base.push({
       loader: 'less-loader',
@@ -114,7 +99,7 @@ const clientConfig = {
   target: 'web',
   stats: 'minimal',
   devtool,
-  entry: path.join(srcPath, './client'),
+  entry: path.join(srcPath),
   watchOptions: {
     ignored: /node_modules/,
   },
@@ -179,87 +164,12 @@ const clientConfig = {
         ignoreOrder: true,
         filename: '[name].[contenthash].css',
       }),
-    SsrPlugin,
   ].filter(Boolean),
-};
-
-const serverConfig = {
-  name: 'server',
-  mode: nodeEnv,
-  target: 'node',
-  stats: 'minimal',
-  optimization: {
-    minimize: false,
-  },
-  devtool,
-  watchOptions: {
-    ignored: /node_modules/,
-  },
-  entry: path.join(srcPath, './server'),
-  output: {
-    libraryTarget: 'commonjs2',
-    path: path.join(distPath, './server'),
-    hashDigestLength: 8,
-    filename: '[name].js',
-  },
-  resolve: {...modulesResolve, mainFields: ['jsnext:main', 'module', 'main']},
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: 'source-map-loader',
-      },
-      {
-        oneOf: [
-          {
-            test: /\.(tsx|ts)$/,
-            use: 'babel-loader',
-          },
-          {
-            test: /\.m\.less$/,
-            // include: pathsConfig.moduleSearch,
-            use: getStyleLoader(true, true),
-          },
-          {
-            test: /\.(less|css)$/,
-            // include: pathsConfig.moduleSearch,
-            use: 'null-loader',
-          },
-          fileLoader,
-        ],
-      },
-    ],
-  },
-  plugins: [
-    new webpack.ProgressPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
-    }),
-    SsrPlugin,
-  ],
 };
 
 const devServerConfig = {
   port: 8080,
-  static: {serveIndex: false, publicPath: clientPublicPath, directory: path.join(staticPath, './client')},
-  dev: {
-    publicPath: clientPublicPath,
-    serverSideRender: true,
-  },
-  onAfterSetupMiddleware: (server) => {
-    server.use((req, res, next) => {
-      const serverBundle = require(SsrPlugin.getEntryPath(res));
-      serverBundle
-        .default(req, res)
-        .then((str) => {
-          res.end(str);
-        })
-        .catch((e) => {
-          console.log(e);
-          res.status(500).end(e.toString());
-        });
-    });
-  },
+  static: {publicPath: clientPublicPath, directory: path.join(staticPath, './client')},
+  historyApiFallback: {index: '/client/index.html'},
 };
-module.exports = {clientConfig, serverConfig, devServerConfig, distPath, mediaPath, staticPath, configPath};
+module.exports = {clientConfig, devServerConfig, distPath, mediaPath, staticPath, configPath};

@@ -30,7 +30,7 @@
     "@types/react-dom": "~16.9.5"
   },
   "dependencies": {
-    "@medux/react-web-router": "~2.0.0-beta.3.2",
+    "@medux/react-web-router": "2.0.0-beta.3.2",
     "axios": "~0.21.0",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
