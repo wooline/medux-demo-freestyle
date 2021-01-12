@@ -1,17 +1,18 @@
 const webpack = require('webpack');
 const fs = require('fs-extra');
 const path = require('path');
-const {patch} = require('@medux/dev-utils/dist/patch-actions');
-const {clientConfig, distPath, staticPath, configPath} = require('./webpack.config');
+const {patch} = require('@medux/dev-utils/lib/patch-actions');
+const {clientWebpackConfig, projectConfigJson, distPath, publicPath, envPath} = require('./webpack.config');
 
 patch();
 
 fs.ensureDirSync(distPath);
 fs.emptyDirSync(distPath);
-fs.copySync(staticPath, distPath, {dereference: true});
-fs.copySync(configPath, distPath, {dereference: true});
+fs.copySync(publicPath, distPath, {dereference: true});
+fs.copySync(envPath, distPath, {dereference: true});
+fs.writeFileSync(path.join(distPath, 'config.js'), `module.exports = ${projectConfigJson}`);
 
-const compiler = webpack(clientConfig);
+const compiler = webpack(clientWebpackConfig);
 
 compiler.run((err, stats) => {
   if (err) throw err;

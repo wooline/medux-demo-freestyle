@@ -1,0 +1,11 @@
+import 'core-js/features/string/starts-with';
+import 'core-js/features/string/ends-with';
+import 'core-js/features/string/trim';
+import 'core-js/features/array/find';
+import 'core-js/features/array/find-index';
+import 'core-js/features/object/assign';
+import 'core-js/features/set';
+import 'core-js/features/map';
+import 'core-js/features/symbol';
+import 'core-js/features/promise';
+// import 'regenerator-runtime/runtime';

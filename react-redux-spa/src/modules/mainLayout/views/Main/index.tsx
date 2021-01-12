@@ -1,11 +1,12 @@
 import React from 'react';
 import {Switch} from '@medux/react-web-router';
 import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
-import GlobalLoading from 'components/GlobalLoading';
 import NotFound from 'components/NotFound';
-import {Provider} from 'react-redux';
+import Navigation from '../Navigation';
+import TabBar from '../TabBar';
+import styles from './index.m.less';
 
-const MainLayout = App.loadView('mainLayout', 'main');
+const Photos = App.loadView('photos', 'main');
 
 interface StoreProps {
   subView: RouteState['params'];
@@ -16,8 +17,11 @@ interface DispatchProps {}
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView}) => {
   return (
     <>
-      <Switch elseView={<NotFound />}>{subView.mainLayout && <MainLayout />}</Switch>
-      <GlobalLoading />
+      <Navigation />
+      <div className={styles.root}>
+        <Switch elseView={<NotFound />}>{subView.photos && <Photos />}</Switch>
+      </div>
+      <TabBar />
     </>
   );
 };
@@ -26,12 +30,4 @@ function mapStateToProps(appState: APPState): StoreProps {
   return {subView: appState.route.params};
 }
 
-const APP = connectRedux(mapStateToProps)(React.memo(Component));
-
-export default function Root({store}) {
-  return (
-    <Provider store={store}>
-      <APP />
-    </Provider>
-  );
-}
+export default connectRedux(mapStateToProps)(React.memo(Component));

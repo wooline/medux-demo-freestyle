@@ -1,5 +1,6 @@
 import React from 'react';
-import {DocumentHead, Dispatch, connectRedux} from '@medux/react-web-router';
+import {DocumentHead, Dispatch} from '@medux/react-web-router';
+import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
 
 interface StoreProps {
   subView: RouteState['params'];
@@ -16,7 +17,30 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({dispatch}
         <title>photos</title>
         <style>{`body{background:blue}`}</style>
       </DocumentHead>
-      photos
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
+      <p>photos</p>
     </div>
   );
 };

@@ -1,3 +1,3 @@
 module.exports = {
-  plugins: [require('autoprefixer')],
+  plugins: [require('postcss-flexbugs-fixes'), require('autoprefixer')],
 };

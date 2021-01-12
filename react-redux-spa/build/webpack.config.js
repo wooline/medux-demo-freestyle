@@ -1,6 +1,8 @@
 const path = require('path');
 const chalk = require('chalk');
+const fs = require('fs');
 const deepExtend = require('deep-extend');
+const jsonFormat = require('json-format');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
@@ -8,27 +10,33 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const createMockMiddleware = require('@medux/dev-utils/lib/api-mock');
 
 const debugMode = !!process.env.DEBUG;
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const isProdModel = nodeEnv === 'production';
-const projEnv = process.env.PROJ_ENV || 'common';
+const envName = process.env.PROJ_ENV || 'local';
 
 const rootPath = path.join(__dirname, '../');
 const srcPath = path.join(rootPath, './src');
-const distPath = path.join(rootPath, './dist', projEnv);
-const staticPath = path.join(rootPath, './public');
-const envPath = path.join(rootPath, './env');
-const configPath = path.join(envPath, projEnv);
-const commonConfig = require(path.join(envPath, 'common', 'config'));
-const currentConfig = require(path.join(configPath, 'config'));
+const distPath = path.join(rootPath, './dist', envName);
+const publicPath = path.join(rootPath, './public');
+const envPath = path.join(rootPath, './env', envName);
+const baseConfigPath = path.join(publicPath, 'config.js');
+const envConfigPath = path.join(envPath, 'config.js');
 
-const projConfig = deepExtend({}, commonConfig[nodeEnv], currentConfig[nodeEnv]);
+const baseConfig = require(baseConfigPath);
+const envConfig = fs.existsSync(envConfigPath) ? require(envConfigPath) : {};
+const projectConfig = deepExtend({}, baseConfig[nodeEnv], envConfig[nodeEnv]);
+const projectConfigJson = jsonFormat(projectConfig, {type: 'space'});
 // eslint-disable-next-line no-nested-ternary
 const devtool = isProdModel ? 'cheap-module-source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval';
-console.log(`env: ${nodeEnv}(debuger ${devtool}) \n ${chalk.green(configPath)} \n ${chalk.blue(JSON.stringify(projConfig))}`);
 
-const {clientPublicPath} = projConfig;
+console.info(`config: \n${chalk.blue(projectConfigJson)}`);
+console.info(`mode: ${chalk.magenta(nodeEnv)} \ndebuger: ${chalk.magenta(devtool)} \nenv: ${chalk.magenta(envName)}`);
+
+const {clientPublicPath, apiMock, apiProxy, global} = projectConfig;
 
 const modulesResolve = {
   extensions: ['.js', '.ts', '.tsx', '.json'],
@@ -93,13 +101,14 @@ function getStyleLoader(cssModule, isLess) {
   return base;
 }
 
-const clientConfig = {
+const clientWebpackConfig = {
   name: 'client',
   mode: nodeEnv,
-  target: 'web',
+  target: 'browserslist',
   stats: 'minimal',
   devtool,
-  entry: path.join(srcPath),
+  entry: srcPath,
+  performance: false,
   watchOptions: {
     ignored: /node_modules/,
   },
@@ -111,6 +120,7 @@ const clientConfig = {
   },
   resolve: modulesResolve,
   optimization: {
+    // minimize: false,
     minimizer: ['...', new CssMinimizerPlugin()],
   },
   module: {
@@ -124,21 +134,26 @@ const clientConfig = {
         oneOf: [
           {
             test: /\.(tsx|ts)$/,
-            use: 'babel-loader',
+            use: isProdModel
+              ? 'babel-loader'
+              : [
+                  {loader: '@medux/dev-webpack/lib/loader/module-hot-loader'},
+                  {loader: 'babel-loader', options: {plugins: [require.resolve('react-refresh/babel')]}},
+                ],
           },
           {
             test: /\.m\.less$/,
             // include: pathsConfig.moduleSearch,
-            use: getStyleLoader(true, false, true),
+            use: getStyleLoader(true, true),
           },
           {
             test: /\.less$/,
             // include: pathsConfig.moduleSearch,
-            use: getStyleLoader(false, false, true),
+            use: getStyleLoader(false, true),
           },
           {
             test: /\.css$/,
-            use: getStyleLoader(false, false, false),
+            use: getStyleLoader(false, false),
           },
           fileLoader,
         ],
@@ -149,14 +164,16 @@ const clientConfig = {
     new webpack.ProgressPlugin(),
     new ESLintPlugin(),
     new StylelintPlugin({files: 'src/**/*.less', cache: true}),
-    new webpack.DefinePlugin({
-      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
-    }),
-    new HtmlWebpackPlugin({minify: false, template: path.join(staticPath, './client/index.html')}),
+    // new webpack.DefinePlugin({}),
+    new HtmlWebpackPlugin({minify: false, inject: 'body', template: path.join(publicPath, './client/index.html')}),
     new HtmlReplaceWebpackPlugin([
       {
-        pattern: '@@ClientPublicPath@@',
+        pattern: '$$ClientPublicPath$$',
         replacement: clientPublicPath,
+      },
+      {
+        pattern: '$$ClientGlobalVar$$',
+        replacement: JSON.stringify(projectConfig.globalVar),
       },
     ]),
     isProdModel &&
@@ -164,12 +181,25 @@ const clientConfig = {
         ignoreOrder: true,
         filename: '[name].[contenthash].css',
       }),
+    !isProdModel && new ReactRefreshWebpackPlugin({overlay: false}),
+    !isProdModel && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean),
 };
 
+const mockMiddleware = createMockMiddleware(path.join(envPath, 'mock'));
+
 const devServerConfig = {
-  port: 8080,
-  static: {publicPath: clientPublicPath, directory: path.join(staticPath, './client')},
+  static: [
+    {publicPath: clientPublicPath, directory: path.join(envPath, './client')},
+    {publicPath: clientPublicPath, directory: path.join(publicPath, './client')},
+  ],
   historyApiFallback: {index: '/client/index.html'},
+  onBeforeSetupMiddleware: (server) => {
+    if (apiMock) {
+      Object.keys(apiProxy).forEach((key) => {
+        server.use(key, mockMiddleware);
+      });
+    }
+  },
 };
-module.exports = {clientConfig, devServerConfig, distPath, mediaPath, staticPath, configPath};
+module.exports = {clientWebpackConfig, devServerConfig, projectConfigJson, distPath, publicPath, envPath};
