@@ -6,9 +6,10 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    project: './tsconfig-build.json',
+    project: `${__dirname}/tsconfig.json`,
   },
   rules: {
+    'global-require': 'off',
   },
   ignorePatterns: ['/src','/dist','/mock'],
 };

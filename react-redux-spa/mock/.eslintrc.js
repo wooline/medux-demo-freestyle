@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
-  extends: ['plugin:@medux/recommended/react'],
+  extends: ['plugin:@medux/recommended/common'],
   env: {
     browser: false,
-    node: false,
+    node: true,
   },
   parserOptions: {
     project: `${__dirname}/tsconfig.json`,

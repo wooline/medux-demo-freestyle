@@ -25,6 +25,7 @@ const publicPath = path.join(rootPath, './public');
 const envPath = path.join(rootPath, './env', envName);
 const baseConfigPath = path.join(publicPath, 'config.js');
 const envConfigPath = path.join(envPath, 'config.js');
+const mockPath = path.join(rootPath, 'mock');
 
 const baseConfig = require(baseConfigPath);
 const envConfig = fs.existsSync(envConfigPath) ? require(envConfigPath) : {};
@@ -163,7 +164,7 @@ const clientWebpackConfig = {
   plugins: [
     new webpack.ProgressPlugin(),
     new ESLintPlugin(),
-    new StylelintPlugin({files: 'src/**/*.less', cache: true}),
+    new StylelintPlugin({files: '**/*.less', cache: true}),
     // new webpack.DefinePlugin({}),
     new HtmlWebpackPlugin({minify: false, inject: 'body', template: path.join(publicPath, './client/index.html')}),
     new HtmlReplaceWebpackPlugin([
@@ -186,7 +187,8 @@ const clientWebpackConfig = {
   ].filter(Boolean),
 };
 
-const mockMiddleware = createMockMiddleware(path.join(envPath, 'mock'));
+
+const mockMiddleware = createMockMiddleware(path.join(mockPath, 'index.ts'));
 
 const devServerConfig = {
   static: [
@@ -202,4 +204,4 @@ const devServerConfig = {
     }
   },
 };
-module.exports = {clientWebpackConfig, devServerConfig, projectConfigJson, distPath, publicPath, envPath};
+module.exports = {clientWebpackConfig, devServerConfig, projectConfigJson, distPath, publicPath, envPath, mockPath};
