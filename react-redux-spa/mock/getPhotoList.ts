@@ -1,22 +1,23 @@
 import {NextFunction, Request, Response} from 'express';
+import {GetPhotoList} from '~/api/photo';
 
 export = function (request: Request, response: Response, next: NextFunction) {
-  response.end({
+  const result: GetPhotoList['Response'] = {
     listSummary: {
-      page: 1,
+      pageCurrent: 1,
       pageSize: 5,
       totalItems: 10,
       totalPages: 2,
     },
-    listItems: [
+    list: [
       {
         id: '1',
-        title: '新加坡+吉隆坡+马六甲6或7日跟团游',
+        title: '新加坡+吉隆坡+马六甲6或7日跟团游9999',
         departure: '无锡',
         type: '跟团游',
         price: 2499,
         hot: 265,
-        coverUrl: 'imgs/1.jpg',
+        coverUrl: '/client/imgs/1.jpg',
       },
       {
         id: '2',
@@ -25,7 +26,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 1582,
         hot: 36,
-        coverUrl: 'imgs/2.jpg',
+        coverUrl: '/client/imgs/2.jpg',
       },
       {
         id: '3',
@@ -34,7 +35,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自驾游',
         price: 800,
         hot: 6895,
-        coverUrl: 'imgs/3.jpg',
+        coverUrl: '/client/imgs/3.jpg',
       },
       {
         id: '4',
@@ -43,7 +44,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自助游',
         price: 6581,
         hot: 562,
-        coverUrl: 'imgs/4.jpg',
+        coverUrl: '/client/imgs/4.jpg',
       },
       {
         id: '5',
@@ -52,8 +53,9 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 3075,
         hot: 882,
-        coverUrl: 'imgs/5.jpg',
+        coverUrl: '/client/imgs/5.jpg',
       },
     ],
-  });
+  };
+  response.json(result);
 };

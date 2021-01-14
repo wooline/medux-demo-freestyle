@@ -11,7 +11,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const createMockMiddleware = require('@medux/dev-utils/lib/api-mock');
+const {createMiddleware} = require('@medux/dev-utils/lib/api-mock');
 
 const debugMode = !!process.env.DEBUG;
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
@@ -25,7 +25,7 @@ const publicPath = path.join(rootPath, './public');
 const envPath = path.join(rootPath, './env', envName);
 const baseConfigPath = path.join(publicPath, 'config.js');
 const envConfigPath = path.join(envPath, 'config.js');
-const mockPath = path.join(rootPath, 'mock');
+const mockPath = path.join(rootPath, './mock');
 
 const baseConfig = require(baseConfigPath);
 const envConfig = fs.existsSync(envConfigPath) ? require(envConfigPath) : {};
@@ -163,7 +163,7 @@ const clientWebpackConfig = {
   },
   plugins: [
     new webpack.ProgressPlugin(),
-    new ESLintPlugin(),
+    new ESLintPlugin({extensions: ['ts', 'js', 'tsx', 'jsx']}),
     new StylelintPlugin({files: '**/*.less', cache: true}),
     // new webpack.DefinePlugin({}),
     new HtmlWebpackPlugin({minify: false, inject: 'body', template: path.join(publicPath, './client/index.html')}),
@@ -187,8 +187,7 @@ const clientWebpackConfig = {
   ].filter(Boolean),
 };
 
-
-const mockMiddleware = createMockMiddleware(path.join(mockPath, 'index.ts'));
+const mockMiddleware = createMiddleware(path.join(mockPath, 'index.ts'));
 
 const devServerConfig = {
   static: [

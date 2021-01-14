@@ -21,7 +21,7 @@ instance.interceptors.request.use((req) => {
 
 instance.interceptors.response.use(
   (response: AxiosResponse<any>) => {
-    return response.data;
+    return response;
   },
   (error: AxiosError<{message: string}>) => {
     const httpErrorCode = error.response ? error.response.status : 0;

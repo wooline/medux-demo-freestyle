@@ -10,13 +10,12 @@ fs.ensureDirSync(distPath);
 fs.emptyDirSync(distPath);
 fs.copySync(publicPath, distPath, {dereference: true});
 fs.copySync(envPath, distPath, {dereference: true});
-fs.copySync(mockPath, path.join(distPath, 'mock'), {dereference: true});
+fs.moveSync(path.join(distPath, '../mock'), path.join(distPath, 'mock'), {dereference: true});
 fs.writeFileSync(path.join(distPath, 'config.js'), `module.exports = ${projectConfigJson}`);
 
 const compiler = webpack(clientWebpackConfig);
 compiler.run((err, stats) => {
   if (err) throw err;
-
   process.stdout.write(
     `${stats.toString({
       colors: true,

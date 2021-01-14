@@ -9,6 +9,7 @@ export interface ModuleState extends BaseModuleState {
   };
 }
 
+const aaa = {message: 'dsfdsfsf'};
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
     super({
@@ -26,8 +27,6 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
 
   @effect(null)
   protected async [ActionTypes.Error](error: {message: string}) {
-    // eslint-disable-next-line no-alert
-    alert(error.message);
     throw error;
   }
 

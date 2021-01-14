@@ -5,7 +5,7 @@ import Loading from 'assets/imgs/loading48x48.gif';
 
 const DefLoading = () => (
   <div className="g-viewLoader">
-    <img src={Loading} alt="loading..." />
+    <img src={Loading} width="20" height="20" alt="loading..." />
   </div>
 );
 const DefError = () => <div className="g-viewLoader">error</div>;
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
   // eslint-disable-next-line
   patchActions(
     'ProxyActions',
-    '{"app":["Init","Loading","RouteParams","Update","initState"],"mainLayout":["Init","Loading","RouteParams","Update","initState"],"photos":["Init","Loading","RouteParams","Update","initState"]}'
+    '{"app":["Init","Loading","RouteParams","Update","initState"],"mainLayout":["Init","Loading","RouteParams","Update","initState"],"photos":["Init","Loading","RouteParams","Update","fetchList","initState","putList"]}'
   );
 }
 

@@ -1,4 +1,7 @@
+import request from 'common/request';
+
 export interface ListItem {
+  id: string;
   title: string;
   departure: string;
   type: string;
@@ -26,17 +29,19 @@ export type ItemView = 'detail' | '';
 
 export interface RouteParams {
   listView: ListView;
-  listParams: ListSearch;
-  _listVer: number;
+  listSearchPre: ListSearch;
+  _listVerPre: number;
   itemView: ItemView;
-  id: string;
-  _itemVer: number;
+  itemIdPre: string;
+  _itemVerPre: number;
 }
 
 class API {
-  // public searchList(args: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
-  //   return Promise.resolve('');
-  // }
+  public getList(args: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
+    return request.get<{list: ListItem[]; listSummary: ListSummary}>('/api/getPhotoList').then((res) => {
+      return res.data;
+    });
+  }
   // public getDetailItem(id: string): Promise<ItemDetail> {
   //   if (!id) {
   //     return Promise.resolve({} as any);

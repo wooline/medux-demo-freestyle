@@ -4,11 +4,11 @@
     "module": "CommonJS",
     "lib": ["es2018"],
     "types": ["node"],
-    "noEmit": true,
     "allowJs": true,
     "checkJs": false,
     "resolveJsonModule": true,
     "strict": true,
+    "importHelpers": true,
     "declaration": false,
     "alwaysStrict": true,
     "noImplicitAny": false,
@@ -16,12 +16,18 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
     "preserveConstEnums": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "outDir": "../dist/mock",
+    "paths": {
+      "~/*": ["../src/*"]
+    }
   },
   "include": ["./"],
   "exclude": []

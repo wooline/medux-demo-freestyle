@@ -6,10 +6,10 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    project: `${__dirname}/tsconfig.json`,
+    project: './tsconfig.json',
   },
   rules: {
-    'global-require': 'off',
+    'no-console': 'off'
   },
-  ignorePatterns: ['/src','/dist','/mock'],
+  ignorePatterns: ['/src','/dist','/mock', '/public/client/polyfill.js'],
 };

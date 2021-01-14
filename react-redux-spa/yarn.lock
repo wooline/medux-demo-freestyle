@@ -1205,22 +1205,21 @@
     babel-plugin-root-import "~6.6.0"
     core-js "^3.7.0"
 
-"@medux/core@^2.0.0-beta.3.6":
-  version "2.0.0-beta.3.6"
-  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.6.tgz#e1834493361b06294945e87a0e7c94475138dd32"
-  integrity sha512-uD4brY/2UU4u8o8UiYbMr65gbRGPde5CeogYaU24VbqQJGH5NqV7u/S63HBnatnS3XnXWFiXuHJ0pfKCQTgK3A==
+"@medux/core@^2.0.0-beta.3.7":
+  version "2.0.0-beta.3.7"
+  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.7.tgz#5f94d0349f48bff1a7e7a78acd166ec8c33361db"
+  integrity sha512-VIVQWq9ecFUKiP88BDAoDkrMLruhRPv2XdK9r3WQL+GfJPl6UWc8pmLTH0VJhBO92jWRAm0QyevXMSYddEeM3w==
   dependencies:
     "@babel/runtime" "~7.12.5"
     redux "^4.0.5"
 
-"@medux/dev-pkg@~2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@medux/dev-pkg/-/dev-pkg-2.0.7.tgz#cea1e9e87ee30c2b72b756092309f5c43de36ec2"
-  integrity sha512-qrgzuEcz71uXICOfETDOFvb1fc/3+Kv1582cAiY//NFw1ZlMOcOKjGsK4T4y+jaHP0sgp1i+bFMuygt3gixSmQ==
+"@medux/dev-pkg@~2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@medux/dev-pkg/-/dev-pkg-2.0.8.tgz#e4f2ecc7bc41e4f49efad020b72e61d8c07edeeb"
+  integrity sha512-gFNNmI4Gcc+j9Wqrq16IRYj1TyGlRQnMlYU9VW7ClabCboua9Obg6I8NOOm7a+HSczaaX7r36rFTO17kFhO4dw==
   dependencies:
     "@medux/babel-preset-recommended" "^1.0.5"
-    "@medux/dev-utils" "^3.0.3"
-    "@medux/eslint-plugin-recommended" "^1.0.7"
+    "@medux/eslint-plugin-recommended" "^1.0.8"
     "@medux/stylelint-config-recommended" "^1.0.0"
     "@types/fs-extra" "^9.0.0"
     chalk "^4.0.0"
@@ -1228,6 +1227,7 @@
     cross-env "^7.0.0"
     deep-extend "^0.6.0"
     eslint "^7.0.0"
+    fast-deep-equal "^3.1.0"
     fs-extra "^9.0.0"
     indexof "^0.0.1"
     json-format "^1.0.0"
@@ -1237,10 +1237,10 @@
     rimraf "^3.0.0"
     stylelint "^13.0.0"
 
-"@medux/dev-utils@^3.0.0", "@medux/dev-utils@^3.0.3":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@medux/dev-utils/-/dev-utils-3.0.4.tgz#da49c9945279be0b2e4abcef176a8526f0930961"
-  integrity sha512-PHlURmwQYnb1gDShmS+6tKEU8i+H/YeayMqiGY9pP/l3NxEA1vvbLZ9YUYTtwGfRxKee8ZDGFNSVJySq/n+Hfw==
+"@medux/dev-utils@^3.0.0", "@medux/dev-utils@~3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@medux/dev-utils/-/dev-utils-3.0.6.tgz#fde157087052c19b2d7337a5b789027507f1f060"
+  integrity sha512-2ZUgFOjwctj+0SsXWGK+1FaYl6lSe33lI3opBcgWFUarELm9UKt56axqJeQC4PoYVi/KIRpqu7waADfuHSZN4A==
   dependencies:
     chalk "^4.0.0"
     commander "^6.0.0"
@@ -1277,10 +1277,10 @@
     webpack-bundle-analyzer "^4.0.0"
     webpack-dev-server next
 
-"@medux/eslint-plugin-recommended@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@medux/eslint-plugin-recommended/-/eslint-plugin-recommended-1.0.7.tgz#761264d240f9bf5d132f0804b6d01f50d753cfed"
-  integrity sha512-xAeODZ3XHTp+YxORg10JC7UME7qocxLTBPs/OrP6/QRVWT5/4hJFdATfLt7nHM2GtCbxzlIsCRVHPXWucKlAvw==
+"@medux/eslint-plugin-recommended@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@medux/eslint-plugin-recommended/-/eslint-plugin-recommended-1.0.8.tgz#af8e375c8f7fbb89af0858a87f029c626ed4ba58"
+  integrity sha512-Q97F3TEO07yygwYHXMm9dS30c/wRXBoDw7jV86qyE2KHXbQYfbTcdMMUImKsMs1jRgp6ltvqTJiT8oJBUmpDtA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "~4.7.0"
     "@typescript-eslint/parser" "~4.7.0"
@@ -1293,22 +1293,22 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-web-router@2.0.0-beta.3.6":
-  version "2.0.0-beta.3.6"
-  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.6.tgz#5912f274b51e1c6a32d2516f1c5a955442f38ff8"
-  integrity sha512-O+LsDSWfu34NWvWmFHCxHC9ODqPTLjU3b4UjI/3ID8AIEvkZTas6S6l9voS43l0TlFkKuUxdZr3ua24UPRLSCQ==
+"@medux/react-web-router@2.0.0-beta.3.7":
+  version "2.0.0-beta.3.7"
+  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.7.tgz#b548f0733813827d6d3117c512ff31efb8275bcb"
+  integrity sha512-10oSKLzvi6tXXVKtaKa3rF5Jwa/SQhRibsHRGts2QX0TVVs6pQ2GzIDdvNGrrvfaC3sxSiRcW/VWI1HZPBQR8g==
   dependencies:
-    "@medux/core" "^2.0.0-beta.3.6"
-    "@medux/route-plan-a" "^2.0.0-beta.3.6"
-    "@medux/web" "^2.0.0-beta.3.6"
+    "@medux/core" "^2.0.0-beta.3.7"
+    "@medux/route-plan-a" "^2.0.0-beta.3.7"
+    "@medux/web" "^2.0.0-beta.3.7"
 
-"@medux/route-plan-a@^2.0.0-beta.3.6":
-  version "2.0.0-beta.3.6"
-  resolved "https://registry.yarnpkg.com/@medux/route-plan-a/-/route-plan-a-2.0.0-beta.3.6.tgz#3ee7197cbc77ca21ca88e8ef1cd17fb919771de7"
-  integrity sha512-ualiXYZm2w+nRDXcehdJC0E6FQ9MAbvQTzDUsdm1TCi5gC7M8KJlTaoBSSxDLjJaalud4Kmp9mXqA3XJc6/FKA==
+"@medux/route-plan-a@^2.0.0-beta.3.7":
+  version "2.0.0-beta.3.7"
+  resolved "https://registry.yarnpkg.com/@medux/route-plan-a/-/route-plan-a-2.0.0-beta.3.7.tgz#cced46ccd58c2595a9cfee5c76522e5a1c0fb9a7"
+  integrity sha512-wErHUetkJjkJ8XqwqHxtwKRQ8xwgTlg5fej2sdxhLydJeGS3NkOA+YsVG66z6F30UimWIbGR9l98Hh0DF6+8aQ==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.6"
+    "@medux/core" "^2.0.0-beta.3.7"
     path-to-regexp "~6.2.0"
 
 "@medux/stylelint-config-recommended@^1.0.0":
@@ -1321,14 +1321,14 @@
     stylelint-declaration-block-no-ignored-properties "~2.3.0"
     stylelint-prettier "~1.1.2"
 
-"@medux/web@^2.0.0-beta.3.6":
-  version "2.0.0-beta.3.6"
-  resolved "https://registry.yarnpkg.com/@medux/web/-/web-2.0.0-beta.3.6.tgz#1fd98531280c04cab08b8a794fb28bf78cd1d101"
-  integrity sha512-kAurAaZx+N7rjFMSUZhs2NYmqchwXX4ZQob1NMuEEN0zsmlP4VES42l78LI/pFj4zKfvktJTiB08jB4v14Tghw==
+"@medux/web@^2.0.0-beta.3.7":
+  version "2.0.0-beta.3.7"
+  resolved "https://registry.yarnpkg.com/@medux/web/-/web-2.0.0-beta.3.7.tgz#6fcfd399ef231a6a0d4d107605798b58629fffc7"
+  integrity sha512-6odD9l5jSZVud5Cdln+pDiPTp5bZ/HpkHL/vaXYET6ayJGV3aLqxkmOpucGsZr5TCT7PzApby9a3Teyobuzx/A==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.6"
-    "@medux/route-plan-a" "^2.0.0-beta.3.6"
+    "@medux/core" "^2.0.0-beta.3.7"
+    "@medux/route-plan-a" "^2.0.0-beta.3.7"
     "@types/history" "~4.7.7"
     history "~4.10.1"
 
@@ -1400,9 +1400,9 @@
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
 "@sinonjs/commons@^1.7.0":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
-  integrity sha512-892K+kWUUi3cl+LlqEWIDrhvLgdL79tECi8JZUyq6IviKy/DNhuzCRlbHUjxK89f4ypPMMaFnFuR9Ie6DoIMsw==
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.2.tgz#858f5c4b48d80778fde4b9d541f27edc0d56488b"
+  integrity sha512-sruwd86RJHdsVf/AtBoijDmUqJp3B6hF/DGC23C+JaegnDHaZyewCjoVGTdg3J0uz3Zs7NnIT05OBOmML72lQw==
   dependencies:
     type-detect "4.0.8"
 
@@ -2876,9 +2876,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001173:
-  version "1.0.30001174"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001174.tgz#0f2aca2153fd88ceb07a2bb982fc2acb787623c4"
-  integrity sha512-tqClL/4ThQq6cfFXH3oJL4rifFBeM6gTkphjao5kgwMaW9yn0tKgQLAEfKzDwj6HQWCB/aWo8kTFlSvIN8geEA==
+  version "1.0.30001177"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001177.tgz#2c3b384933aafda03e29ccca7bb3d8c3389e1ece"
+  integrity sha512-6Ld7t3ifCL02jTj3MxPMM5wAYjbo4h/TAQGFTgv1inihP1tWnWp8mxxT4ut4JBEHLbpFXEXJJQ119JCJTBkYDw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3990,9 +3990,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.634:
-  version "1.3.636"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.636.tgz#6980bd90813a9fb744e43f5e848f16cea4930058"
-  integrity sha512-Adcvng33sd3gTjNIDNXGD1G4H6qCImIy2euUJAQHtLNplEKU5WEz5KRJxupRNIIT8sD5oFZLTKBWAf12Bsz24A==
+  version "1.3.639"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.639.tgz#0a27e3018ae3acf438a14a1dd4e41db4b8ab764e"
+  integrity sha512-bwl6/U6xb3d3CNufQU9QeO1L32ueouFwW4bWANSwdXR7LVqyLzWjNbynoKNfuC38QFB5Qn7O0l2KLqBkcXnC3Q==
 
 emittery@^0.7.1:
   version "0.7.2"
@@ -4026,10 +4026,10 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-enhanced-resolve@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.6.0.tgz#ad19a1665f230a6e384724a30acf3f7332b2b3f0"
-  integrity sha512-C3GGDfFZmqUa21o10YRKbZN60DPl0HyXKXxoEnQMWso9u7KMU23L7CBHfr/rVxORddY/8YQZaU2MZ1ewTS8Pcw==
+enhanced-resolve@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.7.0.tgz#525c5d856680fbd5052de453ac83e32049958b5c"
+  integrity sha512-6njwt/NsZFUKhM6j9U8hzVyD4E4r0x7NQzhTCbcWOJ0IQjNSAoalWmb0AE51Wn+fwan5qVESWi7t2ToBxs9vrw==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -4106,6 +4106,11 @@ es-abstract@^1.18.0-next.1:
     object.assign "^4.1.1"
     string.prototype.trimend "^1.0.1"
     string.prototype.trimstart "^1.0.1"
+
+es-module-lexer@^0.3.26:
+  version "0.3.26"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.3.26.tgz#7b507044e97d5b03b01d4392c74ffeb9c177a83b"
+  integrity sha512-Va0Q/xqtrss45hWzP8CZJwzGSZJjDM5/MJRE3IXXnUCcVLElR9BRaE9F62BopysASyc4nM3uwhSW7FFB9nlWAA==
 
 es-to-primitive@^1.2.1:
   version "1.2.1"
@@ -4644,7 +4649,7 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fast-deep-equal@^3.1.1:
+fast-deep-equal@^3.1.0, fast-deep-equal@^3.1.1:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
@@ -7580,9 +7585,9 @@ min-indent@^1.0.0:
   integrity sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==
 
 mini-css-extract-plugin@^1.3.0:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-1.3.3.tgz#7802e62b34199aa7d1a62e654395859a836486a0"
-  integrity sha512-7lvliDSMiuZc81kI+5/qxvn47SCM7BehXex3f2c6l/pR3Goj58IQxZh9nuPQ3AkGQgoETyXuIqLDaO5Oa0TyBw==
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-1.3.4.tgz#706e69632cdcdb8b15bf8e638442a0dba304a9c8"
+  integrity sha512-dNjqyeogUd8ucUgw5sxm1ahvSfSUgef7smbmATRSbDm4EmNx5kQA6VdUEhEeCKSjX6CTYjb5vxgMUvRjqP3uHg==
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
@@ -11287,9 +11292,9 @@ webpack-bundle-analyzer@^4.0.0:
     ws "^7.3.1"
 
 webpack-dev-middleware@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-4.0.3.tgz#71a846f825cf44999edd3a58a07d8cafae0c2283"
-  integrity sha512-mjZrPmR6b55A6nHZY6ylh+ncwK7PXbx7KJ4uU02ThXPFlpDj/PN8YlCl12uhe4OZU94lx1rjy9a4UH99IZbWQA==
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-4.0.4.tgz#ebe1e4ad2cca8d33389f89b25d2b7ef7d621bc3f"
+  integrity sha512-6dKe7cufta6TXUwcQqFJNDoGtS3ZdlfQstPJM22V5aNT8qTVd2bWwfEC62vOQOh19eazLDczU+82FgxLHYCmlQ==
   dependencies:
     colorette "^1.2.1"
     mem "^8.0.0"
@@ -11350,9 +11355,9 @@ webpack-sources@^2.1.1:
     source-map "^0.6.1"
 
 webpack@^5.0.0:
-  version "5.13.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.13.0.tgz#275351b043bd212562f4390e903619d07d5a2fcf"
-  integrity sha512-NPhMEtfhSVegp1FNPkCM1MPygDm0GHwpreG10dh//0Gr0epfB0br9nlgEfxSghxJqrQ7j9XzgO91CGGLWZiHeA==
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.14.0.tgz#cdfe9286d14ddc2bb348afabc1d910d166f3c47f"
+  integrity sha512-PFtfqXIKT6EG+k4L7d9whUPacN2XvxlUMc8NAQvN+sF9G8xPQqrCDGDiXbAdyGNz+/OP6ioxnUKybBBZ1kp/2A==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.45"
@@ -11362,7 +11367,8 @@ webpack@^5.0.0:
     acorn "^8.0.4"
     browserslist "^4.14.5"
     chrome-trace-event "^1.0.2"
-    enhanced-resolve "^5.6.0"
+    enhanced-resolve "^5.7.0"
+    es-module-lexer "^0.3.26"
     eslint-scope "^5.1.1"
     events "^3.2.0"
     glob-to-regexp "^0.4.1"

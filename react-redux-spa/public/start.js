@@ -3,7 +3,7 @@ const express = require('express');
 const chalk = require('chalk');
 const fallback = require('express-history-api-fallback');
 const {createProxyMiddleware} = require('http-proxy-middleware');
-const createMockMiddleware = require('@medux/dev-utils/lib/api-mock');
+const {createMiddleware} = require('@medux/dev-utils/lib/api-mock');
 const config = require('./config');
 
 const apiProxy = config.apiProxy || {};
@@ -12,7 +12,7 @@ const [, , port] = server.split(/:\/*/);
 
 const staticPath = path.join(__dirname, './client');
 
-const mockMiddleware = createMockMiddleware(path.join(__dirname, 'mock'));
+const mockMiddleware = createMiddleware(path.join(__dirname, 'mock/index.js'));
 const app = express();
 app.use('/client', express.static(staticPath));
 Object.keys(apiProxy).forEach((key) => {
