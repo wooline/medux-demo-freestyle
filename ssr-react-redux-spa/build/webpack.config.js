@@ -49,11 +49,10 @@ const modulesResolve = {
   modules: [srcPath, 'node_modules'],
 };
 /**
- * output.path 决定生成文件的物理path ,output.publicPath 仅决定html中引入的url
- * devServer只将第一个配置中的output.path设置为生成目录
- * devServer.dev.publicPath，为生成目录设置访问路径，默认为'/'，该参数直接传递给webpack-dev-middleware
+ * webpackConfig.output.path 决定生成文件的物理path ,output.publicPath 仅决定html中引入的url
+ * devServer只将第一个 webpackConfig 中的output.path设置为生成目录
+ * devServer.dev.publicPath，为webpackConfig生成目录设置访问路径，默认为'/'，该参数直接传递给webpack-dev-middleware
  * devServer.static.publicPath 为静态目录设置访问路径，默认为'/'
- * devServer先查找静态资源，如果找不到会执行onAfterSetupMiddleware
  */
 
 const mediaPath = 'media';
