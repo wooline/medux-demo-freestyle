@@ -28,7 +28,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
             </div>
             <div className="desc">
               <span className="hot">
-                人气(<strong>{item.hot}</strong>)
+                人气6(<strong>{item.hot}</strong>)
               </span>
               <em className="price">
                 <span className="unit">￥</span>

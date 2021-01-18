@@ -1,19 +1,12 @@
 import React from 'react';
+import {Request, Response} from 'express';
 import {exportApp, RootModuleFacade, FacadeExports, patchActions} from '@medux/react-web-router';
 import {ModuleGetter, RouteParams} from 'modules/config';
 import Loading from 'assets/imgs/loading48x48.gif';
 
-// @ts-ignore
-const Project = process.env.PROJ_CONFIG;
-interface Response {
-  redirect(status: 301 | 302, path: string);
-}
-interface Request {
-  url: string;
-}
 const DefLoading = () => (
   <div className="g-viewLoader">
-    <img src={Loading} alt="loading..." />
+    <img src={Loading} width="20" height="20" alt="loading..." />
   </div>
 );
 const DefError = () => <div className="g-viewLoader">error</div>;
@@ -27,7 +20,7 @@ if (process.env.NODE_ENV === 'production') {
   // eslint-disable-next-line
   patchActions(
     'ProxyActions',
-    '{"app":["Init","Loading","RouteParams","Update","initState"],"mainLayout":["Init","Loading","RouteParams","Update","initState"],"photos":["Init","Loading","RouteParams","Update","initState"]}'
+    '{"app":["Init","Loading","RouteParams","Update","initState"],"mainLayout":["Init","Loading","RouteParams","Update","initState"],"photos":["Init","Loading","RouteParams","Update","fetchList","initState","putList"]}'
   );
 }
 
@@ -43,15 +36,7 @@ declare global {
   type RouteState = APP['App']['state']['route'];
   const App: APP['App'];
   const Modules: APP['Modules'];
-  const Project: {clientPublicPath: string};
-
-  // 初始环境变量放在/public/index.html中, 以防止被 webpack 打包
-  const initEnv: {
-    version: string;
-    staticPath: string;
-    apiServerPath: {[key: string]: string};
-    production: boolean;
-  };
+  const ENV: {apiMaps: {[key: string]: string}};
 }
 
 ((data: {[key: string]: any}) => {
@@ -60,4 +45,4 @@ declare global {
   Object.keys(data).forEach((key) => {
     g[key] = data[key];
   });
-})({App, Modules, Project});
+})({App, Modules});

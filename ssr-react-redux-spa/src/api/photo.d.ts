@@ -1,11 +1,11 @@
 export interface ListItem {
+  id: string;
   title: string;
   departure: string;
   type: string;
   hot: number;
   price: number;
   coverUrl: string;
-  comments: number;
 }
 export interface ListSummary {
   pageCurrent: number;
@@ -21,14 +21,9 @@ export interface ListSearch {
   sorterField?: string;
 }
 
-export type ListView = 'list' | '';
-export type ItemView = 'detail' | '';
-
-export interface RouteParams {
-  listView: ListView;
-  listParams: ListSearch;
-  _listVer: number;
-  itemView: ItemView;
-  id: string;
-  _itemVer: number;
+export interface API<Req, Res> {
+  Request: Req;
+  Response: Res;
 }
+
+export type GetPhotoList = API<ListSearch, {list: ListItem[]; listSummary: ListSummary}>;

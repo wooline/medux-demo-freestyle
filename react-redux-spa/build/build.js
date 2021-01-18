@@ -25,5 +25,4 @@ compiler.run((err, stats) => {
       chunkModules: false,
     })}\n\n`
   );
-  process.exit();
 });

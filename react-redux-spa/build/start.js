@@ -2,11 +2,11 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const {patch} = require('@medux/dev-utils/lib/patch-actions');
 const chalk = require('chalk');
-const {clientWebpackConfig, devServerConfig} = require('./webpack.config');
+const {clientWebpackConfig, devServerConfig, projectConfig} = require('./webpack.config');
 
-// patch();
+patch();
 
-const server = 'http://localhost:3000';
+const server = projectConfig.devServer;
 const [, , port] = server.split(':');
 devServerConfig.port = port;
 

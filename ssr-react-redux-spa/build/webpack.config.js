@@ -1,6 +1,8 @@
 const path = require('path');
 const chalk = require('chalk');
+const fs = require('fs');
 const deepExtend = require('deep-extend');
+const jsonFormat = require('json-format');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
@@ -8,29 +10,39 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
-const {getSsrInjectPlugin} = require('@medux/dev-webpack/dist/plugin/ssr-inject');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const {createMiddleware} = require('@medux/dev-utils/lib/api-mock');
+const {getSsrInjectPlugin} = require('@medux/dev-webpack/lib/plugin/ssr-inject');
 
 const SsrPlugin = getSsrInjectPlugin();
 const debugMode = !!process.env.DEBUG;
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const isProdModel = nodeEnv === 'production';
-const projEnv = process.env.PROJ_ENV || 'common';
+const envName = process.env.PROJ_ENV || 'local';
 
 const rootPath = path.join(__dirname, '../');
 const srcPath = path.join(rootPath, './src');
-const distPath = path.join(rootPath, './dist', projEnv);
-const staticPath = path.join(rootPath, './public');
-const envPath = path.join(rootPath, './env');
-const configPath = path.join(envPath, projEnv);
-const commonConfig = require(path.join(envPath, 'common', 'config'));
-const currentConfig = require(path.join(configPath, 'config'));
+const distPath = path.join(rootPath, './dist', envName);
+const publicPath = path.join(rootPath, './public');
+const envPath = path.join(rootPath, './env', envName);
+const mockPath = path.join(rootPath, './mock');
+const baseConfigPath = path.join(publicPath, 'config.js');
+const envConfigPath = path.join(envPath, 'config.js');
 
-const projConfig = deepExtend({}, commonConfig[nodeEnv], currentConfig[nodeEnv]);
+const baseConfig = require(baseConfigPath);
+const envConfig = fs.existsSync(envConfigPath) ? require(envConfigPath) : {};
+const projectConfig = deepExtend({}, baseConfig[nodeEnv], envConfig[nodeEnv]);
+const projectConfigJson = jsonFormat(projectConfig, {type: 'space'});
 // eslint-disable-next-line no-nested-ternary
-const devtool = isProdModel ? 'cheap-module-source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval';
-console.log(`env: ${nodeEnv}(debuger ${devtool}) \n ${chalk.green(configPath)} \n ${chalk.blue(JSON.stringify(projConfig))}`);
+const clientDevtool = isProdModel ? 'source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval'; // TerserWebpackPlugin 仅支持 source-map
+// eslint-disable-next-line no-nested-ternary
+const serverDevtool = isProdModel ? 'cheap-module-source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval';
+console.info(`config: \n${chalk.blue(projectConfigJson)}`);
+console.info(`mode: ${chalk.magenta(nodeEnv)} \ndebuger: ${chalk.magenta([clientDevtool, serverDevtool])} \nenv: ${chalk.magenta(envName)}`);
 
-const {clientPublicPath} = projConfig;
+const {clientPublicPath, apiMock, apiProxy} = projectConfig;
+
+global.ENV = projectConfig.serverGlobalVar;
 
 const modulesResolve = {
   extensions: ['.js', '.ts', '.tsx', '.json'],
@@ -108,12 +120,12 @@ function getStyleLoader(cssModule, isServer, isLess) {
   return base;
 }
 
-const clientConfig = {
+const clientWebpackConfig = {
   name: 'client',
   mode: nodeEnv,
-  target: 'web',
+  target: 'browserslist',
   stats: 'minimal',
-  devtool,
+  devtool: clientDevtool,
   entry: path.join(srcPath, './client'),
   watchOptions: {
     ignored: /node_modules/,
@@ -139,7 +151,12 @@ const clientConfig = {
         oneOf: [
           {
             test: /\.(tsx|ts)$/,
-            use: 'babel-loader',
+            use: isProdModel
+              ? 'babel-loader'
+              : [
+                  {loader: '@medux/dev-webpack/lib/loader/module-hot-loader'},
+                  {loader: 'babel-loader', options: {plugins: [require.resolve('react-refresh/babel')]}},
+                ],
           },
           {
             test: /\.m\.less$/,
@@ -162,16 +179,18 @@ const clientConfig = {
   },
   plugins: [
     new webpack.ProgressPlugin(),
-    new ESLintPlugin(),
-    new StylelintPlugin({files: 'src/**/*.less', cache: true}),
-    new webpack.DefinePlugin({
-      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
-    }),
-    new HtmlWebpackPlugin({minify: false, template: path.join(staticPath, './client/index.html')}),
+    new ESLintPlugin({extensions: ['ts', 'js', 'tsx', 'jsx']}),
+    new StylelintPlugin({files: '**/*.less', cache: true}),
+    // new webpack.DefinePlugin({}),
+    new HtmlWebpackPlugin({minify: false, inject: 'body', template: path.join(publicPath, './client/index.html')}),
     new HtmlReplaceWebpackPlugin([
       {
-        pattern: '@@ClientPublicPath@@',
+        pattern: '$$ClientPublicPath$$',
         replacement: clientPublicPath,
+      },
+      {
+        pattern: '$$ClientGlobalVar$$',
+        replacement: JSON.stringify(projectConfig.clientGlobalVar),
       },
     ]),
     isProdModel &&
@@ -179,11 +198,13 @@ const clientConfig = {
         ignoreOrder: true,
         filename: '[name].[contenthash].css',
       }),
+    !isProdModel && new ReactRefreshWebpackPlugin({overlay: false}),
+    !isProdModel && new webpack.HotModuleReplacementPlugin(),
     SsrPlugin,
   ].filter(Boolean),
 };
 
-const serverConfig = {
+const serverWebpackConfig = {
   name: 'server',
   mode: nodeEnv,
   target: 'node',
@@ -191,7 +212,7 @@ const serverConfig = {
   optimization: {
     minimize: false,
   },
-  devtool,
+  devtool: serverDevtool,
   watchOptions: {
     ignored: /node_modules/,
   },
@@ -231,35 +252,61 @@ const serverConfig = {
       },
     ],
   },
-  plugins: [
-    new webpack.ProgressPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.PROJ_CONFIG': JSON.stringify(projConfig),
-    }),
-    SsrPlugin,
-  ],
+  plugins: [new webpack.ProgressPlugin(), SsrPlugin],
 };
 
+const mockMiddleware = createMiddleware(path.join(mockPath, 'index.ts'));
+const passUrls = [/\w+.hot-update.\w+$/];
+
 const devServerConfig = {
-  port: 8080,
-  static: {serveIndex: false, publicPath: clientPublicPath, directory: path.join(staticPath, './client')},
+  static: [
+    {publicPath: clientPublicPath, directory: path.join(envPath, './client')},
+    {publicPath: clientPublicPath, directory: path.join(publicPath, './client'), staticOptions: {fallthrough: false}},
+  ],
   dev: {
     publicPath: clientPublicPath,
     serverSideRender: true,
   },
+  onBeforeSetupMiddleware: (server) => {
+    if (apiMock) {
+      Object.keys(apiProxy).forEach((key) => {
+        server.use(key, mockMiddleware);
+      });
+    }
+  },
   onAfterSetupMiddleware: (server) => {
     server.use((req, res, next) => {
-      const serverBundle = require(SsrPlugin.getEntryPath(res));
-      serverBundle
-        .default(req, res)
-        .then((str) => {
-          res.end(str);
-        })
-        .catch((e) => {
-          console.log(e);
+      if (passUrls.some((reg) => reg.test(req.url))) {
+        console.log('pass', req.url);
+        next();
+      } else {
+        console.log('render', req.url);
+        const serverBundle = require(SsrPlugin.getEntryPath(res));
+        try {
+          serverBundle
+            .default(req, res)
+            .then((str) => {
+              res.end(str);
+            })
+            .catch((e) => {
+              res.status(500).end(e.toString());
+            });
+        } catch (e) {
           res.status(500).end(e.toString());
-        });
+        }
+      }
     });
   },
 };
-module.exports = {clientConfig, serverConfig, devServerConfig, distPath, mediaPath, staticPath, configPath};
+module.exports = {
+  clientWebpackConfig,
+  serverWebpackConfig,
+  devServerConfig,
+  mediaPath,
+  projectConfig,
+  projectConfigJson,
+  distPath,
+  publicPath,
+  envPath,
+  mockPath,
+};

@@ -16,6 +16,7 @@ const apiMaps = Object.keys(apiProxy).reduce((map, key) => {
   return map;
 }, {});
 const base = {
+  devServer: 'http://localhost:4000',
   clientPublicPath: '/client/',
   apiMock: true,
   apiProxy,

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Switch, connectRedux} from '@medux/react-web-router';
+import {Switch} from '@medux/react-web-router';
+import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
 import GlobalLoading from 'components/GlobalLoading';
 import NotFound from 'components/NotFound';
 import {Provider} from 'react-redux';
@@ -14,10 +15,10 @@ interface DispatchProps {}
 
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView}) => {
   return (
-    <div>
+    <>
       <Switch elseView={<NotFound />}>{subView.mainLayout && <MainLayout />}</Switch>
       <GlobalLoading />
-    </div>
+    </>
   );
 };
 

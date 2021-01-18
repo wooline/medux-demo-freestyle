@@ -1,8 +1,6 @@
 import React from 'react';
-import {Switch, connectRedux} from '@medux/react-web-router';
-import NotFound from 'components/NotFound';
-
-const Photos = App.loadView('photos', 'main');
+import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
+import styles from './index.m.less';
 
 interface StoreProps {
   subView: RouteState['params'];
@@ -12,12 +10,10 @@ interface DispatchProps {}
 
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView}) => {
   return (
-    <div>
-      <div>header</div>
-      <div>
-        <Switch elseView={<NotFound />}>{subView.photos && <Photos />}</Switch>
-      </div>
-      <div>footer</div>
+    <div className={`${styles.root} g-doc-width`}>
+      <span>aa3</span>
+      <span>bb</span>
+      <span>cc</span>
     </div>
   );
 };

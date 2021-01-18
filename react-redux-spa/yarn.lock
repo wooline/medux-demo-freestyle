@@ -1293,10 +1293,10 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-web-router@2.0.0-beta.3.7":
-  version "2.0.0-beta.3.7"
-  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.7.tgz#b548f0733813827d6d3117c512ff31efb8275bcb"
-  integrity sha512-10oSKLzvi6tXXVKtaKa3rF5Jwa/SQhRibsHRGts2QX0TVVs6pQ2GzIDdvNGrrvfaC3sxSiRcW/VWI1HZPBQR8g==
+"@medux/react-web-router@2.0.0-beta.3.8":
+  version "2.0.0-beta.3.8"
+  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.8.tgz#7004432ee04e5ae84eeaab5f0b3f9e12405278bc"
+  integrity sha512-392100paI+6C11dt7qs/le5Q9QyMjxV9ONN7UeNhnwSLEwX244hNCVl6lbaA+ztkjyR4VxvZO6IrTUbPn0wp7w==
   dependencies:
     "@medux/core" "^2.0.0-beta.3.7"
     "@medux/route-plan-a" "^2.0.0-beta.3.7"

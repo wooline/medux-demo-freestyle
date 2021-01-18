@@ -23,9 +23,9 @@ const srcPath = path.join(rootPath, './src');
 const distPath = path.join(rootPath, './dist', envName);
 const publicPath = path.join(rootPath, './public');
 const envPath = path.join(rootPath, './env', envName);
+const mockPath = path.join(rootPath, './mock');
 const baseConfigPath = path.join(publicPath, 'config.js');
 const envConfigPath = path.join(envPath, 'config.js');
-const mockPath = path.join(rootPath, './mock');
 
 const baseConfig = require(baseConfigPath);
 const envConfig = fs.existsSync(envConfigPath) ? require(envConfigPath) : {};
@@ -192,7 +192,7 @@ const mockMiddleware = createMiddleware(path.join(mockPath, 'index.ts'));
 const devServerConfig = {
   static: [
     {publicPath: clientPublicPath, directory: path.join(envPath, './client')},
-    {publicPath: clientPublicPath, directory: path.join(publicPath, './client')},
+    {publicPath: clientPublicPath, directory: path.join(publicPath, './client'), staticOptions: {fallthrough: false}},
   ],
   historyApiFallback: {index: '/client/index.html'},
   onBeforeSetupMiddleware: (server) => {
@@ -203,4 +203,4 @@ const devServerConfig = {
     }
   },
 };
-module.exports = {clientWebpackConfig, devServerConfig, projectConfigJson, distPath, publicPath, envPath, mockPath};
+module.exports = {clientWebpackConfig, devServerConfig, projectConfigJson, projectConfig, distPath, publicPath, envPath, mockPath};

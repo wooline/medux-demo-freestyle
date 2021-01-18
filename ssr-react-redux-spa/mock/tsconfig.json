@@ -3,23 +3,34 @@
     "target": "ESNext",
     "module": "CommonJS",
     "lib": ["es2018"],
-    "moduleResolution": "node",
     "types": ["node"],
-    "noEmit": true,
     "allowJs": true,
     "checkJs": false,
+    "resolveJsonModule": true,
     "strict": true,
+    "importHelpers": true,
+    "declaration": false,
+    "alwaysStrict": true,
     "noImplicitAny": false,
+    "isolatedModules": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
     "preserveConstEnums": false,
-    "esModuleInterop": false
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "outDir": "../dist/mock",
+    "paths": {
+      "~/*": ["../src/*"]
+    }
   },
   "include": ["./"],
-  "exclude": ["./src","./dist","./mock"]
+  "exclude": []
 }
+
+
