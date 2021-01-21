@@ -1,5 +1,5 @@
 module.exports = {
-  presets: [['@medux/recommended', {classPropertiesLoose: false}]],
+  presets: [['@medux/recommended', {presets: ['@babel/preset-react']}]],
   ignore: ['**/*.d.ts'],
   comments: false,
 };
