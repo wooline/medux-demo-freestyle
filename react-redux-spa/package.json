@@ -32,7 +32,7 @@
     "@types/express": "~4.17.9"
   },
   "dependencies": {
-    "@medux/react-web-router": "2.0.0-beta.3.8",
+    "@medux/react-web-router": "2.0.0-beta.3.9",
     "@better-scroll/core": "^2.1.1",
     "axios": "~0.21.0",
     "react": "~17.0.1",

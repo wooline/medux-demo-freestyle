@@ -57,5 +57,5 @@ export = function (request: Request, response: Response, next: NextFunction) {
       },
     ],
   };
-  response.json(result);
+  response.status(500).end('');
 };

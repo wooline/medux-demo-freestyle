@@ -1,6 +1,6 @@
 import * as AppModule from 'modules/app';
 import * as MainLayout from 'modules/mainLayout';
-import {createWebLocationTransform, PathnameRules} from '@medux/react-web-router';
+import {createLocationTransform, createPathnameTransform, PagenameMap, DeepPartial} from '@medux/react-web-router';
 import photoDefaultRouteParams from 'modules/photos/meta';
 
 // 定义模块的加载方案，同步或者异步均可
@@ -22,29 +22,56 @@ export const defaultRouteParams = {
   mainLayout: {},
   photos: photoDefaultRouteParams,
 };
+
 export type RouteParams = typeof defaultRouteParams;
 
-const pathnameRules: PathnameRules<RouteParams> = {
-  '/$': () => {
+type PartialRouteParams = DeepPartial<RouteParams>;
+
+const pathnameIn = (pathname: string) => {
+  if (pathname === '/') {
     return '/photos/list';
+  }
+  return pathname;
+};
+
+const pagenameMap = {
+  '/photos': {
+    in() {
+      const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {}};
+      return pathParams;
+    },
+    out() {
+      return [];
+    },
   },
-  '/:page(photos|videos)$': ({page}: {page: string}) => {
-    return `/${page}/list`;
+  '/photos/list': {
+    in([pageCurrent, term]: string[]) {
+      const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {listView: 'list', listSearchPre: {}}};
+      if (pageCurrent) {
+        pathParams.photos!.listSearchPre!.pageCurrent = parseInt(pageCurrent, 10);
+      }
+      if (term) {
+        pathParams.photos!.listSearchPre!.term = term;
+      }
+      return pathParams;
+    },
+    out(params: PartialRouteParams) {
+      const {pageCurrent, term} = params.photos?.listSearchPre || {};
+      return [pageCurrent, term];
+    },
   },
-  '/:page(photos|videos)/:view': ({page, view}: {page: string; view: string}, params) => {
-    params.app = {};
-    params.mainLayout = {};
-    params[page] = {};
-    return {
-      $: () => {
-        params[page].listView = view;
-      },
-      '/:id': ({id}: {id: string}) => {
-        params[page].itemView = view;
-        params[page].itemIdPre = id;
-      },
-    };
+  '/photos/detail': {
+    in([itemIdPre]: string[]) {
+      const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {itemView: 'detail', itemIdPre}};
+      return pathParams;
+    },
+    out(params) {
+      const {itemIdPre} = params.photos || {};
+      return [itemIdPre];
+    },
   },
 };
 
-export const locationTransform = createWebLocationTransform(defaultRouteParams, pathnameRules, true);
+export type Pagename = keyof typeof pagenameMap;
+
+export const locationTransform = createLocationTransform(createPathnameTransform(pathnameIn, pagenameMap), defaultRouteParams);

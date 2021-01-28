@@ -1,16 +1,20 @@
 import React from 'react';
-import {exportApp, RootModuleFacade, FacadeExports, patchActions} from '@medux/react-web-router';
-import {ModuleGetter, RouteParams} from 'modules/config';
+import {exportApp, RootModuleFacade, FacadeExports, patchActions, setConfig} from '@medux/react-web-router';
+import {ModuleGetter, RouteParams, Pagename} from 'modules/config';
 import Loading from 'assets/imgs/loading48x48.gif';
 
-const DefLoading = () => (
+const LoadViewOnLoading = (
   <div className="g-viewLoader">
     <img src={Loading} width="20" height="20" alt="loading..." />
   </div>
 );
-const DefError = () => <div className="g-viewLoader">error</div>;
+const LoadViewOnError = <div className="g-viewLoader">error</div>;
 
-type APP = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams>;
+setConfig({LoadViewOnLoading, LoadViewOnError});
+
+type APP = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename>;
+
+const {App, Modules, Pagenames}: APP = exportApp();
 
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {
@@ -23,18 +27,12 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-const {App, Modules}: APP = exportApp();
-
-const baseLoadView = App.loadView;
-
-App.loadView = (moduleName, viewName, options, loading: React.ComponentType<any> = DefLoading, error: React.ComponentType<any> = DefError) =>
-  baseLoadView(moduleName, viewName, options, loading, error);
-
 declare global {
   type APPState = APP['App']['state'];
   type RouteState = APP['App']['state']['route'];
   const App: APP['App'];
   const Modules: APP['Modules'];
+  const Pagenames: APP['Pagenames'];
   const ENV: {apiMaps: {[key: string]: string}};
 }
 
@@ -44,4 +42,4 @@ declare global {
   Object.keys(data).forEach((key) => {
     g[key] = data[key];
   });
-})({App, Modules});
+})({App, Modules, Pagenames});
