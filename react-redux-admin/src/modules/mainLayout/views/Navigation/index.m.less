@@ -1,0 +1,19 @@
+:global {
+  :local(.root) {
+    text-align: center;
+    height: 50px;
+    display: flex;
+    flex: none;
+    background-color: red;
+    > * {
+      display: block;
+      flex: 1;
+    }
+    > *:first-child {
+      flex: none;
+    }
+    > *:last-child {
+      flex: none;
+    }
+  }
+}
