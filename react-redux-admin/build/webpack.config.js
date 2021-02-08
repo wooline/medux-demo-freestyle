@@ -12,6 +12,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const {createMiddleware} = require('@medux/dev-utils/lib/api-mock');
+const bodyParser = require('body-parser');
 
 const debugMode = !!process.env.DEBUG;
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development';
@@ -73,6 +74,8 @@ function getLocalIdent(context, localIdentName, localName) {
   return generateScopedName(localName, context.resourcePath);
 }
 
+const lessVars = require(path.join(srcPath, 'assets/css/antd-vars.js'));
+
 function getStyleLoader(cssModule, isLess) {
   const base = isProdModel ? [{loader: MiniCssExtractPlugin.loader}] : [{loader: 'style-loader'}];
   base.push({
@@ -94,6 +97,7 @@ function getStyleLoader(cssModule, isLess) {
       loader: 'less-loader',
       options: {
         lessOptions: {
+          modifyVars: lessVars,
           javascriptEnabled: true,
         },
       },
@@ -197,6 +201,8 @@ const devServerConfig = {
   historyApiFallback: {index: '/client/index.html'},
   onBeforeSetupMiddleware: (server) => {
     if (apiMock) {
+      server.use(bodyParser.urlencoded({extended: true}));
+      server.use(bodyParser.json());
       Object.keys(apiProxy).forEach((key) => {
         server.use(key, mockMiddleware);
       });

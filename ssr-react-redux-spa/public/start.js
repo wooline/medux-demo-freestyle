@@ -27,9 +27,11 @@ app.use((req, res, next) => {
         res.end(str.replace('main.0ec5e296.js', 'main.4424c8c0.js').replace('main.985b0032.css', 'main.001e7ac6.css'));
       })
       .catch((e) => {
+        console.log(e);
         res.status(500).end(e.toString());
       });
   } catch (e) {
+    console.log(e);
     res.status(500).end(e.toString());
   }
 });

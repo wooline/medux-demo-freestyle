@@ -1,4 +1,4 @@
 export = {
-  '/api/getSession': require('./getSession'),
-  '/api/getPhotoList': require('./getPhotoList'),
+  '/api/getSession': import('./getSession'),
+  '/api/getPhotoList': import('./getPhotoList'),
 };

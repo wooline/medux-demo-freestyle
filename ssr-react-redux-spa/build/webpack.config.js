@@ -36,7 +36,7 @@ const projectConfigJson = jsonFormat(projectConfig, {type: 'space'});
 // eslint-disable-next-line no-nested-ternary
 const clientDevtool = isProdModel ? 'source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval'; // TerserWebpackPlugin 仅支持 source-map
 // eslint-disable-next-line no-nested-ternary
-const serverDevtool = isProdModel ? 'cheap-module-source-map' : debugMode ? 'eval-cheap-module-source-map' : 'eval';
+const serverDevtool = isProdModel ? false : debugMode ? 'eval-cheap-module-source-map' : 'eval';
 console.info(`config: \n${chalk.blue(projectConfigJson)}`);
 console.info(`mode: ${chalk.magenta(nodeEnv)} \ndebuger: ${chalk.magenta([clientDevtool, serverDevtool])} \nenv: ${chalk.magenta(envName)}`);
 
@@ -276,10 +276,8 @@ const devServerConfig = {
   onAfterSetupMiddleware: (server) => {
     server.use((req, res, next) => {
       if (passUrls.some((reg) => reg.test(req.url))) {
-        console.log('pass', req.url);
         next();
       } else {
-        console.log('render', req.url);
         const serverBundle = require(SsrPlugin.getEntryPath(res));
         try {
           serverBundle
@@ -288,9 +286,11 @@ const devServerConfig = {
               res.end(str);
             })
             .catch((e) => {
+              console.log(e);
               res.status(500).end(e.toString());
             });
         } catch (e) {
+          console.log(e);
           res.status(500).end(e.toString());
         }
       }

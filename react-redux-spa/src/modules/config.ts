@@ -1,6 +1,6 @@
 import * as AppModule from 'modules/app';
 import * as MainLayout from 'modules/mainLayout';
-import {createLocationTransform, createPathnameTransform, PagenameMap, DeepPartial} from '@medux/react-web-router';
+import {createLocationTransform, DeepPartial} from '@medux/react-web-router';
 import photoDefaultRouteParams from 'modules/photos/meta';
 
 // 定义模块的加载方案，同步或者异步均可
@@ -27,25 +27,18 @@ export type RouteParams = typeof defaultRouteParams;
 
 type PartialRouteParams = DeepPartial<RouteParams>;
 
-const pathnameIn = (pathname: string) => {
-  if (pathname === '/') {
-    return '/photos/list';
-  }
-  return pathname;
-};
-
 const pagenameMap = {
   '/photos': {
-    in() {
+    argsToParams() {
       const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {}};
       return pathParams;
     },
-    out() {
+    paramsToArgs() {
       return [];
     },
   },
   '/photos/list': {
-    in([pageCurrent, term]: string[]) {
+    argsToParams([pageCurrent, term]: Array<string | undefined>) {
       const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {listView: 'list', listSearchPre: {}}};
       if (pageCurrent) {
         pathParams.photos!.listSearchPre!.pageCurrent = parseInt(pageCurrent, 10);
@@ -55,17 +48,17 @@ const pagenameMap = {
       }
       return pathParams;
     },
-    out(params: PartialRouteParams) {
+    paramsToArgs(params: PartialRouteParams) {
       const {pageCurrent, term} = params.photos?.listSearchPre || {};
       return [pageCurrent, term];
     },
   },
   '/photos/detail': {
-    in([itemIdPre]: string[]) {
+    argsToParams([itemIdPre]: Array<string | undefined>) {
       const pathParams: PartialRouteParams = {app: {}, mainLayout: {}, photos: {itemView: 'detail', itemIdPre}};
       return pathParams;
     },
-    out(params) {
+    paramsToArgs(params) {
       const {itemIdPre} = params.photos || {};
       return [itemIdPre];
     },
@@ -74,4 +67,15 @@ const pagenameMap = {
 
 export type Pagename = keyof typeof pagenameMap;
 
-export const locationTransform = createLocationTransform(createPathnameTransform(pathnameIn, pagenameMap), defaultRouteParams);
+export const locationTransform = createLocationTransform(defaultRouteParams, pagenameMap, {
+  in(nativeLocation) {
+    let pathname = nativeLocation.pathname;
+    if (pathname === '/') {
+      pathname = '/photos/list';
+    }
+    return {...nativeLocation, pathname};
+  },
+  out(nativeLocation) {
+    return nativeLocation;
+  },
+});

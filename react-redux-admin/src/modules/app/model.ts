@@ -1,15 +1,15 @@
 /* eslint-disable no-restricted-globals */
-import {ActionTypes, BaseModuleHandlers, BaseModuleState, effect, LoadingState, errorAction} from '@medux/react-web-router';
-import {CurUser, api} from './entity';
+import {ActionTypes, BaseModuleHandlers, BaseModuleState, reducer, effect, LoadingState, errorAction} from '@medux/react-web-router';
+import {AccountView, ProjectConfig, RouteParams, CurUser, LoginParams, api} from './entity';
 
-export interface ModuleState extends BaseModuleState {
+export interface ModuleState extends BaseModuleState<RouteParams> {
+  projectConfig: ProjectConfig;
   curUser: CurUser;
   loading: {
     global: LoadingState;
   };
 }
 
-const aaa = {message: 'dsfdsfsf'};
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
     super({
@@ -19,14 +19,43 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
         hasLogin: false,
         avatar: '',
       },
+      projectConfig: {noticeTimer: 20},
       loading: {
         global: LoadingState.Stop,
       },
     });
   }
 
+  @reducer
+  public putCurUser(curUser: CurUser): ModuleState {
+    return {...this.state, curUser};
+  }
+
   @effect(null)
-  protected async [ActionTypes.Error](error: {message: string}) {
+  public async navToAccount(accountView?: AccountView) {
+    App.router.push({extendParams: 'current', params: {app: {accountView}}});
+  }
+
+  @effect()
+  public async login(args: LoginParams) {
+    const curUser = await api.login(args);
+    if (this.state.curUser.hasLogin) {
+      App.router.nativeRouter.refresh();
+    }
+    this.dispatch(this.actions.putCurUser(curUser));
+    this.dispatch(this.actions.navToAccount());
+  }
+
+  @effect()
+  public async logout() {
+    await api.logout();
+    if (this.state.curUser.hasLogin) {
+      App.router.nativeRouter.refresh();
+    }
+  }
+
+  @effect(null)
+  protected async [ActionTypes.Error](error: {code: string; message: string}) {
     throw error;
   }
 
@@ -38,7 +67,13 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
     window.addEventListener('error', (error) => {
       this.dispatch(errorAction(error));
     });
+    const projectConfig = await api.getProjectConfig();
     const curUser = await api.getCurUser();
-    this.dispatch(this.actions.Update({curUser}, 'init'));
+    this.dispatch(this.actions.Update({projectConfig, curUser}, 'init'));
+
+    const routeData = this.rootState.route.params;
+    if (routeData.adminLayout && !curUser.hasLogin) {
+      this.dispatch(this.actions.navToAccount('login'));
+    }
   }
 }

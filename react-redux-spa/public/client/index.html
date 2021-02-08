@@ -116,26 +116,32 @@
           }
           document.head.appendChild(style);
         }
-        function setSize() {
-          var cwidth = document.documentElement.clientWidth;
-          var cheight = document.documentElement.clientHeight;
+        function setRem() {
           var maxWidth = 500;
-          var width = Math.min(maxWidth, cwidth);
-          var rem = width / 10;
+          var documentElement = document.documentElement;
+          var clientWidth = documentElement.clientWidth;
+          var width = Math.min(maxWidth, clientWidth);
+          var rootFontSize = width / 10;
+          documentElement.style.fontSize = rootFontSize + 'px';
+          var realFont = parseFloat(window.getComputedStyle(documentElement).fontSize);
+          if (parseInt(rootFontSize) !== parseInt(realFont)) {
+            documentElement.style.fontSize = (rootFontSize * rootFontSize / realFont) + 'px'
+          }
           var styleArr = [];
-          styleArr.push('html{font-size:' + rem + 'px;}');
+          //styleArr.push('html{font-size:' + rootFontSize + 'px;}');
           styleArr.push('.g-doc-width{max-width:' + maxWidth + 'px;}');
           setStyle(styleArr.join(' '));
         }
-        setSize();
+        setRem();
 
         var timer;
+        var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
         window.addEventListener(
-          'resize',
+          resizeEvt,
           function () {
             if (!timer) {
               timer = setTimeout(function () {
-                setSize();
+                setRem();
                 timer = null;
               }, 1000);
             }

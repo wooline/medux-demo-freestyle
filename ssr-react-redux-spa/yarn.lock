@@ -1193,18 +1193,18 @@
     babel-plugin-root-import "~6.6.0"
     core-js "^3.7.0"
 
-"@medux/core@^2.0.0-beta.3.7":
-  version "2.0.0-beta.3.7"
-  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.7.tgz#5f94d0349f48bff1a7e7a78acd166ec8c33361db"
-  integrity sha512-VIVQWq9ecFUKiP88BDAoDkrMLruhRPv2XdK9r3WQL+GfJPl6UWc8pmLTH0VJhBO92jWRAm0QyevXMSYddEeM3w==
+"@medux/core@^2.0.0-beta.3.14":
+  version "2.0.0-beta.3.14"
+  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.14.tgz#ccf99f78f5f6e712f049c7a65996650e0e280865"
+  integrity sha512-2EO5O2PpffMSDsaEblkXumLlaaPaRAxxUR/eVeFjMZIZ7KIE/1AkDm8Vnh+z7aI5Yl91Qs61gi8qLARqHwouCg==
   dependencies:
     "@babel/runtime" "~7.12.5"
     redux "^4.0.5"
 
-"@medux/dev-pkg@~2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@medux/dev-pkg/-/dev-pkg-2.0.8.tgz#e4f2ecc7bc41e4f49efad020b72e61d8c07edeeb"
-  integrity sha512-gFNNmI4Gcc+j9Wqrq16IRYj1TyGlRQnMlYU9VW7ClabCboua9Obg6I8NOOm7a+HSczaaX7r36rFTO17kFhO4dw==
+"@medux/dev-pkg@~2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@medux/dev-pkg/-/dev-pkg-2.0.9.tgz#00212121a955cde44480735af0b59b5a43c62df0"
+  integrity sha512-HKzNZB3qqIC/8qIug8HdErd+CqF/RfQRWP5TtGTdfYxJBD7rULFcyWXWmeUxr4dNX6x8cirChjWc2WXPkgJwFw==
   dependencies:
     "@medux/babel-preset-recommended" "^1.0.5"
     "@medux/eslint-plugin-recommended" "^1.0.8"
@@ -1224,6 +1224,8 @@
     react-refresh "^0.9.0"
     rimraf "^3.0.0"
     stylelint "^13.0.0"
+    ts-node "^9.1.1"
+    tsconfig-paths "^3.9.0"
 
 "@medux/dev-utils@^3.0.0", "@medux/dev-utils@~3.0.6":
   version "3.0.6"
@@ -1281,23 +1283,33 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-web-router@2.0.0-beta.3.8":
-  version "2.0.0-beta.3.8"
-  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.8.tgz#7004432ee04e5ae84eeaab5f0b3f9e12405278bc"
-  integrity sha512-392100paI+6C11dt7qs/le5Q9QyMjxV9ONN7UeNhnwSLEwX244hNCVl6lbaA+ztkjyR4VxvZO6IrTUbPn0wp7w==
+"@medux/react-web-router@2.0.0-beta.3.14":
+  version "2.0.0-beta.3.14"
+  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.14.tgz#0155a5d98e37bfe93ad4a1d0e83103f47defd0a5"
+  integrity sha512-PQREHMwN0LoJLsAx2SMypQw6kUoPGF9XFbwB1KiOFZw4apPnn+/5Gthy9SynNLb3ZVWdZ3105gGsKv4Xv3nVzw==
   dependencies:
-    "@medux/core" "^2.0.0-beta.3.7"
-    "@medux/route-plan-a" "^2.0.0-beta.3.7"
-    "@medux/web" "^2.0.0-beta.3.7"
+    "@medux/core" "^2.0.0-beta.3.14"
+    "@medux/route-browser" "^2.0.0-beta.3.14"
+    "@medux/route-web" "^2.0.0-beta.3.14"
 
-"@medux/route-plan-a@^2.0.0-beta.3.7":
-  version "2.0.0-beta.3.7"
-  resolved "https://registry.yarnpkg.com/@medux/route-plan-a/-/route-plan-a-2.0.0-beta.3.7.tgz#cced46ccd58c2595a9cfee5c76522e5a1c0fb9a7"
-  integrity sha512-wErHUetkJjkJ8XqwqHxtwKRQ8xwgTlg5fej2sdxhLydJeGS3NkOA+YsVG66z6F30UimWIbGR9l98Hh0DF6+8aQ==
+"@medux/route-browser@^2.0.0-beta.3.14":
+  version "2.0.0-beta.3.14"
+  resolved "https://registry.yarnpkg.com/@medux/route-browser/-/route-browser-2.0.0-beta.3.14.tgz#b208f78abd0aa33f494acf2d9c0bba2c535a6a8c"
+  integrity sha512-eJ8kKAx1SGhDrHd85tq4xT9Ol+Cm0QNP6thpY5CP+08j/IvcS0Uj6d5kzVFFq9jjalYi+yyIDNfG/MVgbq7FQg==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.7"
-    path-to-regexp "~6.2.0"
+    "@medux/core" "^2.0.0-beta.3.14"
+    "@medux/route-web" "^2.0.0-beta.3.14"
+    "@types/history" "~4.7.7"
+    history "~4.10.1"
+
+"@medux/route-web@^2.0.0-beta.3.14":
+  version "2.0.0-beta.3.14"
+  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.14.tgz#2c8c911bffb5737cb97a3b599b8be4490bdab0f2"
+  integrity sha512-G3YXNkyZcIpFUc9XD5n1OblUDwb+l5ORJTdoTzcISCQTiMqmeyrUrsOlqbs05KWLM6JSMsyIK8ntzjtgm7aPyg==
+  dependencies:
+    "@babel/runtime" "~7.12.5"
+    "@medux/core" "^2.0.0-beta.3.14"
 
 "@medux/stylelint-config-recommended@^1.0.0":
   version "1.0.0"
@@ -1308,17 +1320,6 @@
     stylelint-config-standard "~20.0.0"
     stylelint-declaration-block-no-ignored-properties "~2.3.0"
     stylelint-prettier "~1.1.2"
-
-"@medux/web@^2.0.0-beta.3.7":
-  version "2.0.0-beta.3.7"
-  resolved "https://registry.yarnpkg.com/@medux/web/-/web-2.0.0-beta.3.7.tgz#6fcfd399ef231a6a0d4d107605798b58629fffc7"
-  integrity sha512-6odD9l5jSZVud5Cdln+pDiPTp5bZ/HpkHL/vaXYET6ayJGV3aLqxkmOpucGsZr5TCT7PzApby9a3Teyobuzx/A==
-  dependencies:
-    "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.7"
-    "@medux/route-plan-a" "^2.0.0-beta.3.7"
-    "@types/history" "~4.7.7"
-    history "~4.10.1"
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents":
   version "2.1.8-no-fsevents"
@@ -8415,11 +8416,6 @@ path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
-
-path-to-regexp@~6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.2.0.tgz#f7b3803336104c346889adece614669230645f38"
-  integrity sha512-f66KywYG6+43afgE/8j/GoiNyygk/bnoCbps++3ErRKsIYkGGupyv07R2Ok5m9i67Iqc+T2g1eAUGUPzWhYTyg==
 
 path-type@^1.0.0:
   version "1.1.0"

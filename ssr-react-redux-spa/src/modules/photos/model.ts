@@ -30,7 +30,8 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   }
 
   @effect(null)
-  protected async ['this.Init, this.RouteParams'](_, prevState: ModuleState) {
+  protected async ['this.Init, this.RouteParams']() {
+    const prevState = this.prevState || {};
     const {listView, listSearchPre, _listVerPre, _itemVerPre, listVer = 0, listSearch, itemId, itemVer = 0} = this.state;
     if (listView) {
       if (_listVerPre > listVer || !fastEqual(listSearchPre, listSearch)) {
