@@ -12,7 +12,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
     list: [
       {
         id: '1',
-        title: '新加坡+吉隆坡+马六甲6或7日跟团游9999',
+        title: '新加坡+吉隆坡+马六甲6或7日跟团游555555',
         departure: '无锡',
         type: '跟团游',
         price: 2499,
