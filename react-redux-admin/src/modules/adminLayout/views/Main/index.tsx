@@ -2,7 +2,7 @@ import React from 'react';
 import {Else} from '@medux/react-web-router';
 import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
 import {Layout, Result} from 'antd';
-import Navs from '../Navs';
+import Menu from '../Menu';
 import Header from '../Header';
 import Flag from '../Flag';
 import styles from './index.m.less';
@@ -22,7 +22,7 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView, 
     <Layout className={styles.root}>
       <Layout.Sider className="g-scrollBar" trigger={null} collapsible collapsed={siderCollapsed}>
         <Flag />
-        <Navs singleOpen />
+        <Menu singleOpen />
       </Layout.Sider>
       <Layout>
         <Layout.Header>

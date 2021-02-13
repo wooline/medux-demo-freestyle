@@ -1,10 +1,8 @@
 import React from 'react';
 import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
-import {pathToRegexp} from 'path-to-regexp';
 import {Menu} from 'antd';
 import {DashboardOutlined, ProfileOutlined, TeamOutlined} from '@ant-design/icons';
 import ListKeyLink from 'components/ListKeyLink';
-import {PickOptional} from 'common/utils';
 import {MenuItem} from '../../entity';
 import styles from './index.m.less';
 
@@ -14,27 +12,23 @@ const Icons = {
   post: ProfileOutlined,
 };
 const {SubMenu} = Menu;
-const matchCache: {[path: string]: RegExp} = {};
 
-function getSelectedMenuKeys(
-  linksKeys: {[key: string]: string[]},
-  pathname: string,
-  match: (pathname: string, key: string) => boolean,
-  alias: {[key: string]: string},
-  lastedOpenKeys: string[]
-) {
-  const selectedKeys = Object.keys(linksKeys).filter((key) => match(pathname, key));
+function matchPagename(pagename: string, key: string): boolean {
+  return pagename === key;
+}
+function getSelectedMenuKeys(leaves: {[key: string]: string[]}, pagename: string, alias: {[key: string]: string}, lastedOpenKeys: string[]) {
+  const selectedKeys = Object.keys(leaves).filter((key) => matchPagename(pagename, key));
   if (selectedKeys.length) {
     const selected = alias[selectedKeys[0]] || selectedKeys[0];
-    const openKeys = lastedOpenKeys.length ? Array.from(new Set([...lastedOpenKeys, ...linksKeys[selected]])) : linksKeys[selected];
+    const openKeys = lastedOpenKeys.length ? Array.from(new Set([...lastedOpenKeys, ...leaves[selected]])) : leaves[selected];
     return {selectedKey: selected, openKeys};
   }
   return {selectedKey: '', openKeys: lastedOpenKeys};
 }
 
-function mapMenuData(menus: MenuItem[]): {links: {[key: string]: string[]}; folders: {[key: string]: string[]}; alias: {[key: string]: string}} {
+function mapMenuData(menus: MenuItem[]): {leaves: {[key: string]: string[]}; folders: {[key: string]: string[]}; alias: {[key: string]: string}} {
   const maps: {[key: string]: string[]} = {};
-  const links: string[] = [];
+  const leaves: string[] = [];
   const folders: string[] = [];
   const alias: {[key: string]: string} = {};
   const checkData = (item: MenuItem, parent?: string) => {
@@ -50,20 +44,20 @@ function mapMenuData(menus: MenuItem[]): {links: {[key: string]: string[]}; fold
       item.children.forEach((subItem) => checkData(subItem, path));
       folders.push(path);
     } else {
-      links.push(path);
+      leaves.push(path);
       if (keys.length) {
         keys.forEach((key) => {
           alias[key] = path;
           maps[key] = maps[path];
-          links.push(key);
+          leaves.push(key);
         });
       }
     }
   };
-  menus.forEach((subItem) => checkData(subItem));
+  menus.forEach((menuItem) => checkData(menuItem));
   return {
     alias,
-    links: links.reduce((pre, cur) => {
+    leaves: leaves.reduce((pre, cur) => {
       pre[cur] = maps[cur].reverse();
       return pre;
     }, {}),
@@ -145,10 +139,9 @@ function generateMenu(menusData: MenuItem[], folderHandler: (item: {key: string}
 interface StoreProps {
   siderCollapsed: boolean;
   dataSource: MenuItem[];
-  pathname: string;
+  pagename: string;
 }
 interface OwnProps {
-  match?: (pathname: string, key: string) => boolean;
   singleOpen?: boolean;
 }
 interface State {
@@ -156,70 +149,70 @@ interface State {
   dataSource: MenuItem[];
   selectedKey: string;
   openKeys: string[];
-  pathname: string;
+  pagename: string;
   alias: {[key: string]: string};
-  linksKeys: {[key: string]: string[]}; // {path:[parent1,parent2]}
-  foldersKeys: {[key: string]: string[]}; // {path:[parent1,parent2]}
+  leaves: {[key: string]: string[]}; // {path:[parent1,parent2]}
+  folders: {[key: string]: string[]}; // {path:[parent1,parent2]}
 }
 class Component extends React.Component<StoreProps & OwnProps, State> {
-  public static defaultProps: PickOptional<StoreProps> = {
-    match: (pathname: string, key: string) => {
-      let reg: RegExp;
-      if (matchCache[key]) {
-        reg = matchCache[key];
-      } else {
-        const arr = key.split(/[?#]/);
-        reg = pathToRegexp(arr[0]);
-        matchCache[key] = pathToRegexp(arr[0]);
-      }
-      return reg.test(pathname);
-    },
-  };
+  // public static defaultProps: PickOptional<StoreProps> = {
+  //   match: (pagename: string, key: string) => {
+  //     let reg: RegExp;
+  //     if (matchCache[key]) {
+  //       reg = matchCache[key];
+  //     } else {
+  //       const arr = key.split(/[?#]/);
+  //       reg = pathToRegexp(arr[0]);
+  //       matchCache[key] = pathToRegexp(arr[0]);
+  //     }
+  //     return reg.test(pagename);
+  //   },
+  // };
 
   static getDerivedStateFromProps(nextProps: StoreProps & OwnProps, prevState: State): State | null {
     if (nextProps.dataSource.length && nextProps.dataSource !== prevState.dataSource) {
       const menus = filterDisable(nextProps.dataSource);
-      const {links, folders, alias} = mapMenuData(menus);
-      const {dataSource, pathname, match} = nextProps;
-      const {selectedKey, openKeys} = getSelectedMenuKeys(links, pathname, match!, alias, []);
+      const {leaves, folders, alias} = mapMenuData(menus);
+      const {dataSource, pagename} = nextProps;
+      const {selectedKey, openKeys} = getSelectedMenuKeys(leaves, pagename, alias, []);
       return {
         dataSource,
         menus,
-        pathname,
+        pagename,
         alias,
-        linksKeys: links,
-        foldersKeys: folders,
+        leaves,
+        folders,
         selectedKey,
         openKeys,
       };
     }
-    if (nextProps.pathname !== prevState.pathname) {
-      const {pathname, match} = nextProps;
-      const {linksKeys, alias, openKeys: lastedOpenKeys, dataSource, menus, foldersKeys} = prevState;
-      const {selectedKey, openKeys} = getSelectedMenuKeys(linksKeys, pathname, match!, alias, lastedOpenKeys);
+    if (nextProps.pagename !== prevState.pagename) {
+      const {pagename} = nextProps;
+      const {leaves, alias, openKeys: lastedOpenKeys, dataSource, menus, folders} = prevState;
+      const {selectedKey, openKeys} = getSelectedMenuKeys(leaves, pagename, alias, lastedOpenKeys);
       return {
         dataSource,
         menus,
         alias,
-        linksKeys,
-        foldersKeys,
+        leaves,
+        folders,
         selectedKey,
         openKeys,
-        pathname,
+        pagename,
       };
     }
     return null;
   }
 
-  constructor(props: StoreProps, context?: any) {
-    super(props, context);
+  constructor(props: StoreProps) {
+    super(props);
     this.state = {
       menus: [],
       dataSource: [],
-      pathname: '',
+      pagename: '',
       alias: {},
-      linksKeys: {},
-      foldersKeys: {},
+      leaves: {},
+      folders: {},
       selectedKey: '',
       openKeys: [],
     };
@@ -250,7 +243,7 @@ class Component extends React.Component<StoreProps & OwnProps, State> {
       if (n > -1) {
         openKeys = openKeys.slice(0, n);
       } else {
-        openKeys = this.state.foldersKeys[key];
+        openKeys = this.state.folders[key];
       }
       this.setState({
         openKeys,
@@ -283,7 +276,7 @@ function mapStateToProps(state: APPState): StoreProps {
   return {
     dataSource: state.adminLayout!.menuData || [],
     siderCollapsed: !!state.adminLayout!.siderCollapsed,
-    pathname: state.route.pagename,
+    pagename: state.route.pagename,
   };
 }
 

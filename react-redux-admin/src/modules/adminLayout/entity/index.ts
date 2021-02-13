@@ -8,7 +8,6 @@ export interface MenuItem {
   disable?: boolean;
 }
 export interface TabNav {
-  id: string;
   title: string;
   url: string;
 }
@@ -18,32 +17,43 @@ export class API {
     return Promise.resolve([
       {
         name: '概要总览',
-        icon: 'dashboard',
         keys: '/admin/home',
       },
       {
         name: '用户管理',
-        icon: 'user',
         keys: 'member',
         children: [
           {
             name: '用户列表',
-            keys: ['/admin/adminMember/:view'],
-            link: '/admin/adminMember/list',
+            keys: ['/admin/adminMember/list'],
+          },
+          {
+            name: '用户详细',
+            keys: ['/admin/adminMember/detail'],
           },
         ],
       },
       {
         name: '信息管理',
-        icon: 'post',
-        keys: '/admin/finance',
-        children: [{name: '信息列表', keys: ['/admin/post/list', '/admin/post/list/detail/:id'], link: '/admin/post/list'}],
+        keys: 'post',
+        children: [
+          {name: '信息列表', keys: ['/admin/post/list', '/admin/post/list2']},
+          {name: '信息详细', keys: ['/admin/post/detail', '/admin/post/detail2']},
+        ],
       },
       {
-        name: '性能监控',
-        icon: 'post',
-        keys: 'monitor',
-        children: [{name: '日志列表', keys: ['/monitor/list', '/monitor/detail/:id'], link: '/monitor/list'}],
+        name: '角色管理',
+        keys: 'role',
+        children: [
+          {
+            name: '角色列表',
+            keys: ['/admin/role/list', '/admin/role/list2'],
+            children: [
+              {name: '群主列表', keys: ['/admin/group/list', '/admin/group/list2']},
+              {name: '群主详细', keys: ['/admin/group/detail', '/admin/group/detail2']},
+            ],
+          },
+        ],
       },
     ]);
   }
