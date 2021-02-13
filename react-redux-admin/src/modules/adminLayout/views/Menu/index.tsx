@@ -98,40 +98,19 @@ function filterDisable(data: MenuItem[]): MenuItem[] {
 function generateMenu(menusData: MenuItem[], folderHandler: (item: {key: string}) => void) {
   return menusData.map((item) => {
     const keys = typeof item.keys === 'string' ? [item.keys] : [...item.keys];
-    const path = keys.shift() as string;
-    const link = item.link || path;
+    const key = keys.shift() as string;
+    // const link = item.link || path;
     const {icon, children, target, name} = item;
     if (children && children.length) {
       return (
-        <SubMenu
-          title={
-            icon ? (
-              <span>
-                {getIcon(icon)}
-                <span>{name}</span>
-              </span>
-            ) : (
-              name
-            )
-          }
-          key={path}
-          onTitleClick={folderHandler}
-        >
+        <SubMenu icon={getIcon(icon)} title={name} key={key} onTitleClick={folderHandler}>
           {generateMenu(children, folderHandler)}
         </SubMenu>
       );
     }
     return (
-      <Menu.Item key={path}>
-        {target ? (
-          <a href={link} target={target}>
-            {getIcon(icon)} <span>{name}</span>
-          </a>
-        ) : (
-          <ListKeyLink href={link}>
-            {getIcon(icon)} <span>{name}</span>
-          </ListKeyLink>
-        )}
+      <Menu.Item key={key} icon={getIcon(icon)}>
+        {name}
       </Menu.Item>
     );
   });
