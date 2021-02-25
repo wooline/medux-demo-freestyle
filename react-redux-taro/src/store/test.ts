@@ -1,5 +1,8 @@
-
-export function reducer(target: any, key: string, descriptor: PropertyDescriptor) {
+export function reducer(
+  target: any,
+  key: string,
+  descriptor: PropertyDescriptor
+) {
   if (!key && !descriptor) {
     key = target.key;
     descriptor = target.descriptor;
@@ -10,20 +13,22 @@ export function reducer(target: any, key: string, descriptor: PropertyDescriptor
   descriptor.enumerable = true;
   return target.descriptor === descriptor ? target : descriptor;
 }
-const split = typeof window === 'undefined' ? '.' :',';
+const split = typeof window === 'undefined' ? '.' : ',';
 
-export class Test{
-  name:string;
-  constructor(){
-    this.name = 'jimmy'
+export class Test {
+  name: string;
+
+  constructor() {
+    this.name = 'jimmy';
   }
+
   @reducer
-  getList(){
+  getList() {
     return {};
   }
 
   @reducer
-  ['get.List2'](){
+  ['get.List2']() {
     return {};
   }
 }

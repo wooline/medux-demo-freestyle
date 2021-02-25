@@ -1,11 +1,9 @@
 import React from 'react';
 import {ConfigProvider, Result} from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
-import {Switch, Else} from '@medux/react-web-router';
-import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
+import {Switch} from '@medux/react-web-router';
+import {connectRedux, Provider} from '@medux/react-web-router/lib/conect-redux';
 import GlobalLoading from 'components/GlobalLoading';
-import NotFound from 'components/NotFound';
-import {Provider} from 'react-redux';
 import {CurUser, AccountView} from '../entity';
 import 'assets/css/global.m.less';
 import 'assets/css/override.less';

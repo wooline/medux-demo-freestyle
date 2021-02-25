@@ -1,9 +1,8 @@
 import React from 'react';
 import {Switch} from '@medux/react-web-router';
-import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
+import {connectRedux, Provider} from '@medux/react-web-router/lib/conect-redux';
 import GlobalLoading from 'components/GlobalLoading';
 import NotFound from 'components/NotFound';
-import {Provider} from 'react-redux';
 
 const MainLayout = App.loadView('mainLayout', 'main');
 

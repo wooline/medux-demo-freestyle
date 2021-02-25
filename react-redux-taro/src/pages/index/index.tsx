@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { View, Button, Text } from '@tarojs/components'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View, Button, Text} from '@tarojs/components';
 
-import { add, minus, asyncAdd } from '../../actions/counter'
+import {add, minus, asyncAdd} from '../../actions/counter';
 
-import './index.less'
+import './index.less';
 
 // #region 书写注意
 //
@@ -18,62 +18,73 @@ import './index.less'
 
 type PageStateProps = {
   counter: {
-    num: number
-  }
-}
+    num: number;
+  };
+};
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
-}
+  add: () => void;
+  dec: () => void;
+  asyncAdd: () => any;
+};
 
-type PageOwnProps = {}
+type PageOwnProps = {};
 
-type PageState = {}
+type PageState = {};
 
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
 interface Index {
   props: IProps;
 }
 
-
 class Index extends Component {
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props, nextProps);
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount() {}
 
-  componentDidShow () { }
+  componentDidShow() {}
 
-  componentDidHide () { }
+  componentDidHide() {}
 
-  render () {
+  render() {
     return (
-      <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+      <View className="index">
+        <Button className="add_btn" onClick={this.props.add}>
+          +
+        </Button>
+        <Button className="dec_btn" onClick={this.props.dec}>
+          -
+        </Button>
+        <Button className="dec_btn" onClick={this.props.asyncAdd}>
+          async
+        </Button>
+        <View>
+          <Text>{this.props.counter.num}</Text>
+        </View>
+        <View>
+          <Text>Hello, World</Text>
+        </View>
       </View>
-    )
+    );
   }
 }
 
-export default connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
-}))(Index)
-
+export default connect(
+  ({counter}) => ({
+    counter,
+  }),
+  (dispatch) => ({
+    add() {
+      dispatch(add());
+    },
+    dec() {
+      dispatch(minus());
+    },
+    asyncAdd() {
+      dispatch(asyncAdd());
+    },
+  })
+)(Index);

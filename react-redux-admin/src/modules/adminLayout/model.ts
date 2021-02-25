@@ -19,7 +19,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   }
 
   private getCurTabNav(): TabNav {
-    const url = App.router.getUrl();
+    const url = App.router.getMeduxUrl();
     const title = document.title;
     return {url, title};
   }
