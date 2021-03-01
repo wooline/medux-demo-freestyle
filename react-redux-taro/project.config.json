@@ -2,9 +2,9 @@
   "miniprogramRoot": "./dist",
   "projectname": "react-redux-taro",
   "description": "",
-  "appid": "touristappid",
+  "appid": "wx81aa0a9ccb3960f1",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "postcss": false,
     "minified": false

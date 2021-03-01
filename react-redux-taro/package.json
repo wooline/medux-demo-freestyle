@@ -1,7 +1,6 @@
 {
   "name": "react-redux-taro",
   "version": "1.0.0",
-  "private": true,
   "description": "",
   "templateInfo": {
     "name": "redux",
@@ -26,7 +25,9 @@
     "dev:rn": "npm run build:rn -- --watch",
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
-    "dev:quickapp": "npm run build:quickapp -- --watch"
+    "dev:quickapp": "npm run build:quickapp -- --watch",
+    "buildMock": "rimraf ./dist/mock && copyfiles ./mock/package.json ./mock/static/**/* ./dist && tsc -p ./mock",
+    "runMock": "ts-node -P mock/tsconfig.json -r tsconfig-paths/register mock/start.js"
   },
   "browserslist": [
     "last 3 versions",
@@ -35,18 +36,21 @@
   ],
   "author": "",
   "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "mock"
+  ],
   "dependencies": {
+    "@medux/react-taro-router": "~2.0.0-beta.3.19",
     "@babel/runtime": "^7.7.7",
     "@tarojs/components": "3.0.24",
     "@tarojs/runtime": "3.0.24",
     "@tarojs/taro": "3.0.24",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
-    "redux": "^4.0.0",
+    "@tarojs/react": "3.0.24",
     "react-redux": "^7.2.0",
     "react-dom": "^16.10.0",
-    "@tarojs/react": "3.0.24",
-    "react": "^16.10.0"
+    "react": "^16.10.0",
+    "qrcode": "^1.4.4"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.13.6",
@@ -55,11 +59,7 @@
     "@babel/core": "^7.8.0",
     "@tarojs/webpack-runner": "3.0.24",
     "babel-preset-taro": "3.0.24",
-    "@medux/eslint-plugin-recommended": "^1.0.8",
-    "@medux/stylelint-config-recommended": "^1.0.0",
-    "eslint": "^7.0.0",
-    "stylelint": "^13.0.0",
-    "prettier": "^2.1.2",
+    "@medux/dev-pkg": "~2.1.0",
     "typescript": "~4.0.5"
   }
 }

@@ -12,8 +12,89 @@
   <script>
     !function(x){function w(){var v,u,t,tes,s=x.document,r=s.documentElement,a=r.getBoundingClientRect().width;if(!v&&!u){var n=!!x.navigator.appVersion.match(/AppleWebKit.*Mobile.*/);v=x.devicePixelRatio;tes=x.devicePixelRatio;v=n?v:1,u=1/v}if(a>=640){r.style.fontSize="40px"}else{if(a<=320){r.style.fontSize="20px"}else{r.style.fontSize=a/320*20+"px"}}}x.addEventListener("resize",function(){w()});w()}(window);
   </script>
+  <style>
+    #app-qrcode{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 999999999;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+    #app-qrcode .warp{
+      position: absolute;
+      width: 128px;
+      height: 150px;
+      left: 50%;
+      top: 50%;
+      padding: 10px;
+      overflow: hidden;
+      background-color: #fff;
+      border-radius: 5px;
+      margin-left: -74px;
+      margin-top: -85px;
+    }
+    #app-qrcode-img{
+      width: 128px;
+      height: 128px;
+    }
+    #app-qrcode .tips{
+      font-size: 12px;
+      text-align: center;
+      line-height: 1;
+      padding-top: 10px;
+    }
+  </style>
+  <script>
+    (function () {
+      // function isIE() {
+      //     if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+      //       return true;
+      //     } else {
+      //       return false;
+      //     }
+      //   }
+      //   if (isIE()) {
+      //     var script = document.createElement('script');
+      //     script.type = 'text/javaScript';
+      //     script.defer = true;
+      //     script.async = false;
+      //     script.src = '/polyfill.js';
+      //     document.head.appendChild(script);
+      //   }
+    })();
+  </script>
 </head>
 <body>
+  <div id="app-qrcode">
+    <div class="warp">
+      <div id="app-qrcode-img"></div>
+      <div class="tips">请使用手机扫码浏览</div>
+    </div>
+
+  </div>
   <div id="app"></div>
+  <script>
+    if (!(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent))) {
+      var script = document.createElement('script');
+      script.type = 'text/javaScript';
+      script.defer = true;
+      script.async = true;
+      script.src = '/js/qrcode.min.js';
+      script.onload = function(){
+        var qrcodeLayer = document.getElementById('app-qrcode');
+        qrcodeLayer.style.display = 'block';
+        var qrcodeCanvas = document.getElementById('app-qrcode-img');
+        new QRCode(qrcodeCanvas, {
+          text: window.location.href,
+          width: 128,
+          height: 128,
+          colorDark : "#000000",
+          colorLight : "#ffffff",
+        });
+      }
+      document.head.appendChild(script);
+		}
+  </script>
 </body>
 </html>

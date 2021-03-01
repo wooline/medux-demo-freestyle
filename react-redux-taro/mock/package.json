@@ -1,0 +1,17 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "",
+  "main": "start.js",
+  "scripts": {
+    "start": "node ./start.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@medux/dev-utils":"^3.0.6",
+    "express": "^4.0.0",
+    "http-proxy-middleware": "^1.0.0",
+    "mockjs":"^1.1.0"
+  }
+}

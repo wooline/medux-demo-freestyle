@@ -9,9 +9,8 @@ const LoadViewOnLoading = (
     <img src={Loading} width="20" height="20" alt="loading..." />
   </div>
 );
-const LoadViewOnError = <div className="g-viewLoader">error</div>;
 
-setConfig({LoadViewOnLoading, LoadViewOnError});
+setConfig({LoadViewOnLoading});
 
 type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename, Request, Response>;
 

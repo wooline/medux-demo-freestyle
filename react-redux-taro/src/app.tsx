@@ -1,30 +1,34 @@
-import React, { Component } from 'react'
-import { Provider } from 'react-redux'
+import './Global';
+import React, {Component} from 'react';
+import {buildApp} from '@medux/react-taro-router';
+import {Provider} from '@medux/react-taro-router/lib/conect-redux';
+import {moduleGetter, locationTransform} from './modules/config';
 
-import configStore from './store'
+import './app.less';
 
-import './app.less'
-
-const store = configStore()
-
+let store: any;
 class App extends Component {
-  componentDidMount () {}
+  constructor(props: any) {
+    super(props);
+    !store &&
+      buildApp(moduleGetter, {locationTransform}, (_store) => {
+        store = _store;
+      });
+  }
 
-  componentDidShow () {}
+  componentDidMount() {}
 
-  componentDidHide () {}
+  componentDidShow() {}
 
-  componentDidCatchError () {}
+  componentDidHide() {}
+
+  componentDidCatchError() {}
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
-    return (
-      <Provider store={store}>
-        {this.props.children}
-      </Provider>
-    )
+  render() {
+    return <Provider store={store}>{this.props.children}</Provider>;
   }
 }
 
-export default App
+export default App;

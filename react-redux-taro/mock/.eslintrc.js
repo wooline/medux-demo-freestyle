@@ -6,10 +6,9 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    project: './tsconfig.json',
+    project: `${__dirname}/tsconfig.json`,
   },
   rules: {
-    'no-console': 'off'
   },
-  ignorePatterns: ['/src','/dist','/mock','/h5-static'],
+  ignorePatterns: ['/static'],
 };
