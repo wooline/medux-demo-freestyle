@@ -14,7 +14,7 @@ export const guest: CurUser = {
 };
 class API {
   public getCurUser(): Promise<CurUser> {
-    return Promise.reject(guest);
+    return Promise.resolve(guest);
   }
 }
 

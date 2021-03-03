@@ -3,12 +3,9 @@ import request from '~/common/request';
 export interface ListItem {
   id: string;
   title: string;
-  departure: string;
-  type: string;
   hot: number;
-  price: number;
   coverUrl: string;
-  comments: number;
+  videoUrl: string;
 }
 export interface ListSummary {
   pageCurrent: number;
@@ -38,7 +35,7 @@ export interface RouteParams {
 
 class API {
   public getList(args: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
-    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getPhotoList'}).then((res) => {
+    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getVideoList'}).then((res) => {
       return res.data;
     });
   }

@@ -7,10 +7,4 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
     super({});
   }
-
-  @effect(null)
-  protected async ['this.Init, this.ReInit']() {
-    const modules = Object.keys(this.rootState.route.params);
-    await Promise.all(modules.map((moduleName) => this.loadModel(moduleName)));
-  }
 }

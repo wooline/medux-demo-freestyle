@@ -1,0 +1,38 @@
+:global {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+
+  :local(.pic-list) {
+    background-color: #000;
+    .list-item {
+      border-top: 1px #666 solid;
+      border-bottom: 1px #666 solid;
+      margin-bottom: 10px;
+    }
+    .list-pic {
+      position: relative;
+      height: 400px;
+      border-top: 3px #333 solid;
+      border-bottom: 3px #333 solid;
+      background: no-repeat center center;
+      background-size: cover;
+    }
+    .list-title {
+      font-size: 34px;
+      color: #fff;
+      font-weight: bold;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+      padding: 15px 0 30px 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}

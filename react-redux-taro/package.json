@@ -41,24 +41,23 @@
     "mock"
   ],
   "dependencies": {
-    "@medux/react-taro-router": "~2.0.0-beta.3.19",
-    "@babel/runtime": "^7.7.7",
+    "@medux/react-taro-router": "^2.0.0-beta.3.21",
     "@tarojs/components": "3.0.24",
     "@tarojs/runtime": "3.0.24",
     "@tarojs/taro": "3.0.24",
     "@tarojs/react": "3.0.24",
+    "taro-ui": "next",
     "react-redux": "^7.2.0",
     "react-dom": "^16.10.0",
     "react": "^16.10.0",
     "qrcode": "^1.4.4"
   },
   "devDependencies": {
-    "@types/webpack-env": "^1.13.6",
-    "@types/react": "^16.0.0",
+    "@types/webpack-env": "~1.13.6",
+    "@types/react": "~16.14.0",
     "@tarojs/mini-runner": "3.0.24",
-    "@babel/core": "^7.8.0",
     "@tarojs/webpack-runner": "3.0.24",
-    "babel-preset-taro": "3.0.24",
+    "babel-preset-taro": "~3.0.24",
     "@medux/dev-pkg": "~2.1.0",
     "typescript": "~4.0.5"
   }

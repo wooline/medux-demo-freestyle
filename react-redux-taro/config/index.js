@@ -4,7 +4,7 @@ const srcPath = path.resolve(__dirname, '..', 'src');
 const h5StaticPath = path.resolve(__dirname, '..', 'h5-static');
 
 function generateScopedName(localName, mfileName) {
-  if (mfileName.match(/[/\\]assets[/\\]css[/\\]global.m.\w+?$/)) {
+  if (mfileName.match(/[/\\]assets[/\\]css[/\\]global.module.\w+?$/)) {
     return `g-${localName}`;
   }
   mfileName = mfileName
@@ -59,6 +59,7 @@ const config = {
     },
   },
   h5: {
+    esnextModules: ['taro-ui'],
     publicPath: '/',
     staticDirectory: 'static',
     router: {

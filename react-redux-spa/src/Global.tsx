@@ -1,15 +1,6 @@
 import React from 'react';
 import {exportApp, RootModuleFacade, FacadeExports, patchActions, setConfig} from '@medux/react-web-router';
 import {ModuleGetter, RouteParams, Pagename} from 'modules/config';
-import Loading from 'assets/imgs/loading48x48.gif';
-
-const LoadViewOnLoading = (
-  <div className="g-viewLoader">
-    <img src={Loading} width="20" height="20" alt="loading..." />
-  </div>
-);
-
-setConfig({LoadViewOnLoading});
 
 type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename>;
 

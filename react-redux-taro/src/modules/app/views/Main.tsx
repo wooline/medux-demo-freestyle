@@ -13,12 +13,15 @@ interface OwnerProps {}
 interface DispatchProps {}
 
 const Photos = App.loadView('photos', 'main');
+const Videos = App.loadView('videos', 'main');
 
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({subView}) => {
-  console.log(subView);
   return (
     <View className={styles.root}>
-      <Switch elseView={<NotFound />}>{subView.photos && <Photos />}</Switch>
+      <Switch elseView={<NotFound />}>
+        {subView.photos && <Photos />}
+        {subView.videos && <Videos />}
+      </Switch>
     </View>
   );
 };

@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
-import {View} from '@tarojs/components';
+import React, {PureComponent} from 'react';
 import {App} from '~/Global';
 
 const MainLayout = App.loadView('app', 'main');
 
-class Page extends Component {
+class Page extends PureComponent {
   componentWillUnmount() {}
 
   componentDidShow() {}
@@ -12,11 +11,7 @@ class Page extends Component {
   componentDidHide() {}
 
   render() {
-    return (
-      <View>
-        <MainLayout />
-      </View>
-    );
+    return <MainLayout />;
   }
 }
 
