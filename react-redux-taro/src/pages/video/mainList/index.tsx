@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
+import {connectPage} from '@medux/react-taro-router/lib/conect-redux';
 import {App} from '~/Global';
 
-const MainLayout = App.loadView('app', 'main');
+const VideosList = App.loadView('videos', 'mainList');
 
 class Page extends PureComponent {
   componentWillUnmount() {}
@@ -11,8 +12,8 @@ class Page extends PureComponent {
   componentDidHide() {}
 
   render() {
-    return <MainLayout />;
+    return <VideosList />;
   }
 }
 
-export default Page;
+export default connectPage(Page);

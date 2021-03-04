@@ -58,7 +58,7 @@
     "@tarojs/mini-runner": "3.0.24",
     "@tarojs/webpack-runner": "3.0.24",
     "babel-preset-taro": "~3.0.24",
-    "@medux/dev-pkg": "~2.1.0",
+    "@medux/dev-pkg": "~2.1.1",
     "typescript": "~4.0.5"
   }
 }

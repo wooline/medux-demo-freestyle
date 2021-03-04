@@ -1,5 +1,5 @@
 import {exportModule} from '@medux/react-taro-router';
-import main from './views/Main';
+import mainList from './views/MainList';
 import {ModuleHandlers} from './model';
 
-export default exportModule('videos', ModuleHandlers, {main});
+export default exportModule('videos', ModuleHandlers, {mainList});

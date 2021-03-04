@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-globals */
 import {ActionTypes, BaseModuleHandlers, BaseModuleState, effect, LoadingState, errorAction} from '@medux/react-taro-router';
 import Taro from '@tarojs/taro';
-import {CurUser, api} from './entity';
+import {CurUser, RouteParams, api} from './entity';
 
 declare const wx: any;
 declare const process: any;
 
-export interface ModuleState extends BaseModuleState {
+export interface ModuleState extends BaseModuleState<RouteParams> {
   curUser: CurUser;
   loading: {
     global: LoadingState;

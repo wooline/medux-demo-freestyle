@@ -29,6 +29,7 @@ const config = {
   outputRoot: `dist/${process.env.TARO_ENV}`,
   alias: {
     '~': srcPath,
+    '@': srcPath,
   },
   plugins: [],
   defineConstants: {},
@@ -37,6 +38,9 @@ const config = {
     options: {},
   },
   framework: 'react',
+  sass: {
+    projectDirectory: srcPath,
+  },
   mini: {
     postcss: {
       pxtransform: {

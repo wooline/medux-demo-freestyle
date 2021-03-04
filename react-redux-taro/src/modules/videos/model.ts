@@ -3,15 +3,14 @@ import fastEqual from 'fast-deep-equal';
 import {api, ListItem, ListSearch, ListSummary, RouteParams} from './entity';
 import defaultRouteParams from './meta';
 
-export type ModuleState = BaseModuleState &
-  RouteParams & {
-    listVer?: number;
-    listSearch?: ListSearch;
-    list?: ListItem[];
-    listSummary?: ListSummary;
-    itemVer?: number;
-    itemId?: string;
-  };
+export type ModuleState = BaseModuleState<RouteParams> & {
+  listVer?: number;
+  listSearch?: ListSearch;
+  list?: ListItem[];
+  listSummary?: ListSummary;
+  itemVer?: number;
+  itemId?: string;
+};
 
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {

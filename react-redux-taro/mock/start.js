@@ -24,7 +24,7 @@ const server = 'http://localhost:4002';
 const [, , port] = server.split(/:\/*/);
 
 const app = express();
-app.use('/static', express.static(staticPath));
+app.use('/client', express.static(staticPath));
 Object.keys(apiProxy).forEach((key) => {
   app.use(key, (req, res, next) => {
     res.set({

@@ -2,8 +2,8 @@ import React from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
-import {StaticServer, App} from '~/Global';
-import {api, ListItem, ListSearch, ListSummary, RouteParams} from '~/modules/videos/entity';
+import {StaticServer} from '~/Global';
+import {ListItem, ListSearch, ListSummary} from '~/modules/photos/entity';
 import styles from './index.module.less';
 
 interface StoreProps {
@@ -24,7 +24,8 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
               <View className="list-title">{item.title}</View>
               <View className="listImg" />
               <View className="props">
-                <View className="at-icon at-icon-star" /> {item.hot}
+                <View className="at-icon at-icon-map-pin" /> {item.departure}
+                <View className="at-icon at-icon-star" style={{marginLeft: '5px'}} /> {item.type}
               </View>
               <View className="desc">
                 <View className="price">
@@ -40,8 +41,11 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
   );
 };
 
+// Component.options = {
+//   addGlobalClass: true,
+// };
 function mapStateToProps(appState: APPState): StoreProps {
-  const thisModule = appState.videos!;
+  const thisModule = appState.photos!;
   const {listSearch, list, listSummary} = thisModule;
   return {listSearch, list, listSummary};
 }

@@ -17,7 +17,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 2499,
         hot: 265,
-        coverUrl: '/static/imgs/1.jpg',
+        coverUrl: '/client/imgs/1.jpg',
       },
       {
         id: '2',
@@ -26,7 +26,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 1582,
         hot: 36,
-        coverUrl: '/static/imgs/2.jpg',
+        coverUrl: '/client/imgs/2.jpg',
       },
       {
         id: '3',
@@ -35,7 +35,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自驾游',
         price: 800,
         hot: 6895,
-        coverUrl: '/static/imgs/3.jpg',
+        coverUrl: '/client/imgs/3.jpg',
       },
       {
         id: '4',
@@ -44,7 +44,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自助游',
         price: 6581,
         hot: 562,
-        coverUrl: '/static/imgs/4.jpg',
+        coverUrl: '/client/imgs/4.jpg',
       },
       {
         id: '5',
@@ -53,7 +53,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 3075,
         hot: 882,
-        coverUrl: '/static/imgs/5.jpg',
+        coverUrl: '/client/imgs/5.jpg',
       },
     ],
   };
