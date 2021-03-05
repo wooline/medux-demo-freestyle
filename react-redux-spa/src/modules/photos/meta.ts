@@ -4,9 +4,9 @@ const defaultRouteParams: RouteParams = {
   listSearchPre: {
     pageSize: 10,
     pageCurrent: 1,
-    term: undefined,
-    sorterField: undefined,
-    sorterOrder: undefined,
+    term: null,
+    sorterField: null,
+    sorterOrder: null,
   },
   listView: '',
   _listVerPre: 0,

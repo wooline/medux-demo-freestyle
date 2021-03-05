@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-globals */
-import {ActionTypes, BaseModuleHandlers, BaseModuleState, effect, LoadingState, errorAction} from '@medux/react-taro-router';
+import {ActionTypes, BaseModuleHandlers, BaseModuleState, reducer, effect, LoadingState, errorAction} from '@medux/react-taro-router';
 import Taro from '@tarojs/taro';
-import {CurUser, RouteParams, api} from './entity';
+import {App} from '@/src/Global';
+import {CurUser, LoginParams, RouteParams, api, guest} from './entity';
 
 declare const wx: any;
 declare const process: any;
@@ -16,16 +17,23 @@ export interface ModuleState extends BaseModuleState<RouteParams> {
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
     super({
-      curUser: {
-        id: '',
-        username: 'guest',
-        hasLogin: false,
-        avatar: '',
-      },
+      curUser: guest,
       loading: {
         global: LoadingState.Stop,
       },
     });
+  }
+
+  @reducer
+  public putCurUser(curUser: CurUser): ModuleState {
+    return {...this.state, curUser};
+  }
+
+  @effect()
+  public async login(args: LoginParams) {
+    const curUser = await api.login(args);
+    this.dispatch(this.actions.putCurUser(curUser));
+    App.router.back();
   }
 
   @effect(null)
@@ -39,6 +47,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
 
   @effect(null)
   protected async [ActionTypes.Error](error: {message: string}) {
+    Taro.showToast({title: error.message, icon: 'none'});
     throw error;
   }
 

@@ -17,11 +17,11 @@ export interface ListSummary {
   totalPages: number;
 }
 export interface ListSearch {
-  pageCurrent?: number;
-  pageSize?: number;
-  term?: string;
-  sorterOrder?: 'ascend' | 'descend';
-  sorterField?: string;
+  pageCurrent: number;
+  pageSize: number;
+  term: string | null;
+  sorterOrder: 'ascend' | 'descend' | null;
+  sorterField: string | null;
 }
 
 export type ListView = 'list' | '';

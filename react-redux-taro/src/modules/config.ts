@@ -1,7 +1,8 @@
 import {createLocationTransform, DeepPartial} from '@medux/react-taro-router';
-import photoDefaultRouteParams from '~/modules/photos/meta';
-import videosDefaultRouteParams from '~/modules/videos/meta';
-import myDefaultRouteParams from '~/modules/my/meta';
+import photoDefaultRouteParams from '@/src/modules/photos/meta';
+import videosDefaultRouteParams from '@/src/modules/videos/meta';
+import myDefaultRouteParams from '@/src/modules/my/meta';
+import appDefaultRouteParams from '@/src/modules/app/meta';
 import * as App from './app';
 import * as Photos from './photos';
 import * as Videos from './videos';
@@ -25,7 +26,7 @@ export const moduleGetter = {
 export type ModuleGetter = typeof moduleGetter;
 
 export const defaultRouteParams = {
-  app: {},
+  app: appDefaultRouteParams,
   photos: photoDefaultRouteParams,
   videos: videosDefaultRouteParams,
   my: myDefaultRouteParams,
@@ -68,20 +69,23 @@ const pagenameMap = {
       return [pageCurrent, term];
     },
   },
-  '/my/summary': {
-    argsToParams([pageCurrent, term]: Array<string | undefined>) {
-      const pathParams: PartialRouteParams = {app: {}, my: {subView: 'UserSummary'}};
-      if (pageCurrent) {
-        pathParams.videos!.listSearchPre!.pageCurrent = parseInt(pageCurrent, 10);
-      }
-      if (term) {
-        pathParams.videos!.listSearchPre!.term = term;
-      }
+  '/app/login': {
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {subView: 'Login'}};
       return pathParams;
     },
     paramsToArgs(params: PartialRouteParams) {
       const {pageCurrent, term} = params.videos?.listSearchPre || {};
       return [pageCurrent, term];
+    },
+  },
+  '/my/summary': {
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, my: {subView: 'UserSummary'}};
+      return pathParams;
+    },
+    paramsToArgs(params: PartialRouteParams) {
+      return [];
     },
   },
 };
@@ -90,17 +94,25 @@ export type Pagename = keyof typeof pagenameMap;
 
 export const locationTransform = createLocationTransform(defaultRouteParams, pagenameMap, {
   in(nativeLocation) {
-    let pathname = nativeLocation.pathname;
-    if (pathname === '/' || pathname === '/pages/photo/mainList/index') {
-      pathname = '/photos/list';
-    } else if (pathname === '/pages/video/mainList/index') {
-      pathname = '/videos/list';
-    } else if (pathname === '/pages/my/userSummary/index') {
-      pathname = '/my/summary';
-    }
-    return {...nativeLocation, pathname};
+    const map = {
+      '/': '/photos/list',
+      '/pages/photo/mainList/index': '/photos/list',
+      '/pages/video/mainList/index': '/videos/list',
+      '/pages/my/userSummary/index': '/my/summary',
+      '/pages/app/login/index': '/app/login',
+    };
+    const pathname = nativeLocation.pathname;
+
+    return {...nativeLocation, pathname: map[pathname]};
   },
   out(nativeLocation) {
-    return nativeLocation;
+    const map = {
+      '/photos/list': '/pages/photo/mainList/index',
+      '/videos/list': '/pages/video/mainList/index',
+      '/my/summary': '/pages/my/userSummary/index',
+      '/app/login': '/pages/app/login/index',
+    };
+    const pathname = nativeLocation.pathname;
+    return {...nativeLocation, pathname: map[pathname]};
   },
 });

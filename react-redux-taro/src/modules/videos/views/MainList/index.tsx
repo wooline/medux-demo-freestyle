@@ -2,8 +2,8 @@ import React from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
-import {StaticServer, App} from '~/Global';
-import {api, ListItem, ListSearch, ListSummary, RouteParams} from '~/modules/videos/entity';
+import {StaticServer, App} from '@/src/Global';
+import {api, ListItem, ListSearch, ListSummary, RouteParams} from '@/src/modules/videos/entity';
 import styles from './index.module.less';
 
 interface StoreProps {

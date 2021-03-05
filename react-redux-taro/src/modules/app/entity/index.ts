@@ -15,8 +15,20 @@ export const guest: CurUser = {
   mobile: '18928760092',
 };
 
-export interface RouteParams {}
+export type SubView = 'Login';
+
+export interface LoginParams {
+  username: string;
+  password: string;
+}
+export interface RouteParams {
+  subView?: SubView;
+}
 class API {
+  public login(params: LoginParams): Promise<CurUser> {
+    return Promise.reject('用户名或密码错误');
+  }
+
   public getCurUser(): Promise<CurUser> {
     return Promise.resolve(guest);
   }

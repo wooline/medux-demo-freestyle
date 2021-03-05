@@ -27,7 +27,8 @@
     "dev:jd": "npm run build:jd -- --watch",
     "dev:quickapp": "npm run build:quickapp -- --watch",
     "buildMock": "rimraf ./dist/mock && copyfiles ./mock/package.json ./mock/static/**/* ./dist && tsc -p ./mock",
-    "runMock": "ts-node -P mock/tsconfig.json -r tsconfig-paths/register mock/start.js"
+    "runMock": "ts-node -P mock/tsconfig.json -r tsconfig-paths/register mock/start.js",
+    "runBabel": "babel ./src/app.tsx"
   },
   "browserslist": [
     "last 3 versions",
@@ -57,8 +58,14 @@
     "@types/react": "~16.14.0",
     "@tarojs/mini-runner": "3.0.24",
     "@tarojs/webpack-runner": "3.0.24",
+    "typescript": "~4.0.5",
     "babel-preset-taro": "~3.0.24",
-    "@medux/dev-pkg": "~2.1.1",
-    "typescript": "~4.0.5"
+    "stylelint": "^13.0.0",
+    "eslint": "^7.0.0",
+    "prettier": "^2.1.2",
+    "@medux/eslint-plugin-recommended": "^1.0.9",
+    "@medux/stylelint-config-recommended": "^1.0.0",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0"
   }
 }

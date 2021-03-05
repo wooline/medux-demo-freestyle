@@ -3,6 +3,14 @@
     "@medux/stylelint-config-recommended"
   ],
   "rules": {
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": [
+          "page"
+        ]
+      }
+    ],
     "at-rule-no-unknown": [
       true,
       {

@@ -1,4 +1,4 @@
-import request from '~/common/request';
+import request from '@/src/common/request';
 
 export interface UpdateUserInfo {
   nickname: string;

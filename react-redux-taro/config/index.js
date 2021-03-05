@@ -28,19 +28,22 @@ const config = {
   sourceRoot: 'src',
   outputRoot: `dist/${process.env.TARO_ENV}`,
   alias: {
-    '~': srcPath,
-    '@': srcPath,
+    '@/src': srcPath,
   },
   plugins: [],
-  defineConstants: {},
+  defineConstants: {
+    'process.GlobalVar': JSON.stringify({
+      StaticServer: 'http://192.168.127.226:4002',
+      ApiMaps: {
+        '/api/': 'http://192.168.127.226:4002/api/',
+      },
+    }),
+  },
   copy: {
     patterns: [{from: 'h5-static/', to: 'dist/h5/'}],
     options: {},
   },
   framework: 'react',
-  sass: {
-    projectDirectory: srcPath,
-  },
   mini: {
     postcss: {
       pxtransform: {
@@ -50,7 +53,7 @@ const config = {
       url: {
         enable: true,
         config: {
-          limit: 1024, // 设定转换尺寸上限
+          limit: 10240, // 设定转换尺寸上限
         },
       },
       cssModules: {

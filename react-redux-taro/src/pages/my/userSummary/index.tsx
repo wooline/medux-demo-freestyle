@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {connectPage} from '@medux/react-taro-router/lib/conect-redux';
-import {App} from '~/Global';
+import {App} from '@/src/Global';
 
 const UserSummary = App.loadView('my', 'userSummary');
 

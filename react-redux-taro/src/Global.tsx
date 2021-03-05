@@ -5,12 +5,12 @@ type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagenam
 
 export const {App, Modules, Pagenames}: Facade = exportApp();
 
-export const StaticServer: string = 'http://192.168.127.226:4002';
+//@ts-ignore
+const GlobalVar = process.GlobalVar;
 
-export const ApiMaps = {
-  '/api/': 'http://192.168.127.226:4002/api/',
-};
+export const StaticServer: string = GlobalVar.StaticServer;
 
+export const ApiMaps: {[key: string]: string} = GlobalVar.ApiMaps;
 declare global {
   type APPState = Facade['App']['state'];
   type RouteState = Facade['App']['state']['route'];

@@ -1,5 +1,8 @@
 :global {
   :local(.root) {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
     &::before {
       content: '';
       display: block;
@@ -25,27 +28,35 @@
       z-index: -2;
     }
     .info {
-      padding-top: 50vw;
+      padding-top: 48vw;
       text-align: center;
 
       .avatar {
-        width: 100px;
-        height: 100px;
+        width: 140px;
+        height: 140px;
         border-radius: 200px;
         display: inline-block;
         border: 10px solid #fff;
-        background-image: url(~@/assets/imgs/avatar.png);
+        background: url(~@/src/assets/imgs/avatar.png) no-repeat center center;
+        background-size: cover;
       }
       .nickName {
-        background-color: #fff;
+        font-size: 30px;
         font-weight: bold;
       }
       .score {
-        background-color: #fff;
         line-height: 2;
-        font-size: 11px;
+        font-size: 24px;
         color: #999;
         padding-bottom: 40px;
+      }
+      .login {
+        font-size: 30px;
+        padding: 10px 50px;
+        border: 1px solid rgb(70, 150, 255);
+        color: rgb(70, 150, 255);
+        border-radius: 100px;
+        display: inline-block;
       }
     }
   }

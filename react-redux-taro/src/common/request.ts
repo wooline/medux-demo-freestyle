@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import {ApiMaps} from '~/Global';
+import {ApiMaps} from '@/src/Global';
 
 const request: typeof Taro.request = (args) => {
   const options: typeof args = {...args};

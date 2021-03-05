@@ -1,8 +1,9 @@
-import React from 'react';
-import {Switch, Dispatch} from '@medux/react-taro-router';
+import React, {useCallback} from 'react';
+import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
-import {View, Image} from '@tarojs/components';
-import {CurUser} from '~/modules/app/entity';
+import {View} from '@tarojs/components';
+import {CurUser} from '@/src/modules/app/entity';
+import {App} from '@/src/Global';
 import styles from './index.module.less';
 
 interface StoreProps {
@@ -14,12 +15,24 @@ interface DispatchProps {
 }
 
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser}) => {
+  const onLogin = useCallback(() => App.router.push('/app/login?{}'), []);
   return (
     <View className={styles.root}>
       <View className="info">
         <View className="avatar" />
-        <View className="nickName">{curUser.username}</View>
-        <View className="score">✆ {curUser.mobile}, VIP</View>
+
+        {curUser.hasLogin ? (
+          <>
+            <View className="nickName">{curUser.username}</View>
+            <View className="score">✆ {curUser.mobile}</View>
+          </>
+        ) : (
+          <View>
+            <View className="login" onClick={onLogin}>
+              登录
+            </View>
+          </View>
+        )}
       </View>
     </View>
   );
