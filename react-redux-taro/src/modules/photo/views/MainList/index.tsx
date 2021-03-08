@@ -2,8 +2,8 @@ import React from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
-import {StaticServer, App} from '@/src/Global';
-import {api, ListItem, ListSearch, ListSummary, RouteParams} from '@/src/modules/videos/entity';
+import {StaticServer} from '@/src/Global';
+import {ListItem, ListSearch, ListSummary} from '@/src/modules/photo/entity';
 import styles from './index.module.less';
 
 interface StoreProps {
@@ -24,10 +24,14 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
               <View className="list-title">{item.title}</View>
               <View className="listImg" />
               <View className="props">
-                <View className="at-icon at-icon-heart-2" /> {item.hot}
+                <View className="at-icon at-icon-map-pin" /> {item.departure}
+                <View className="at-icon at-icon-star" style={{marginLeft: '5px'}} /> {item.type}
               </View>
-              <View className="player">
-                <View className="at-icon at-icon-play" />
+              <View className="desc">
+                <View className="price">
+                  <Text className="unit">￥</Text>
+                  <Text className="num">{item.price}</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -38,7 +42,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
 };
 
 function mapStateToProps(appState: APPState): StoreProps {
-  const thisModule = appState.videos!;
+  const thisModule = appState.photo!;
   const {listSearch, list, listSummary} = thisModule;
   return {listSearch, list, listSummary};
 }

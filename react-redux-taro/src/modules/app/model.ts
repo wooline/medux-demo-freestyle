@@ -2,13 +2,14 @@
 import {ActionTypes, BaseModuleHandlers, BaseModuleState, reducer, effect, LoadingState, errorAction} from '@medux/react-taro-router';
 import Taro from '@tarojs/taro';
 import {App} from '@/src/Global';
+import {CommonErrorCode, QuietError, CustomError} from '@/src/common/errors';
 import {CurUser, LoginParams, RouteParams, api, guest} from './entity';
 
 declare const wx: any;
 declare const process: any;
 
 export interface ModuleState extends BaseModuleState<RouteParams> {
-  curUser: CurUser;
+  curUser?: CurUser;
   loading: {
     global: LoadingState;
   };
@@ -17,7 +18,7 @@ export interface ModuleState extends BaseModuleState<RouteParams> {
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
     super({
-      curUser: guest,
+      curUser: undefined,
       loading: {
         global: LoadingState.Stop,
       },
@@ -33,7 +34,14 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   public async login(args: LoginParams) {
     const curUser = await api.login(args);
     this.dispatch(this.actions.putCurUser(curUser));
-    App.router.back();
+    App.router.back(1, '/my/summary?{}');
+  }
+
+  @effect()
+  public async logout() {
+    const curUser = await api.logout();
+    this.dispatch(this.actions.putCurUser(curUser));
+    App.router.relaunch('/my/summary?{}');
   }
 
   @effect(null)
@@ -46,8 +54,10 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   }
 
   @effect(null)
-  protected async [ActionTypes.Error](error: {message: string}) {
-    Taro.showToast({title: error.message, icon: 'none'});
+  protected async [ActionTypes.Error](error: CustomError) {
+    if (!error.quiet) {
+      Taro.showToast({title: error.message, icon: 'none'});
+    }
     throw error;
   }
 
@@ -68,7 +78,6 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
     //     this.dispatch(errorAction(error));
     //   });
     // }
-
     const curUser = await api.getCurUser();
     this.dispatch(this.actions.Update({curUser}, 'init'));
   }

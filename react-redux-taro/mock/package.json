@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@medux/dev-utils":"^3.0.6",
+    "@medux/dev-utils":"^3.0.8",
     "express": "^4.0.0",
     "http-proxy-middleware": "^1.0.0",
     "mockjs":"^1.1.0"

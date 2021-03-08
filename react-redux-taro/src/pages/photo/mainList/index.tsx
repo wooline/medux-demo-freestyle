@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {App} from '@/src/Global';
 
-const PhotosList = App.loadView('photos', 'mainList');
+const PhotoList = App.loadView('photo', 'mainList');
 
 class Page extends PureComponent {
   componentWillUnmount() {}
@@ -11,7 +11,7 @@ class Page extends PureComponent {
   componentDidHide() {}
 
   render() {
-    return <PhotosList />;
+    return <PhotoList />;
   }
 }
 

@@ -3,6 +3,7 @@ const express = require('express');
 const chalk = require('chalk');
 const {createMiddleware} = require('@medux/dev-utils/lib/api-mock');
 const {createProxyMiddleware} = require('http-proxy-middleware');
+const bodyParser = require('body-parser');
 
 const staticPath = path.join(__dirname, './static');
 const mockMiddleware = createMiddleware(path.join(__dirname, './index.ts'));
@@ -25,6 +26,8 @@ const [, , port] = server.split(/:\/*/);
 
 const app = express();
 app.use('/client', express.static(staticPath));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 Object.keys(apiProxy).forEach((key) => {
   app.use(key, (req, res, next) => {
     res.set({
@@ -33,7 +36,11 @@ Object.keys(apiProxy).forEach((key) => {
       'Access-Control-Allow-Methods': '*',
       'Access-Control-Allow-Headers': '*',
     });
-    next();
+    if (req.method.toLowerCase() === 'options') {
+      res.sendStatus(200).end();
+    } else {
+      next();
+    }
   });
   app.use(key, mockMiddleware);
   app.use(key, createProxyMiddleware(apiProxy[key]));

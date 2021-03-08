@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {connectPage} from '@medux/react-taro-router/lib/conect-redux';
 import {App} from '@/src/Global';
 
-const VideosList = App.loadView('videos', 'mainList');
+const VideoList = App.loadView('video', 'mainList');
 
 class Page extends PureComponent {
   componentWillUnmount() {}
@@ -12,7 +12,7 @@ class Page extends PureComponent {
   componentDidHide() {}
 
   render() {
-    return <VideosList />;
+    return <VideoList />;
   }
 }
 

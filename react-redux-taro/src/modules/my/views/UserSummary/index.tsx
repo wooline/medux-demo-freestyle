@@ -3,28 +3,35 @@ import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View} from '@tarojs/components';
 import {CurUser} from '@/src/modules/app/entity';
-import {App} from '@/src/Global';
+import {App, StaticServer} from '@/src/Global';
 import styles from './index.module.less';
 
 interface StoreProps {
-  curUser: CurUser;
+  curUser?: CurUser;
 }
 interface OwnerProps {}
 interface DispatchProps {
   dispatch: Dispatch;
 }
-
-const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser}) => {
+const {app: appActions} = App.getActions('app');
+const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, dispatch}) => {
   const onLogin = useCallback(() => App.router.push('/app/login?{}'), []);
+  const onLoginOut = useCallback(() => dispatch(appActions.logout()), [dispatch]);
+  if (!curUser) {
+    return null;
+  }
   return (
     <View className={styles.root}>
       <View className="info">
-        <View className="avatar" />
+        <View className="avatar" style={{backgroundImage: `url(${StaticServer + curUser.avatar})`}} />
 
         {curUser.hasLogin ? (
           <>
             <View className="nickName">{curUser.username}</View>
             <View className="score">✆ {curUser.mobile}</View>
+            <View className="logout" onClick={onLoginOut}>
+              退出登录
+            </View>
           </>
         ) : (
           <View>

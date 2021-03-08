@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View} from '@tarojs/components';
@@ -9,23 +9,32 @@ import {App} from '@/src/Global';
 import styles from './index.module.less';
 
 interface StoreProps {
-  curUser: CurUser;
+  curUser?: CurUser;
 }
 interface OwnerProps {}
 interface DispatchProps {
   dispatch: Dispatch;
 }
 const {app: appActions} = App.getActions('app');
-const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({dispatch}) => {
+const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, dispatch}) => {
+  useEffect(() => {
+    if (curUser && curUser.hasLogin) {
+      App.router.relaunch('/my/summary?{}');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const [errorMessage, setErrorMessage] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const onCancel = useCallback(() => App.router.back(), []);
+  const onCancel = useCallback(() => App.router.back(1, '/my/summary?{}'), []);
   const onSubmit = useCallback(() => {
     const loginParams: LoginParams = {username: username.trim(), password: password.trim()};
     if (!loginParams.username || !loginParams.password) {
       Taro.showToast({title: '请输入用户名和密码', icon: 'none'});
     } else {
-      dispatch(appActions.login(loginParams));
+      (dispatch(appActions.login(loginParams)) as Promise<void>).catch((e) => {
+        setErrorMessage(e.message);
+      });
     }
   }, [password, username, dispatch]);
   return (
@@ -41,6 +50,7 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({dispatch}
         </AtButton>
         <AtButton onClick={onCancel}>取消</AtButton>
       </View>
+      {errorMessage && <View className="errorMessage">{errorMessage}</View>}
     </View>
   );
 };

@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '视频列表',
+  navigationBarTitleText: '个人中心',
 };

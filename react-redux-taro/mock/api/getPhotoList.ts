@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {GetPhotoList} from '~/api/photo';
+import {GetPhotoList} from '@/src/api/photo';
 
 export = function (request: Request, response: Response, next: NextFunction) {
   const result: GetPhotoList['Response'] = {
