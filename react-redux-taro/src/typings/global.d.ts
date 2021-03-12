@@ -1,5 +1,5 @@
-// @ts-ignore
 declare const process: {
+  GlobalVar: any;
   env: {
     TARO_ENV: 'weapp' | 'swan' | 'alipay' | 'h5' | 'rn' | 'tt' | 'quickapp' | 'qq' | 'jd';
     [key: string]: any;

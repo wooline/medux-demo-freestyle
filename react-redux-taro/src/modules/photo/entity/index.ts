@@ -17,16 +17,20 @@ export interface ListSummary {
   totalPages: number;
 }
 export interface ListSearch {
-  pageCurrent?: number;
-  pageSize?: number;
-  term?: string;
-  sorterOrder?: 'ascend' | 'descend';
-  sorterField?: string;
+  pageCurrent: number;
+  pageSize: number;
+  term: string | null;
+  sorterOrder: 'ascend' | 'descend';
+  sorterField: string;
 }
 
 export type ListView = 'list' | '';
 export type ItemView = 'detail' | '';
 
+export interface ItemDetail extends ListItem {
+  remark: string;
+  picList: string[];
+}
 export interface RouteParams {
   listView: ListView;
   listSearchPre: ListSearch;
@@ -37,17 +41,20 @@ export interface RouteParams {
 }
 
 class API {
-  public getList(args: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
-    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getPhotoList'}).then((res) => {
+  public getList(params: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
+    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getPhotoList', data: params}).then((res) => {
       return res.data;
     });
   }
-  // public getDetailItem(id: string): Promise<ItemDetail> {
-  //   if (!id) {
-  //     return Promise.resolve({} as any);
-  //   }
-  //   return request('get', '/api/member/:id', {id});
-  // }
+
+  public getItem(id: string): Promise<ItemDetail> {
+    if (!id) {
+      return Promise.resolve({} as any);
+    }
+    return request<ItemDetail>({url: '/api/getPhotoItem', data: {id}}).then((res) => {
+      return res.data;
+    });
+  }
   // public createItem(item: UpdateItem): Promise<void> {
   //   const {username, ...info} = item;
   //   return request('post', '/api/member', {}, {username, info});

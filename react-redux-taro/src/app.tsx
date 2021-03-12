@@ -10,6 +10,7 @@ import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/loading.scss';
 import 'taro-ui/dist/style/components/input.scss';
 import 'taro-ui/dist/style/components/form.scss';
+import 'taro-ui/dist/style/components/nav-bar.scss';
 import './assets/css/global.module.less';
 
 class App extends Component {

@@ -15,7 +15,7 @@ interface DispatchProps {
 }
 const {app: appActions} = App.getActions('app');
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, dispatch}) => {
-  const onLogin = useCallback(() => App.router.push('/app/login?{}'), []);
+  const onLogin = useCallback(() => App.router.push({pagename: '/app/login'}), []);
   const onLoginOut = useCallback(() => dispatch(appActions.logout()), [dispatch]);
   if (!curUser) {
     return null;

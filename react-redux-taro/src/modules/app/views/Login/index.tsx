@@ -19,7 +19,7 @@ const {app: appActions} = App.getActions('app');
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, dispatch}) => {
   useEffect(() => {
     if (curUser && curUser.hasLogin) {
-      App.router.relaunch('/my/summary?{}');
+      App.router.relaunch({pagename: '/my/summary'});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -39,7 +39,6 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, 
   }, [password, username, dispatch]);
   return (
     <View className={styles.root}>
-      <View className="title">用户登录</View>
       <AtForm>
         <AtInput onChange={setUsername as any} name="username" type="text" placeholder="用户名" value={username} />
         <AtInput onChange={setPassword as any} name="password" type="password" placeholder="密码" value={password} />

@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
-import {GetPhotoList} from '@/src/api/photo';
+import {GetList} from '@/src/api/photo';
 
 export = function (request: Request, response: Response, next: NextFunction) {
-  const result: GetPhotoList['Response'] = {
+  const result: GetList['Response'] = {
     listSummary: {
       pageCurrent: 1,
       pageSize: 5,
@@ -17,6 +17,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 2499,
         hot: 265,
+        comments: 234,
         coverUrl: '/client/imgs/1.jpg',
       },
       {
@@ -26,6 +27,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 1582,
         hot: 36,
+        comments: 234,
         coverUrl: '/client/imgs/2.jpg',
       },
       {
@@ -35,6 +37,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自驾游',
         price: 800,
         hot: 6895,
+        comments: 234,
         coverUrl: '/client/imgs/3.jpg',
       },
       {
@@ -44,6 +47,7 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '自助游',
         price: 6581,
         hot: 562,
+        comments: 234,
         coverUrl: '/client/imgs/4.jpg',
       },
       {
@@ -53,9 +57,11 @@ export = function (request: Request, response: Response, next: NextFunction) {
         type: '跟团游',
         price: 3075,
         hot: 882,
+        comments: 234,
         coverUrl: '/client/imgs/5.jpg',
       },
     ],
   };
+  // setTimeout(() => response.json(result), 10000);
   response.json(result);
 };

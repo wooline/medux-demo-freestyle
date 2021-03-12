@@ -1,5 +1,12 @@
 export default {
-  pages: ['pages/photo/mainList/index', 'pages/video/mainList/index', 'pages/my/userSummary/index', 'pages/app/login/index'],
+  pages: [
+    'pages/photo/mainList/index',
+    'pages/photo/mainItem/index',
+    'pages/video/mainList/index',
+    'pages/comment/mainList/index',
+    'pages/my/userSummary/index',
+    'pages/app/login/index',
+  ],
   tabBar: {
     selectedColor: '#0089ff',
     list: [

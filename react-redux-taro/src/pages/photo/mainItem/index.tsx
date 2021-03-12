@@ -1,10 +1,9 @@
 import React, {PureComponent} from 'react';
-import {connectPage} from '@medux/react-taro-router/lib/conect-redux';
 import {App} from '@/src/Global';
 import config from './index.config';
 
 const CommonPage = App.loadView('app', 'commonPage');
-const Login = App.loadView('app', 'login');
+const PhotoItem = App.loadView('photo', 'mainItem');
 
 class Page extends PureComponent {
   componentWillUnmount() {}
@@ -16,10 +15,10 @@ class Page extends PureComponent {
   render() {
     return (
       <CommonPage title={config.navigationBarTitleText}>
-        <Login />
+        <PhotoItem />
       </CommonPage>
     );
   }
 }
 
-export default connectPage(Page);
+export default Page;

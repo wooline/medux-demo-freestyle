@@ -5,7 +5,6 @@ type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagenam
 
 export const {App, Modules, Pagenames}: Facade = exportApp();
 
-//@ts-ignore
 const GlobalVar = process.GlobalVar;
 
 export const StaticServer: string = GlobalVar.StaticServer;

@@ -2,8 +2,8 @@
 import {ActionTypes, BaseModuleHandlers, BaseModuleState, reducer, effect, LoadingState, errorAction} from '@medux/react-taro-router';
 import Taro from '@tarojs/taro';
 import {App} from '@/src/Global';
-import {CommonErrorCode, QuietError, CustomError} from '@/src/common/errors';
-import {CurUser, LoginParams, RouteParams, api, guest} from './entity';
+import {CustomError} from '@/src/common/errors';
+import {CurUser, LoginParams, RouteParams, api} from './entity';
 
 declare const wx: any;
 declare const process: any;
@@ -41,16 +41,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   public async logout() {
     const curUser = await api.logout();
     this.dispatch(this.actions.putCurUser(curUser));
-    App.router.relaunch('/my/summary?{}');
-  }
-
-  @effect(null)
-  protected async ['this.Loading']({global}: {global?: LoadingState}) {
-    if (global === LoadingState.Start) {
-      Taro.showLoading({title: 'Loading...', mask: true});
-    } else if (global === LoadingState.Stop) {
-      Taro.hideLoading();
-    }
+    App.router.relaunch({pagename: '/my/summary'});
   }
 
   @effect(null)
@@ -63,22 +54,19 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
 
   @effect(null)
   protected async ['this.Init']() {
-    // if (process.env.TARO_ENV === 'h5') {
-    //   window.addEventListener('unhandledrejection', (error) => {
-    //     this.dispatch(errorAction(error.reason));
-    //   });
-    //   window.addEventListener('error', (error) => {
-    //     this.dispatch(errorAction(error));
-    //   });
-    // } else if (process.env.TARO_ENV === 'weapp') {
-    //   wx.onUnhandledRejection((error) => {
-    //     this.dispatch(errorAction(error.reason));
-    //   });
-    //   wx.onError((error) => {
-    //     this.dispatch(errorAction(error));
-    //   });
-    // }
+    // Taro.onError((error) => {
+    //   this.dispatch(errorAction(error));
+    // });
+    // Taro.onUnhandledRejection((error) => {
+    //   this.dispatch(errorAction(error.reason));
+    // });
     const curUser = await api.getCurUser();
     this.dispatch(this.actions.Update({curUser}, 'init'));
+    setTimeout(() => {
+      Promise.reject('11111');
+    }, 3000);
+    setTimeout(() => {
+      throw new Error('444');
+    }, 6000);
   }
 }

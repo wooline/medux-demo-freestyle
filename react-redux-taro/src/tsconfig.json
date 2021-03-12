@@ -4,7 +4,7 @@
     "module": "ESNext",
     "lib": ["es2018","DOM"],
     "moduleResolution": "node",
-    "types": ["./typings/assets"],
+    "types": ["./typings/assets","./typings/global"],
     "noEmit": true,
     "allowJs": true,
     "checkJs": false,

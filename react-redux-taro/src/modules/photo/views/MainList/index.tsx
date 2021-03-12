@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
-import {StaticServer} from '@/src/Global';
-import {ListItem, ListSearch, ListSummary} from '@/src/modules/photo/entity';
+import {App, StaticServer} from '@/src/Global';
+import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
 
 interface StoreProps {
@@ -14,12 +14,15 @@ interface StoreProps {
 interface DispatchProps {
   dispatch: Dispatch;
 }
-const Component: React.FC<StoreProps & DispatchProps> = ({list = []}) => {
+const Component: React.FC<StoreProps & DispatchProps> = ({list}) => {
+  if (!list) {
+    return null;
+  }
   return (
     <View className={styles.root}>
       <View className="g-pic-list">
         {list.map((item) => (
-          <View key={item.id} className="list-item">
+          <View key={item.id} className="list-item" onClick={() => App.router.push({pagename: '/photo/item', params: {photo: {itemIdPre: item.id}}})}>
             <View className="list-pic" style={{backgroundImage: `url(${StaticServer + item.coverUrl})`}}>
               <View className="list-title">{item.title}</View>
               <View className="listImg" />

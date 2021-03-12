@@ -5,6 +5,10 @@ module.exports = {
     [
       'taro',
       {
+        targets: {
+          ios: '10',
+          android: '6',
+        },
         framework: 'react',
         ts: true,
         loose: true,

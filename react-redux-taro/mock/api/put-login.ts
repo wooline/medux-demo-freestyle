@@ -1,8 +1,9 @@
 import {NextFunction, Request, Response} from 'express';
+import {Login} from '@/src/api/session';
 import {database} from '../database';
 
 export = function (request: Request, response: Response, next: NextFunction) {
-  let {username = '', password = ''} = request.body;
+  let {username = '', password = ''}: Login['Request'] = request.body;
   username = username.toString();
   password = password.toString();
   if (username === 'admin' && password === '123456') {

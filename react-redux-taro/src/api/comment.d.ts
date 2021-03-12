@@ -1,9 +1,11 @@
 export interface ListItem {
   id: string;
-  title: string;
-  hot: number;
-  coverUrl: string;
-  videoUrl: string;
+  userId: string;
+  username: string;
+  avatarUrl: string;
+  content: string;
+  createdTime: string;
+  replies: number;
 }
 export interface ListSummary {
   pageCurrent: number;
@@ -12,16 +14,22 @@ export interface ListSummary {
   totalPages: number;
 }
 export interface ListSearch {
+  articleId: string;
   pageCurrent: number;
   pageSize: number;
-  term: string | null;
   sorterOrder: 'ascend' | 'descend';
   sorterField: string;
 }
 
+export interface ItemDetail extends ListItem {
+  remark: string;
+  picList: string[];
+}
 export interface API<Req, Res> {
   Request: Req;
   Response: Res;
 }
 
 export type GetList = API<ListSearch, {list: ListItem[]; listSummary: ListSummary}>;
+
+export type GetItem = API<{id: string}, ItemDetail>;

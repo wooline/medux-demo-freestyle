@@ -2,9 +2,9 @@ import {RouteParams} from './entity';
 
 const defaultRouteParams: RouteParams = {
   listSearchPre: {
+    articleId: '',
     pageSize: 10,
     pageCurrent: 1,
-    term: null,
     sorterField: '',
     sorterOrder: 'ascend',
   },

@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
-import {GetVideoList} from '@/src/api/video';
+import {GetList} from '@/src/api/video';
 
 export = function (request: Request, response: Response, next: NextFunction) {
-  const result: GetVideoList['Response'] = {
+  const result: GetList['Response'] = {
     listSummary: {
       pageCurrent: 1,
       pageSize: 5,

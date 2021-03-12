@@ -17,7 +17,6 @@ const request: typeof Taro.request = (args) => {
   });
   return Taro.request(options)
     .then((res) => {
-      console.log(res.statusCode);
       if (res.statusCode === 200 || res.statusCode === 201) {
         return res;
       }

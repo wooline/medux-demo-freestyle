@@ -3,9 +3,11 @@ import photoDefaultRouteParams from '@/src/modules/photo/meta';
 import videoDefaultRouteParams from '@/src/modules/video/meta';
 import myDefaultRouteParams from '@/src/modules/my/meta';
 import appDefaultRouteParams from '@/src/modules/app/meta';
+import commentDefaultRouteParams from '@/src/modules/comment/meta';
 import * as App from './app';
 import * as Photo from './photo';
 import * as Video from './video';
+import * as Comment from './comment';
 import * as My from './my';
 
 // 定义模块的加载方案，同步或者异步均可
@@ -19,6 +21,9 @@ export const moduleGetter = {
   video: () => {
     return Video;
   },
+  comment: () => {
+    return Comment;
+  },
   my: () => {
     return My;
   },
@@ -29,6 +34,7 @@ export const defaultRouteParams = {
   app: appDefaultRouteParams,
   photo: photoDefaultRouteParams,
   video: videoDefaultRouteParams,
+  comment: commentDefaultRouteParams,
   my: myDefaultRouteParams,
 };
 
@@ -38,35 +44,39 @@ type PartialRouteParams = DeepPartial<RouteParams>;
 
 const pagenameMap = {
   '/photo/list': {
-    argsToParams([pageCurrent, term]: Array<string | undefined>) {
-      const pathParams: PartialRouteParams = {app: {}, photo: {listView: 'list', listSearchPre: {}}};
-      if (pageCurrent) {
-        pathParams.photo!.listSearchPre!.pageCurrent = parseInt(pageCurrent, 10);
-      }
-      if (term) {
-        pathParams.photo!.listSearchPre!.term = term;
-      }
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, photo: {listView: 'list'}};
       return pathParams;
     },
-    paramsToArgs(params: PartialRouteParams) {
-      const {pageCurrent, term} = params.photo?.listSearchPre || {};
-      return [pageCurrent, term];
+    paramsToArgs() {
+      return [];
+    },
+  },
+  '/photo/item': {
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, photo: {itemView: 'detail'}};
+      return pathParams;
+    },
+    paramsToArgs() {
+      return [];
     },
   },
   '/video/list': {
-    argsToParams([pageCurrent, term]: Array<string | undefined>) {
-      const pathParams: PartialRouteParams = {app: {}, video: {listView: 'list', listSearchPre: {}}};
-      if (pageCurrent) {
-        pathParams.video!.listSearchPre!.pageCurrent = parseInt(pageCurrent, 10);
-      }
-      if (term) {
-        pathParams.video!.listSearchPre!.term = term;
-      }
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, video: {listView: 'list'}};
       return pathParams;
     },
     paramsToArgs(params: PartialRouteParams) {
-      const {pageCurrent, term} = params.video?.listSearchPre || {};
-      return [pageCurrent, term];
+      return [];
+    },
+  },
+  '/comment/list': {
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, comment: {listView: 'list'}};
+      return pathParams;
+    },
+    paramsToArgs() {
+      return [];
     },
   },
   '/app/login': {
@@ -74,9 +84,8 @@ const pagenameMap = {
       const pathParams: PartialRouteParams = {app: {subView: 'Login'}};
       return pathParams;
     },
-    paramsToArgs(params: PartialRouteParams) {
-      const {pageCurrent, term} = params.video?.listSearchPre || {};
-      return [pageCurrent, term];
+    paramsToArgs() {
+      return [];
     },
   },
   '/my/summary': {
@@ -84,7 +93,7 @@ const pagenameMap = {
       const pathParams: PartialRouteParams = {app: {}, my: {subView: 'UserSummary'}};
       return pathParams;
     },
-    paramsToArgs(params: PartialRouteParams) {
+    paramsToArgs() {
       return [];
     },
   },
@@ -97,7 +106,9 @@ export const locationTransform = createLocationTransform(defaultRouteParams, pag
     const map = {
       '/': '/photo/list',
       '/pages/photo/mainList/index': '/photo/list',
+      '/pages/photo/mainItem/index': '/photo/item',
       '/pages/video/mainList/index': '/video/list',
+      '/pages/comment/mainList/index': '/comment/list',
       '/pages/my/userSummary/index': '/my/summary',
       '/pages/app/login/index': '/app/login',
     };
@@ -108,7 +119,9 @@ export const locationTransform = createLocationTransform(defaultRouteParams, pag
   out(nativeLocation) {
     const map = {
       '/photo/list': '/pages/photo/mainList/index',
+      '/photo/item': '/pages/photo/mainItem/index',
       '/video/list': '/pages/video/mainList/index',
+      '/comment/list': '/pages/comment/mainList/index',
       '/my/summary': '/pages/my/userSummary/index',
       '/app/login': '/pages/app/login/index',
     };

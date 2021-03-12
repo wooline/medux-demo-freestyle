@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import {App} from '@/src/Global';
+import config from './index.config';
 
+const CommonPage = App.loadView('app', 'commonPage');
 const PhotoList = App.loadView('photo', 'mainList');
 
 class Page extends PureComponent {
@@ -11,7 +13,11 @@ class Page extends PureComponent {
   componentDidHide() {}
 
   render() {
-    return <PhotoList />;
+    return (
+      <CommonPage title={config.navigationBarTitleText}>
+        <PhotoList />
+      </CommonPage>
+    );
   }
 }
 
