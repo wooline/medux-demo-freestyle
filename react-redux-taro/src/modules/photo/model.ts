@@ -23,10 +23,10 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
     return {...this.state, listVer, listSearch, list, listSummary};
   }
 
-  @effect()
-  public async fetchList(listSearchPre: ListSearch, _listVerPre: number) {
+  @effect(null)
+  public async fetchList(listSearchPre: ListSearch, listVerPre: number) {
     const {list, listSummary} = await api.getList(listSearchPre);
-    this.dispatch(this.actions.putList(listSearchPre, list, listSummary, _listVerPre));
+    this.dispatch(this.actions.putList(listSearchPre, list, listSummary, listVerPre));
   }
 
   @reducer

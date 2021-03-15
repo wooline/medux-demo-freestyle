@@ -11,13 +11,14 @@ export interface ListItem {
   comments: number;
 }
 export interface ListSummary {
-  pageCurrent: number;
+  firstSize?: number;
+  pageCurrent: number | [number, number];
   pageSize: number;
   totalItems: number;
   totalPages: number;
 }
 export interface ListSearch {
-  pageCurrent: number;
+  pageCurrent: number | [number, number];
   pageSize: number;
   term: string | null;
   sorterOrder: 'ascend' | 'descend';

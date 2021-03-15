@@ -1,12 +1,14 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
-import {App, StaticServer} from '@/src/Global';
+import MDScrollView from '@/src/components/MDScrollView';
+import {App, Modules, StaticServer} from '@/src/Global';
 import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
 
 interface StoreProps {
+  listVer?: number;
   listSearch?: ListSearch;
   list?: ListItem[];
   listSummary?: ListSummary;
@@ -14,14 +16,26 @@ interface StoreProps {
 interface DispatchProps {
   dispatch: Dispatch;
 }
-const Component: React.FC<StoreProps & DispatchProps> = ({list}) => {
-  if (!list) {
-    return null;
-  }
-  return (
-    <View className={styles.root}>
+
+let sid = 0;
+const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer, dispatch}) => {
+  const onTurning = useCallback(
+    (page: number) => {
+      sid = Date.now();
+      dispatch(Modules.photo.actions.fetchList({...listSearch!, pageCurrent: page}, sid));
+    },
+    [listSearch, dispatch]
+  );
+  const datasource: {list: any[]; page: [number, number] | number; firstSize?: number} | null = useMemo(() => {
+    if (!listSearch || !list || !listSummary) {
+      return null;
+    }
+    return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize};
+  }, [listSearch, list, listSummary]);
+  const children = useCallback((realList: ListItem[]) => {
+    return (
       <View className="g-pic-list">
-        {list.map((item) => (
+        {realList.map((item) => (
           <View key={item.id} className="list-item" onClick={() => App.router.push({pagename: '/photo/item', params: {photo: {itemIdPre: item.id}}})}>
             <View className="list-pic" style={{backgroundImage: `url(${StaticServer + item.coverUrl})`}}>
               <View className="list-title">{item.title}</View>
@@ -40,14 +54,23 @@ const Component: React.FC<StoreProps & DispatchProps> = ({list}) => {
           </View>
         ))}
       </View>
-    </View>
+    );
+  }, []);
+  if (!listSearch || !list || !listSummary) {
+    return null;
+  }
+  console.log(sid, listVer);
+  return (
+    <MDScrollView className={styles.root} totalPages={listSummary.totalPages} datasource={sid === listVer ? datasource : null} onTurning={onTurning}>
+      {children}
+    </MDScrollView>
   );
 };
 
 function mapStateToProps(appState: APPState): StoreProps {
   const thisModule = appState.photo!;
-  const {listSearch, list, listSummary} = thisModule;
-  return {listSearch, list, listSummary};
+  const {listSearch, list, listSummary, listVer} = thisModule;
+  return {listSearch, list, listSummary, listVer};
 }
 
 export default connectRedux(mapStateToProps)(React.memo(Component));

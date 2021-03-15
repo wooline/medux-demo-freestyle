@@ -1,67 +1,33 @@
 import {NextFunction, Request, Response} from 'express';
 import {GetList} from '@/src/api/photo';
+import {database} from '../database';
 
 export = function (request: Request, response: Response, next: NextFunction) {
+  const query: GetList['Request'] = request.query;
+
+  const pageCurrent = parseInt(query.pageCurrent, 10) || 1;
+  const pageSize = parseInt(query.pageSize, 10) || 10;
+
+  const start = (pageCurrent - 1) * pageSize;
+  const end = start + pageSize;
+
+  const datasource = database.photos;
+
+  const listData = Object.keys(datasource).map((id) => {
+    return datasource[id];
+  });
+
+  const totalItems = listData.length;
+
   const result: GetList['Response'] = {
     listSummary: {
-      pageCurrent: 1,
-      pageSize: 5,
-      totalItems: 10,
-      totalPages: 2,
+      pageCurrent,
+      pageSize,
+      totalItems,
+      totalPages: Math.ceil(listData.length / pageSize),
     },
-    list: [
-      {
-        id: '1',
-        title: '新加坡+吉隆坡+马六甲6或7日跟团游',
-        departure: '无锡',
-        type: '跟团游',
-        price: 2499,
-        hot: 265,
-        comments: 234,
-        coverUrl: '/client/imgs/1.jpg',
-      },
-      {
-        id: '2',
-        title: '芽庄4晚5日跟团游',
-        departure: '常州',
-        type: '跟团游',
-        price: 1582,
-        hot: 36,
-        comments: 234,
-        coverUrl: '/client/imgs/2.jpg',
-      },
-      {
-        id: '3',
-        title: '厦门+鼓浪屿自驾4日游',
-        departure: '苏州',
-        type: '自驾游',
-        price: 800,
-        hot: 6895,
-        comments: 234,
-        coverUrl: '/client/imgs/3.jpg',
-      },
-      {
-        id: '4',
-        title: '住无锡318文化大院，游灵山小镇拈花湾',
-        departure: '无锡',
-        type: '自助游',
-        price: 6581,
-        hot: 562,
-        comments: 234,
-        coverUrl: '/client/imgs/4.jpg',
-      },
-      {
-        id: '5',
-        title: '长沙+张家界森林公园+天门山+玻璃栈道+黄龙洞+凤凰古城双高6日跟团游',
-        departure: '长沙',
-        type: '跟团游',
-        price: 3075,
-        hot: 882,
-        comments: 234,
-        coverUrl: '/client/imgs/5.jpg',
-      },
-    ],
+    list: listData.slice(start, end),
   };
-  // setTimeout(() => response.json(result), 10000);
-  response.json(result);
+  setTimeout(() => response.json(result), 5000);
+  // response.json(result);
 };

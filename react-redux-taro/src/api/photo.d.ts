@@ -15,9 +15,9 @@ export interface ListSummary {
   totalPages: number;
 }
 export interface ListSearch {
-  pageCurrent: number;
-  pageSize: number;
-  term: string | null;
+  pageCurrent: string;
+  pageSize: string;
+  term: string;
   sorterOrder: 'ascend' | 'descend';
   sorterField: string;
 }

@@ -62,11 +62,5 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
     // });
     const curUser = await api.getCurUser();
     this.dispatch(this.actions.Update({curUser}, 'init'));
-    setTimeout(() => {
-      Promise.reject('11111');
-    }, 3000);
-    setTimeout(() => {
-      throw new Error('444');
-    }, 6000);
   }
 }
