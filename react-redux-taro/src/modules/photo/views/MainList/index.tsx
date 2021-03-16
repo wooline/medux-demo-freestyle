@@ -17,21 +17,19 @@ interface DispatchProps {
   dispatch: Dispatch;
 }
 
-let sid = 0;
-const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer, dispatch}) => {
+const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer = 0, dispatch}) => {
   const onTurning = useCallback(
-    (page: number) => {
-      sid = Date.now();
+    (page: number, sid: number) => {
       dispatch(Modules.photo.actions.fetchList({...listSearch!, pageCurrent: page}, sid));
     },
     [listSearch, dispatch]
   );
-  const datasource: {list: any[]; page: [number, number] | number; firstSize?: number} | null = useMemo(() => {
+  const datasource: {list: any[]; page: [number, number] | number; firstSize?: number; sid: number} | null = useMemo(() => {
     if (!listSearch || !list || !listSummary) {
       return null;
     }
-    return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize};
-  }, [listSearch, list, listSummary]);
+    return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize, sid: listVer};
+  }, [listSearch, list, listSummary, listVer]);
   const children = useCallback((realList: ListItem[]) => {
     return (
       <View className="g-pic-list">
@@ -56,12 +54,11 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
       </View>
     );
   }, []);
-  if (!listSearch || !list || !listSummary) {
+  if (!listSearch || !list || !listSummary || !datasource) {
     return null;
   }
-  console.log(sid, listVer);
   return (
-    <MDScrollView className={styles.root} totalPages={listSummary.totalPages} datasource={sid === listVer ? datasource : null} onTurning={onTurning}>
+    <MDScrollView className={styles.root} totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning}>
       {children}
     </MDScrollView>
   );

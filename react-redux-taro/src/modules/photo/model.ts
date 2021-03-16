@@ -25,8 +25,13 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
 
   @effect(null)
   public async fetchList(listSearchPre: ListSearch, listVerPre: number) {
+    if (listVerPre !== this.state.listVerPre) {
+      this.dispatch(this.actions.Update({listVerPre}, 'fetchList'));
+    }
     const {list, listSummary} = await api.getList(listSearchPre);
-    this.dispatch(this.actions.putList(listSearchPre, list, listSummary, listVerPre));
+    if (listVerPre === this.state.listVerPre) {
+      this.dispatch(this.actions.putList(listSearchPre, list, listSummary, listVerPre));
+    }
   }
 
   @reducer

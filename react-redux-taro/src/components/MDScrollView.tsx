@@ -2,6 +2,7 @@ import React, {ReactNode, RefObject, PureComponent} from 'react';
 import {ScrollView, View} from '@tarojs/components';
 
 interface DataSource {
+  sid: number;
   list: any[];
   page: [number, number] | number;
   firstSize?: number;
@@ -9,34 +10,31 @@ interface DataSource {
 interface Props {
   className?: string;
   totalPages: number;
-  datasource: DataSource | null;
+  datasource: DataSource;
   onTurning: (page: number, sid: number) => void;
   children: (list: any[]) => ReactNode;
 }
 interface State extends DataSource {
-  datasource?: DataSource;
   reclaiming?: number;
   loadingState: '' | 'next' | 'prev' | 'next-reclaiming' | 'prev-reclaiming';
 }
 
-let sid = 0;
-
 class Component extends PureComponent<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State): Partial<State> | null {
-    if (nextProps.datasource && nextProps.datasource !== prevState.datasource) {
-      const datasource = nextProps.datasource;
-      const {list, page, firstSize, loadingState} = prevState;
-      if (loadingState === 'next-reclaiming' || loadingState === 'prev-reclaiming') {
-        return null;
-      }
-      if (!prevState.datasource || typeof datasource.page === 'object') {
-        return {datasource, loadingState: '', reclaiming: 0, ...datasource};
-      }
+    const datasource = nextProps.datasource;
+    const {list, page, firstSize, loadingState} = prevState;
+    if (loadingState === 'next-reclaiming' || loadingState === 'prev-reclaiming') {
+      return null;
+    }
+    if (datasource.sid > prevState.sid) {
+      return {loadingState: '', reclaiming: 0, ...datasource, sid: datasource.sid + 1};
+    }
+    if (datasource.sid === prevState.sid) {
       const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
       const [firstList, secondList] = typeof page === 'object' ? [list.slice(0, firstSize), list.slice(firstSize)] : [list, list];
       if (datasource.page === firstPage - 1) {
         return {
-          datasource,
+          sid: datasource.sid + 1,
           loadingState: 'prev-reclaiming',
           page: [datasource.page, firstPage],
           list: [...datasource.list, ...list],
@@ -46,7 +44,7 @@ class Component extends PureComponent<Props, State> {
       }
       if (datasource.page === secondPage + 1) {
         return {
-          datasource,
+          sid: datasource.sid + 1,
           loadingState: 'next-reclaiming',
           page: [secondPage, datasource.page],
           list: [...list, ...datasource.list],
@@ -54,12 +52,13 @@ class Component extends PureComponent<Props, State> {
           reclaiming: datasource.list.length + secondList.length,
         };
       }
-      return {datasource, loadingState: '', reclaiming: 0, ...datasource};
     }
+
     return null;
   }
 
   state: State = {
+    sid: -1,
     list: [],
     page: 0,
     loadingState: '',
@@ -117,8 +116,8 @@ class Component extends PureComponent<Props, State> {
     if (loadingState === '' || loadingState === 'prev') {
       const [, secondPage] = typeof page === 'object' ? page : [page, page];
       if (secondPage < this.props.totalPages) {
-        this.setState({loadingState: 'next'});
-        sid = Date.now();
+        const sid = Date.now();
+        this.setState({loadingState: 'next', sid});
         this.props.onTurning(secondPage + 1, sid);
       }
     }
@@ -129,8 +128,8 @@ class Component extends PureComponent<Props, State> {
     if (loadingState === '' || loadingState === 'next') {
       const [firstPage] = typeof page === 'object' ? page : [page, page];
       if (firstPage > 1) {
-        this.setState({loadingState: 'prev'});
-        sid = Date.now();
+        const sid = Date.now();
+        this.setState({loadingState: 'prev', sid});
         this.props.onTurning(firstPage - 1, sid);
       }
     }
