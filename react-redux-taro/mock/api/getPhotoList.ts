@@ -28,6 +28,6 @@ export = function (request: Request, response: Response, next: NextFunction) {
     },
     list: listData.slice(start, end),
   };
-  setTimeout(() => response.json(result), 5000);
-  // response.json(result);
+  // setTimeout(() => response.json(result), 5000);
+  response.json(result);
 };

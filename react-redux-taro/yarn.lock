@@ -1254,10 +1254,10 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-taro-router@^2.0.0-beta.3.25":
-  version "2.0.0-beta.3.25"
-  resolved "https://registry.yarnpkg.com/@medux/react-taro-router/-/react-taro-router-2.0.0-beta.3.25.tgz#a9186f0ac672781511a0429471d90a0891e94098"
-  integrity sha512-5gpB5lCEggH/iclBvzJv1vjAywyyLsvKew0flqWWHVPPOC/pghRWoOV/8Ak/Bofs6MKxsnnwB6o6n1CgDJlEDw==
+"@medux/react-taro-router@^2.0.0-beta.3.26":
+  version "2.0.0-beta.3.26"
+  resolved "https://registry.yarnpkg.com/@medux/react-taro-router/-/react-taro-router-2.0.0-beta.3.26.tgz#9607fcaf05640f98bdbb5f8d5aae361bd497726a"
+  integrity sha512-iaGZv7jIUD4LEfpOtfnTwn4TI7QYKQnAfX6PXBG4lkIuOTcwmZDAL89VKZm0rBn1DanF5pnq25YA1zWeo8GtaQ==
   dependencies:
     "@medux/core" "^2.0.0-beta.3.25"
     "@medux/route-mp" "^2.0.0-beta.3.25"

@@ -1345,10 +1345,10 @@
     babel-plugin-root-import "~6.6.0"
     core-js "*"
 
-"@medux/core@^2.0.0-beta.3.22":
-  version "2.0.0-beta.3.22"
-  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.22.tgz#fbc4821a3b3a87cfcec1344a876955e9089dc84a"
-  integrity sha512-Q2bk0X0EVflPACub/M3WtY4MG5eQQvx4FN3F0MAauFgFjrKLEA/J3EpWklv3RonNTFBLDPZmXawc/D9ijeU35A==
+"@medux/core@^2.0.0-beta.3.25":
+  version "2.0.0-beta.3.25"
+  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.25.tgz#374c8da4a6fa25aa1851a74f4390adf17d28d9fe"
+  integrity sha512-b9yhuDlbZWitmDXw1wf/pVyvbDj3uu6aIRIZU/llZcqd9tYwUrPJLDoSeDfvSYv6clfImH9lSGa+cCPg1F/+uA==
   dependencies:
     "@babel/runtime" "~7.12.5"
     redux "^4.0.5"
@@ -1380,10 +1380,19 @@
     ts-node "^9.1.1"
     tsconfig-paths "^3.9.0"
 
-"@medux/dev-utils@^3.0.0", "@medux/dev-utils@~3.0.6":
+"@medux/dev-utils@^3.0.0":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@medux/dev-utils/-/dev-utils-3.0.6.tgz#fde157087052c19b2d7337a5b789027507f1f060"
   integrity sha512-2ZUgFOjwctj+0SsXWGK+1FaYl6lSe33lI3opBcgWFUarELm9UKt56axqJeQC4PoYVi/KIRpqu7waADfuHSZN4A==
+  dependencies:
+    chalk "^4.0.0"
+    commander "^6.0.0"
+    typescript-json-schema "^0.46.0"
+
+"@medux/dev-utils@~3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@medux/dev-utils/-/dev-utils-3.0.8.tgz#55e4d503b7999694867d3f1537a0bc2946c0c312"
+  integrity sha512-HncHNS0di9U4agNMnS1h6h34TlRPysv2lVsBcjt+gnez/bfGhoQJzl7djZQv0l7P3ZC5pbZ7nvq+YlcFGt/kjQ==
   dependencies:
     chalk "^4.0.0"
     commander "^6.0.0"
@@ -1436,33 +1445,33 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-web-router@~2.0.0-beta.3.22":
-  version "2.0.0-beta.3.22"
-  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.22.tgz#59b042146fee9701ca7259dc72bdb6696bb5c294"
-  integrity sha512-jysMScLY0tKYkGeLp9g36pYF0K/HK6MJXpZ1bMzCS0qqCYqDhNoUEqU5tbCNU7VMmLlXyh/E8JPVJwWBl76htQ==
+"@medux/react-web-router@~2.0.0-beta.3.25":
+  version "2.0.0-beta.3.25"
+  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.25.tgz#c1bda7fd6619ac950e288a081843cae252b86d46"
+  integrity sha512-Tc4mVPPyvOpLlg4TVlbJ2zhqMtlV6qIyWLxRE1giMnJeS2Bx3rbUVjobA+SQ3dGvVpoaekkj2sNEERJFRA0YJQ==
   dependencies:
-    "@medux/core" "^2.0.0-beta.3.22"
-    "@medux/route-browser" "^2.0.0-beta.3.22"
-    "@medux/route-web" "^2.0.0-beta.3.22"
+    "@medux/core" "^2.0.0-beta.3.25"
+    "@medux/route-browser" "^2.0.0-beta.3.25"
+    "@medux/route-web" "^2.0.0-beta.3.25"
 
-"@medux/route-browser@^2.0.0-beta.3.22":
-  version "2.0.0-beta.3.22"
-  resolved "https://registry.yarnpkg.com/@medux/route-browser/-/route-browser-2.0.0-beta.3.22.tgz#538c3a88711fde339a3b111e6e43b82c4b8db383"
-  integrity sha512-TEy3o+ljdkZvRK9yr3/09MJlP9ujX2xBkrXYwhE+3AkuCtg4z2R485QtK+IziPRmYwYxGbWGJIqCSB6KJHHIQA==
+"@medux/route-browser@^2.0.0-beta.3.25":
+  version "2.0.0-beta.3.25"
+  resolved "https://registry.yarnpkg.com/@medux/route-browser/-/route-browser-2.0.0-beta.3.25.tgz#11c855e317c980fed583625961fdeeadb44fbf62"
+  integrity sha512-pUnBujmk/kn3oPFglXtRhBH5LDcQFvBYROrpG8DolJgGcvZEzoN5KIaeOeMxpShlQaAed3JuDcg3n8e9kbJKmQ==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.22"
-    "@medux/route-web" "^2.0.0-beta.3.22"
+    "@medux/core" "^2.0.0-beta.3.25"
+    "@medux/route-web" "^2.0.0-beta.3.25"
     "@types/history" "~4.7.7"
     history "~4.10.1"
 
-"@medux/route-web@^2.0.0-beta.3.22":
-  version "2.0.0-beta.3.22"
-  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.22.tgz#378bc3ab255881309716603aa4cab0cf8ccf7967"
-  integrity sha512-9B7r1Gu+CHRl/kN5qmcMBUgqE+GJhZ3Do+PCTAeVE657SGkeezvUjUchaLbqieTZtR9KKcAq0x+96xJwqZMPaA==
+"@medux/route-web@^2.0.0-beta.3.25":
+  version "2.0.0-beta.3.25"
+  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.25.tgz#5c13b36a23c785ace62bf85c76f2ca99b7e37ee8"
+  integrity sha512-W+ATeJKgFcswwitW+F7xscAwqWloZNj1wLEqXnVPst1ULyCShggQ4maBTl4vnismZDnhRFBoXDKiUUZ/N2zL2Q==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.22"
+    "@medux/core" "^2.0.0-beta.3.25"
 
 "@medux/stylelint-config-recommended@^1.0.0":
   version "1.0.0"
