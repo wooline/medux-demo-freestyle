@@ -19,8 +19,7 @@ interface Props {
   bottomArea?: (morePage: boolean) => ReactNode;
 }
 interface State extends DataSource {
-  forceShowPrevMore: boolean;
-  loadingState: '' | 'next' | 'prev' | 'prev-reclaiming';
+  loadingState: '' | 'next' | 'prev';
 }
 
 const defaultTopArea = (morePage: boolean) => {
@@ -45,16 +44,47 @@ const defaultBottomArea = (morePage: boolean) => {
   );
 };
 
-let instanceId = Date.now();
 class Component extends PureComponent<Props, State> {
+  // static getDerivedStateFromProps(nextProps: Props, prevState: State): Partial<State> | null {
+  //   const datasource = nextProps.datasource;
+  //   const {list, page, firstSize, loadingState} = prevState;
+  //   if (loadingState === 'next-reclaiming' || loadingState === 'prev-reclaiming') {
+  //     return null;
+  //   }
+  //   if (datasource.sid > prevState.sid) {
+  //     return {loadingState: '', reclaiming: 0, ...datasource, sid: datasource.sid + 1};
+  //   }
+  //   if (datasource.sid === prevState.sid) {
+  //     const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
+  //     const [firstList, secondList] = typeof page === 'object' ? [list.slice(0, firstSize), list.slice(firstSize)] : [list, list];
+  //     if (datasource.page === firstPage - 1) {
+  //       return {
+  //         sid: datasource.sid + 1,
+  //         loadingState: '',
+  //         page: [datasource.page, firstPage],
+  //         list: [...datasource.list, ...firstList],
+  //         firstSize: datasource.list.length,
+  //       };
+  //     }
+  //     if (datasource.page === secondPage + 1) {
+  //       return {
+  //         sid: datasource.sid + 1,
+  //         loadingState: '',
+  //         page: [secondPage, datasource.page],
+  //         list: [...secondList, ...datasource.list],
+  //         firstSize: secondList.length,
+  //       };
+  //     }
+  //   }
+
+  //   return null;
+  // }
   static getDerivedStateFromProps(nextProps: Props, prevState: State): Partial<State> | null {
     const datasource = nextProps.datasource;
-    const {list, page, loadingState} = prevState;
-    if (loadingState === 'prev-reclaiming') {
-      return null;
-    }
+    const {list, page} = prevState;
+
     if (datasource.sid > prevState.sid) {
-      return {loadingState: '', ...datasource, sid: datasource.sid + 1, forceShowPrevMore: false};
+      return {loadingState: '', ...datasource, sid: datasource.sid + 1};
     }
     if (datasource.sid === prevState.sid) {
       const curPage = page as number;
@@ -62,11 +92,10 @@ class Component extends PureComponent<Props, State> {
       if (datasource.page === curPage - 1) {
         return {
           sid: datasource.sid + 1,
-          loadingState: 'prev-reclaiming',
+          loadingState: '',
           page: [datasource.page, curPage],
-          list: [...curList, ...datasource.list],
+          list: [...datasource.list, ...curList],
           firstSize: datasource.list.length,
-          forceShowPrevMore: true,
         };
       }
       if (datasource.page === curPage + 1) {
@@ -74,8 +103,8 @@ class Component extends PureComponent<Props, State> {
           sid: datasource.sid + 1,
           loadingState: '',
           page: [curPage, datasource.page],
-          list: [...curList, ...datasource.list],
-          firstSize: curList.length,
+          list: [...list, ...datasource.list],
+          firstSize: list.length,
         };
       }
     }
@@ -88,12 +117,9 @@ class Component extends PureComponent<Props, State> {
     list: [],
     page: 0,
     loadingState: '',
-    forceShowPrevMore: false,
   };
 
   listRef: RefObject<any>;
-
-  iid: string = `scroll-view${instanceId++}`;
 
   currentScrollTop?: number;
 
@@ -102,36 +128,47 @@ class Component extends PureComponent<Props, State> {
     this.listRef = React.createRef();
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  // 回收视口上方的项目会自动调整scrollTop
+  // getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
+  //   const curLoadingState = this.state.loadingState;
+  //   const prevLoadingState = prevState.loadingState;
+  //   if ((curLoadingState === 'next' && prevLoadingState === '') || (curLoadingState === '' && prevLoadingState === 'prev')) {
+  //     const list = this.listRef.current;
+  //     return [list.scrollHeight, list.scrollTop];
+  //   }
+  //   return null;
+  // }
+
+  // 回收视口上方的项目会自动调整scrollTop
+  // componentDidUpdate(prevProps: Props, prevState: State, snapshot: [number, number]) {
+  //   const curLoadingState = this.state.loadingState;
+  //   const prevLoadingState = prevState.loadingState;
+  //   if (snapshot) {
+  //     const [prevScrollHeight, prevScrollTop] = snapshot;
+  //     const ul = this.listRef.current;
+  //     if (curLoadingState === 'next') {
+  //       // ul.scrollTop = prevScrollTop - (prevScrollHeight - ul.scrollHeight);
+  //     } else if (prevLoadingState === 'prev') {
+  //       ul.scrollTop = prevScrollTop + (ul.scrollHeight - prevScrollHeight);
+  //     }
+  //   }
+  // }
+
+  getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
     const curLoadingState = this.state.loadingState;
     const prevLoadingState = prevState.loadingState;
-    if (curLoadingState === 'prev-reclaiming' && prevLoadingState === 'prev') {
-      const iid = `#${this.iid}`;
-      let prevScrollHeight: number;
-      Taro.createSelectorQuery()
-        .select(iid)
-        .boundingClientRect()
-        .exec(([rect]) => {
-          prevScrollHeight = rect.height;
-        });
-      Taro.nextTick(() => {
-        Taro.createSelectorQuery()
-          .select(iid)
-          .boundingClientRect()
-          .exec(([rect]) => {
-            let scrollTop = -rect.top + (rect.height - prevScrollHeight);
-            if (scrollTop === this.state.scrollTop) {
-              scrollTop++;
-            }
-            const {list, firstSize = 0} = this.state;
-            const firstList = list.slice(list.length - firstSize);
-            const secondList = list.slice(0, list.length - firstSize);
-            this.setState({loadingState: '', scrollTop, list: [...firstList, ...secondList]});
-            Taro.nextTick(() => {
-              this.setState({forceShowPrevMore: false});
-            });
-          });
-      });
+    if (curLoadingState === '' && prevLoadingState === 'prev') {
+      const list = this.listRef.current;
+      return [list.scrollHeight, list.scrollTop];
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State, snapshot: [number, number]) {
+    if (snapshot) {
+      const [prevScrollHeight, prevScrollTop] = snapshot;
+      const ul = this.listRef.current;
+      ul.scrollTop = prevScrollTop + (ul.scrollHeight - prevScrollHeight);
     }
   }
 
@@ -178,9 +215,8 @@ class Component extends PureComponent<Props, State> {
 
   render() {
     const {className, children, totalPages, topArea = defaultTopArea, bottomArea = defaultTopArea} = this.props;
-    const {page, list, scrollTop = 0, forceShowPrevMore} = this.state;
+    const {page, list, scrollTop = 0} = this.state;
     const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
-    const iid = this.iid;
     return (
       <ScrollView
         ref={this.listRef}
@@ -191,11 +227,9 @@ class Component extends PureComponent<Props, State> {
         onScrollToLower={this.onScrollToLower}
         onScrollToUpper={this.onScrollToUpper}
       >
-        <View id={iid}>
-          {topArea(firstPage > 1 || forceShowPrevMore)}
-          {children(list || [])}
-          {bottomArea(secondPage < totalPages)}
-        </View>
+        {topArea(firstPage > 1)}
+        {children(list || [])}
+        {bottomArea(secondPage < totalPages)}
       </ScrollView>
     );
   }
