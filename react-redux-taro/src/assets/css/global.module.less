@@ -23,12 +23,21 @@
       width: 100%;
     }
   }
+  .taro-tabbar__tabbar-bottom {
+    overflow: hidden;
+  }
   page {
     height: 100%;
   }
   :local(.scroll-view) {
     height: 100%;
     position: relative;
+    .loading-tips {
+      font-size: 24px;
+      text-align: center;
+      color: #999;
+      line-height: 2;
+    }
   }
   :local(.page-content) {
     overflow: auto;
@@ -44,11 +53,11 @@
     position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 50%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0);
     z-index: 100000;
-
+    display: none;
     > .loadingIcon {
       position: absolute;
       width: 60px;
@@ -62,8 +71,11 @@
       margin-top: -30px;
       animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     }
-
+    &.Start {
+      display: block;
+    }
     &.Depth {
+      display: block;
       background-color: rgba(0, 0, 0, 0.3);
     }
   }

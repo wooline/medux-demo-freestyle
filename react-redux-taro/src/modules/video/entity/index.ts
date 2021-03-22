@@ -12,6 +12,7 @@ export interface ListSummary {
   pageSize: number;
   totalItems: number;
   totalPages: number;
+  firstSize?: number;
 }
 export interface ListSearch {
   pageCurrent: number;
@@ -23,6 +24,8 @@ export interface ListSearch {
 
 export type ListView = 'list' | '';
 export type ItemView = 'detail' | '';
+
+export interface ItemDetail extends ListItem {}
 
 export interface RouteParams {
   listView: ListView;
@@ -36,6 +39,15 @@ export interface RouteParams {
 class API {
   public getList(args: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
     return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getVideoList'}).then((res) => {
+      return res.data;
+    });
+  }
+
+  public getItem(id: string): Promise<ItemDetail> {
+    if (!id) {
+      return Promise.resolve({} as any);
+    }
+    return request<ItemDetail>({url: '/api/getPhotoItem', data: {id}}).then((res) => {
       return res.data;
     });
   }

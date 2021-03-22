@@ -16,6 +16,7 @@ export interface ListSummary {
   pageSize: number;
   totalItems: number;
   totalPages: number;
+  scrollTop?: number;
 }
 export interface ListSearch {
   pageCurrent: number | [number, number];

@@ -3,6 +3,7 @@ export default {
     'pages/photo/mainList/index',
     'pages/photo/mainItem/index',
     'pages/video/mainList/index',
+    'pages/video/mainItem/index',
     'pages/comment/mainList/index',
     'pages/my/userSummary/index',
     'pages/app/login/index',

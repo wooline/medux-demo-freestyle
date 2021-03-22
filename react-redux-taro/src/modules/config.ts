@@ -70,6 +70,15 @@ const pagenameMap = {
       return [];
     },
   },
+  '/video/item': {
+    argsToParams() {
+      const pathParams: PartialRouteParams = {app: {}, video: {itemView: 'detail'}};
+      return pathParams;
+    },
+    paramsToArgs() {
+      return [];
+    },
+  },
   '/comment/list': {
     argsToParams() {
       const pathParams: PartialRouteParams = {app: {}, comment: {listView: 'list'}};
@@ -108,6 +117,7 @@ export const locationTransform = createLocationTransform(defaultRouteParams, pag
       '/pages/photo/mainList/index': '/photo/list',
       '/pages/photo/mainItem/index': '/photo/item',
       '/pages/video/mainList/index': '/video/list',
+      '/pages/video/mainItem/index': '/video/item',
       '/pages/comment/mainList/index': '/comment/list',
       '/pages/my/userSummary/index': '/my/summary',
       '/pages/app/login/index': '/app/login',
@@ -121,6 +131,7 @@ export const locationTransform = createLocationTransform(defaultRouteParams, pag
       '/photo/list': '/pages/photo/mainList/index',
       '/photo/item': '/pages/photo/mainItem/index',
       '/video/list': '/pages/video/mainList/index',
+      '/video/item': '/pages/video/mainItem/index',
       '/comment/list': '/pages/comment/mainList/index',
       '/my/summary': '/pages/my/userSummary/index',
       '/app/login': '/pages/app/login/index',

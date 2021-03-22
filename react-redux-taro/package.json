@@ -41,7 +41,7 @@
     "mock"
   ],
   "dependencies": {
-    "@medux/react-taro-router": "^2.0.0-beta.3.26",
+    "@medux/react-taro-router": "^2.0.0-beta.3.27",
     "@tarojs/components": "3.0.24",
     "@tarojs/runtime": "3.0.24",
     "@tarojs/taro": "3.0.24",

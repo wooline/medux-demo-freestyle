@@ -18,12 +18,15 @@ interface DispatchProps {
 }
 
 const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer = 0, dispatch}) => {
-  const onTurning = useCallback(
-    (page: number, sid: number) => {
-      dispatch(Modules.photo.actions.fetchList({...listSearch!, pageCurrent: page}, sid));
-    },
-    [listSearch, dispatch]
-  );
+  const onTurning = useCallback((page: number, sid: number) => {
+    App.router.replace(
+      {pagename: '/photo/list', params: {photo: {listSearchPre: {pageCurrent: page}, listVerPre: sid}}, extendParams: 'current'},
+      true
+    );
+  }, []);
+  const onUnmount = useCallback((page: [number, number] | number, scrollTop: number) => {
+    console.log(page, scrollTop);
+  }, []);
   const datasource: {list: any[]; page: [number, number] | number; firstSize?: number; sid: number} | null = useMemo(() => {
     if (!listSearch || !list || !listSummary) {
       return null;
@@ -32,11 +35,14 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
   }, [listSearch, list, listSummary, listVer]);
   const children = useCallback((realList: ListItem[]) => {
     return (
-      <View className="g-pic-list">
+      <View className={`g-pic-list ${styles.root}`}>
         {realList.map((item) => (
           <View key={item.id} className="list-item" onClick={() => App.router.push({pagename: '/photo/item', params: {photo: {itemIdPre: item.id}}})}>
             <View className="list-pic" style={{backgroundImage: `url(${StaticServer + item.coverUrl})`}}>
-              <View className="list-title">{item.title}</View>
+              <View className="list-title">
+                {item.id}
+                {item.title}
+              </View>
               <View className="listImg" />
               <View className="props">
                 <View className="at-icon at-icon-map-pin" /> {item.departure}
@@ -58,7 +64,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     return null;
   }
   return (
-    <MDScrollView className={styles.root} totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning}>
+    <MDScrollView totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning} onUnmount={onUnmount}>
       {children}
     </MDScrollView>
   );

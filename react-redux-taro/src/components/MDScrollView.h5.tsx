@@ -14,34 +14,23 @@ interface Props {
   totalPages: number;
   datasource: DataSource;
   onTurning: (page: number, sid: number) => void;
+  onUnmount: (page: [number, number] | number, scrollTop: number) => void;
   children: (list: any[]) => ReactNode;
   topArea?: (morePage: boolean) => ReactNode;
   bottomArea?: (morePage: boolean) => ReactNode;
 }
 interface State extends DataSource {
+  datasource?: DataSource;
   loadingState: '' | 'next' | 'prev';
+  sourceCache: {[page: number]: any[]};
 }
 
 const defaultTopArea = (morePage: boolean) => {
-  return (
-    morePage && (
-      <View style={{fontSize: '12px', textAlign: 'center'}} className="loading">
-        loading...
-      </View>
-    )
-  );
+  return morePage && <View className="loading-tips">loading...</View>;
 };
 
 const defaultBottomArea = (morePage: boolean) => {
-  return morePage ? (
-    <View style={{fontSize: '12px', textAlign: 'center'}} className="loading">
-      loading...
-    </View>
-  ) : (
-    <View style={{fontSize: '12px', textAlign: 'center'}} className="loading">
-      没有更多
-    </View>
-  );
+  return morePage ? <View className="loading-tips">loading...</View> : <View className="loading-tips">没有更多</View>;
 };
 
 class Component extends PureComponent<Props, State> {
@@ -81,32 +70,35 @@ class Component extends PureComponent<Props, State> {
   // }
   static getDerivedStateFromProps(nextProps: Props, prevState: State): Partial<State> | null {
     const datasource = nextProps.datasource;
-    const {list, page} = prevState;
-
-    if (datasource.sid > prevState.sid) {
-      return {loadingState: '', ...datasource, sid: datasource.sid + 1};
-    }
-    if (datasource.sid === prevState.sid) {
-      const curPage = page as number;
-      const curList = list;
-      if (datasource.page === curPage - 1) {
-        return {
-          sid: datasource.sid + 1,
-          loadingState: '',
-          page: [datasource.page, curPage],
-          list: [...datasource.list, ...curList],
-          firstSize: datasource.list.length,
-        };
+    const {list, page, sourceCache} = prevState;
+    if (datasource !== prevState.datasource) {
+      if (prevState.sid > 0 && datasource.sid === prevState.sid) {
+        const curPage = page as number;
+        const curList = list;
+        sourceCache[curPage] = list;
+        sourceCache[datasource.page as number] = datasource.list;
+        if (datasource.page === curPage - 1) {
+          return {
+            datasource,
+            sid: -1,
+            loadingState: '',
+            page: [datasource.page, curPage],
+            list: [...datasource.list, ...curList],
+            firstSize: datasource.list.length,
+          };
+        }
+        if (datasource.page === curPage + 1) {
+          return {
+            datasource,
+            sid: -1,
+            loadingState: '',
+            page: [curPage, datasource.page],
+            list: [...list, ...datasource.list],
+            firstSize: list.length,
+          };
+        }
       }
-      if (datasource.page === curPage + 1) {
-        return {
-          sid: datasource.sid + 1,
-          loadingState: '',
-          page: [curPage, datasource.page],
-          list: [...list, ...datasource.list],
-          firstSize: list.length,
-        };
-      }
+      return {datasource, loadingState: '', ...datasource, scrollTop: datasource.scrollTop || 0, sourceCache: {}};
     }
 
     return null;
@@ -117,6 +109,7 @@ class Component extends PureComponent<Props, State> {
     list: [],
     page: 0,
     loadingState: '',
+    sourceCache: {},
   };
 
   listRef: RefObject<any>;
@@ -172,55 +165,94 @@ class Component extends PureComponent<Props, State> {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onUnmount(this.state.page, this.currentScrollTop || 0);
+  }
+
   onScrollToLower = () => {
-    const {loadingState, page, list, firstSize} = this.state;
+    const {loadingState, page, list, firstSize, sourceCache} = this.state;
     if (loadingState === '' || loadingState === 'prev') {
       const secondPage = typeof page === 'object' ? page[1] : page;
       const secondList = typeof page === 'object' ? list.slice(firstSize) : list;
       if (secondPage < this.props.totalPages) {
         const sid = Date.now();
-        this.setState({
-          loadingState: 'next',
-          list: secondList,
-          page: secondPage,
-          sid,
-        });
-        this.props.onTurning(secondPage + 1, sid);
+        const nextPage = secondPage + 1;
+        const datasource = sourceCache[nextPage];
+        let callback: () => void;
+        if (datasource) {
+          const newState = {
+            sid: -1,
+            loadingState: '',
+            page: [secondPage, nextPage],
+            list: [...secondList, ...datasource],
+            firstSize: secondList.length,
+          };
+          callback = () => this.setState(newState as State);
+        } else {
+          callback = () => this.props.onTurning(nextPage, sid);
+        }
+        this.setState(
+          {
+            sid,
+            loadingState: 'next',
+            list: secondList,
+            page: secondPage,
+          },
+          callback
+        );
       }
     }
   };
 
   onScrollToUpper = () => {
-    const {loadingState, page, list, firstSize} = this.state;
+    const {loadingState, page, list, firstSize, sourceCache} = this.state;
     if (loadingState === '' || loadingState === 'next') {
       const firstPage = typeof page === 'object' ? page[0] : page;
       const firstList = typeof page === 'object' ? list.slice(0, firstSize) : list;
       if (firstPage > 1) {
         const sid = Date.now();
-        this.setState({
-          loadingState: 'prev',
-          list: firstList,
-          page: firstPage,
-          sid,
-        });
-        this.props.onTurning(firstPage - 1, sid);
+        const prevPage = firstPage - 1;
+        const datasource = sourceCache[prevPage];
+        let callback: () => void;
+        if (datasource) {
+          const newState = {
+            sid: -1,
+            loadingState: '',
+            page: [prevPage, firstPage],
+            list: [...datasource, ...firstList],
+            firstSize: datasource.length,
+          };
+          callback = () => this.setState(newState as State);
+        } else {
+          callback = () => this.props.onTurning(prevPage, sid);
+        }
+
+        this.setState(
+          {
+            loadingState: 'prev',
+            list: firstList,
+            page: firstPage,
+            sid,
+          },
+          callback
+        );
       }
     }
   };
 
   onScroll = (e) => {
     this.currentScrollTop = e.detail.scrollTop;
-    console.log(this.currentScrollTop);
   };
 
   render() {
-    const {className, children, totalPages, topArea = defaultTopArea, bottomArea = defaultTopArea} = this.props;
-    const {page, list, scrollTop = 0} = this.state;
+    const {className = 'g-scroll-view', children, totalPages, topArea = defaultTopArea, bottomArea = defaultBottomArea} = this.props;
+    const {page, list, scrollTop = 0, loadingState} = this.state;
     const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
     return (
       <ScrollView
         ref={this.listRef}
-        className={`g-scroll-view ${className}`}
+        style={{height: '100%'}}
+        className={`${className} ${loadingState}`}
         scrollY
         scrollTop={scrollTop}
         onScroll={this.onScroll}

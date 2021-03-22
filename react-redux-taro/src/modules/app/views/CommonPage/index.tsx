@@ -24,11 +24,9 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({globalLoa
       {process.env.TARO_ENV === 'h5' && (
         <AtNavBar color="#555" border={false} onClickLeftIcon={onNavBack} title={title} leftIconType={hasHistory ? 'chevron-left' : ''} />
       )}
-      {(globalLoading === LoadingState.Start || globalLoading === LoadingState.Depth) && (
-        <View className={`g-global-loading ${globalLoading}`}>
-          <View className="loadingIcon at-icon at-icon-loading" />
-        </View>
-      )}
+      <View className={`g-global-loading ${globalLoading}`}>
+        <View className="loadingIcon at-icon at-icon-loading" />
+      </View>
       <View className="g-page-content">{children}</View>
     </>
   );
@@ -36,7 +34,7 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({globalLoa
 
 function mapStateToProps(appState: APPState): StoreProps {
   const app = appState.app!;
-  return {globalLoading: app.loading?.global, hasHistory: App.router.history.getActionsLength() > 1};
+  return {globalLoading: app.loading?.global, hasHistory: App.router.history.getLength() > 0};
 }
 
 export default connectRedux(mapStateToProps)(React.memo(Component));
