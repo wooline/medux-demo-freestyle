@@ -1,4 +1,4 @@
-import {BaseModuleState, BaseModuleHandlers, reducer, effect} from '@medux/react-taro-router';
+import {BaseModuleState, BaseModuleHandlers, reducer, effect, LoadingState} from '@medux/react-taro-router';
 import fastEqual from 'fast-deep-equal';
 import {api, ListItem, ListSearch, ListSummary, ItemDetail, RouteParams} from './entity';
 import defaultRouteParams from './meta';
@@ -15,7 +15,9 @@ export type ModuleState = BaseModuleState<RouteParams> & {
 
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
-    super(defaultRouteParams);
+    super({
+      ...defaultRouteParams,
+    });
   }
 
   @reducer
@@ -23,7 +25,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
     return {...this.state, listVer, listSearch, list, listSummary};
   }
 
-  @effect(null)
+  @effect('fetchList')
   public async fetchList(listSearchPre: ListSearch, listVerPre: number) {
     if (listVerPre !== this.state.listVerPre) {
       this.dispatch(this.actions.Update({listVerPre}, 'fetchList'));

@@ -2,8 +2,10 @@ import React, {useCallback, useMemo} from 'react';
 import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
+import LoadingPanel from '@/src/components/LoadingPanel';
+import ScrollTool from '@/src/components/ScrollTool';
 import MDScrollView from '@/src/components/MDScrollView';
-import {App, Modules, StaticServer} from '@/src/Global';
+import {App, StaticServer} from '@/src/Global';
 import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
 
@@ -18,12 +20,13 @@ interface DispatchProps {
 }
 
 const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer = 0, dispatch}) => {
-  const onTurning = useCallback((page: number, sid: number) => {
+  const onTurning = useCallback((page: [number, number] | number, sid: number) => {
     App.router.replace(
       {pagename: '/photo/list', params: {photo: {listSearchPre: {pageCurrent: page}, listVerPre: sid}}, extendParams: 'current'},
       true
     );
   }, []);
+
   const onUnmount = useCallback((page: [number, number] | number, scrollTop: number) => {
     console.log(page, scrollTop);
   }, []);
@@ -33,6 +36,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     }
     return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize, sid: listVer};
   }, [listSearch, list, listSummary, listVer]);
+
   const children = useCallback((realList: ListItem[]) => {
     return (
       <View className={`g-pic-list ${styles.root}`}>
@@ -61,10 +65,10 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     );
   }, []);
   if (!listSearch || !list || !listSummary || !datasource) {
-    return null;
+    return <LoadingPanel />;
   }
   return (
-    <MDScrollView totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning} onUnmount={onUnmount}>
+    <MDScrollView totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning} onUnmount={onUnmount} tools={ScrollTool}>
       {children}
     </MDScrollView>
   );

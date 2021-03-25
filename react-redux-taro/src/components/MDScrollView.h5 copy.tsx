@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, {ReactNode, PureComponent, ComponentType} from 'react';
+import React, {ReactNode, RefObject, PureComponent} from 'react';
 import {ScrollView, View} from '@tarojs/components';
 import Taro from '@tarojs/taro';
 
@@ -14,10 +14,9 @@ interface Props {
   className?: string;
   totalPages: number;
   datasource: DataSource;
-  onTurning: (page: [number, number] | number, sid: number) => void;
+  onTurning: (page: number, sid: number) => void;
   onUnmount: (page: [number, number] | number, scrollTop: number) => void;
   children: (list: any[]) => ReactNode;
-  tools?: ComponentType<{curPage: number; totalPages: number; show: boolean; onRefresh: () => void}>;
   topArea?: (morePage: boolean, prevPage: number, loading: boolean) => ReactNode;
   bottomArea?: (morePage: boolean, nextPage: number, loading: boolean) => ReactNode;
 }
@@ -39,8 +38,6 @@ const defaultBottomArea = (morePage: boolean, nextPage: number, loading: boolean
   return morePage ? <View className={`loading-tips${loading ? ' loading' : ''}`}>Loading</View> : <View className="loading-tips">没有更多</View>;
 };
 
-let instanceId = Date.now();
-
 class Component extends PureComponent<Props, State> {
   static getDerivedStateFromProps(nextProps: Props, prevState: State): Partial<State> | null {
     const newState: Partial<State> = {};
@@ -52,6 +49,7 @@ class Component extends PureComponent<Props, State> {
     if (prevState.cacheDatasource) {
       newState.cacheDatasource = null;
       datasource = prevState.cacheDatasource;
+      console.log(datasource);
     }
     if (datasource) {
       if (prevState.sid > 0) {
@@ -67,7 +65,7 @@ class Component extends PureComponent<Props, State> {
               lockState: null,
               loadingState: 'prev-reclaiming',
               scrollState: '',
-              list: [...curList, ...datasource.list],
+              list: [...datasource.list, ...curList],
               page: [datasource.page, curPage],
               firstSize: datasource.list.length,
               forceShowPrevMore: true,
@@ -132,7 +130,7 @@ class Component extends PureComponent<Props, State> {
     forceShowPrevMore: false,
   };
 
-  iid: string = `scroll-view${instanceId++}`;
+  listRef: RefObject<any>;
 
   curScrollTop: number = 0;
 
@@ -142,43 +140,61 @@ class Component extends PureComponent<Props, State> {
 
   reclaiming: number | (() => void) = 0;
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  constructor(props) {
+    super(props);
+    this.listRef = React.createRef();
+  }
+
+  // 回收视口上方的项目会自动调整scrollTop
+  // getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
+  //   const curLoadingState = this.state.loadingState;
+  //   const prevLoadingState = prevState.loadingState;
+  //   if ((curLoadingState === 'next' && prevLoadingState === '') || (curLoadingState === '' && prevLoadingState === 'prev')) {
+  //     const list = this.listRef.current;
+  //     return [list.scrollHeight, list.scrollTop];
+  //   }
+  //   return null;
+  // }
+
+  // 回收视口上方的项目会自动调整scrollTop
+  // componentDidUpdate(prevProps: Props, prevState: State, snapshot: [number, number]) {
+  //   const curLoadingState = this.state.loadingState;
+  //   const prevLoadingState = prevState.loadingState;
+  //   if (snapshot) {
+  //     const [prevScrollHeight, prevScrollTop] = snapshot;
+  //     const ul = this.listRef.current;
+  //     if (curLoadingState === 'next') {
+  //       // ul.scrollTop = prevScrollTop - (prevScrollHeight - ul.scrollHeight);
+  //     } else if (prevLoadingState === 'prev') {
+  //       ul.scrollTop = prevScrollTop + (ul.scrollHeight - prevScrollHeight);
+  //     }
+  //   }
+  // }
+
+  // getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
+  //   const curLoadingState = this.state.loadingState;
+  //   const prevLoadingState = prevState.loadingState;
+  //   if (curLoadingState === '' && prevLoadingState === 'prev') {
+  //     const list = this.listRef.current;
+  //     return [list.scrollHeight, list.scrollTop];
+  //   }
+  //   return null;
+  // }
+
+  componentDidUpdate(prevProps: Props, prevState: State, snapshot: [number, number]) {
     const reclaiming = this.reclaiming;
-    const iid = `#${this.iid}`;
+    const list = this.listRef.current;
     if (typeof reclaiming === 'function') {
-      Taro.nextTick(() => {
-        Taro.createSelectorQuery()
-          .select(iid)
-          .boundingClientRect()
-          .exec(([rect]) => {
-            this.reclaiming = rect.height;
-            reclaiming();
-          });
-      });
+      this.reclaiming = list.scrollHeight;
+      reclaiming();
     } else {
       const curLoadingState = this.state.loadingState;
       const prevLoadingState = prevState.loadingState;
       if (curLoadingState === 'next-reclaiming' && prevLoadingState === 'next') {
-        Taro.nextTick(() => this.setState({loadingState: ''}));
+        setTimeout(() => this.setState({loadingState: ''}), 300);
       } else if (curLoadingState === 'prev-reclaiming' && prevLoadingState === 'prev') {
-        Taro.nextTick(() => {
-          Taro.createSelectorQuery()
-            .select(iid)
-            .boundingClientRect()
-            .exec(([rect]) => {
-              let scrollTop = -rect.top + (rect.height - reclaiming);
-              if (scrollTop === this.state.scrollTop) {
-                scrollTop++;
-              }
-              const {list, firstSize = 0} = this.state;
-              const firstList = list.slice(list.length - firstSize);
-              const secondList = list.slice(0, list.length - firstSize);
-              this.setState({loadingState: '', scrollTop, list: [...firstList, ...secondList]});
-              Taro.nextTick(() => {
-                this.setState({forceShowPrevMore: false});
-              });
-            });
-        });
+        list.scrollTop += list.scrollHeight - reclaiming;
+        setTimeout(() => this.setState({loadingState: '', scrollTop: list.scrollTop + 1, forceShowPrevMore: false}), 3000);
       }
     }
   }
@@ -216,6 +232,7 @@ class Component extends PureComponent<Props, State> {
         } else {
           this.props.onTurning(nextPage, sid);
         }
+        console.log(newState);
         this.setState(newState as State);
       }
     }
@@ -250,6 +267,7 @@ class Component extends PureComponent<Props, State> {
         } else {
           this.props.onTurning(prevPage, sid);
         }
+        console.log(newState);
         this.setState(newState as State);
       }
     }
@@ -269,6 +287,7 @@ class Component extends PureComponent<Props, State> {
         this.setState({scrollState});
       }
     }
+    // console.log(scrollState, n);
     if (n === 0) {
       this.scrollTimer = 0;
     } else {
@@ -284,35 +303,28 @@ class Component extends PureComponent<Props, State> {
     }
   };
 
-  onRefresh = () => this.props.onTurning(this.state.page, Date.now());
-
   render() {
-    const {className = 'g-scroll-view', children, totalPages, tools, topArea = defaultTopArea, bottomArea = defaultBottomArea} = this.props;
-    const {page, list, scrollTop, scrollState, loadingState, forceShowPrevMore} = this.state;
+    const {className = 'g-scroll-view', children, totalPages, topArea = defaultTopArea, bottomArea = defaultBottomArea} = this.props;
+    const {page, list, scrollTop, loadingState, forceShowPrevMore} = this.state;
     const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
-    const iid = this.iid;
-    const Tools = tools;
+    console.log(loadingState);
     return (
-      <>
-        {Tools && <Tools curPage={firstPage} totalPages={totalPages} show={!!scrollState} onRefresh={this.onRefresh} />}
-        <ScrollView
-          style={{height: '100%'}}
-          className={`${className} ${loadingState !== '' ? 'loading' : ''}`}
-          scrollY
-          scrollTop={scrollTop}
-          onScroll={this.onScroll}
-          onScrollToLower={this.onScrollToLower}
-          onScrollToUpper={this.onScrollToUpper}
-          upperThreshold={300}
-          lowerThreshold={300}
-        >
-          <View id={iid}>
-            {topArea(firstPage > 1 || forceShowPrevMore, firstPage - 1, loadingState === 'prev' || loadingState === 'prev-reclaiming')}
-            {children(list || [])}
-            {bottomArea(secondPage < totalPages, secondPage + 1, loadingState === 'next' || loadingState === 'next-reclaiming')}
-          </View>
-        </ScrollView>
-      </>
+      <ScrollView
+        ref={this.listRef}
+        style={{height: '100%'}}
+        className={`${className} ${loadingState}`}
+        scrollY
+        scrollTop={scrollTop}
+        onScroll={this.onScroll}
+        onScrollToLower={this.onScrollToLower}
+        onScrollToUpper={this.onScrollToUpper}
+        upperThreshold={300}
+        lowerThreshold={300}
+      >
+        {topArea(firstPage > 1 || forceShowPrevMore, firstPage - 1, loadingState === 'prev' || loadingState === 'prev-reclaiming')}
+        {children(list || [])}
+        {bottomArea(secondPage < totalPages, secondPage + 1, loadingState === 'next' || loadingState === 'next-reclaiming')}
+      </ScrollView>
     );
   }
 }

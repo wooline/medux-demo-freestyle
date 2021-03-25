@@ -44,7 +44,8 @@ export interface RouteParams {
 
 class API {
   public getList(params: ListSearch): Promise<{list: ListItem[]; listSummary: ListSummary}> {
-    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getPhotoList', data: params}).then((res) => {
+    const pageCurrent = typeof params.pageCurrent === 'number' ? params.pageCurrent : params.pageCurrent.join(',');
+    return request<{list: ListItem[]; listSummary: ListSummary}>({url: '/api/getPhotoList', data: {...params, pageCurrent}}).then((res) => {
       return res.data;
     });
   }

@@ -9,10 +9,11 @@ export interface ListItem {
   coverUrl: string;
 }
 export interface ListSummary {
-  pageCurrent: number;
+  pageCurrent: [number, number] | number;
   pageSize: number;
   totalItems: number;
   totalPages: number;
+  firstSize: number;
 }
 export interface ListSearch {
   pageCurrent: string;
