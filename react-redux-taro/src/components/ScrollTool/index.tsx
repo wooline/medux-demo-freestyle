@@ -4,12 +4,13 @@ import styles from './index.module.less';
 
 interface Props {
   show: boolean;
+  loading: boolean;
   curPage: [number, number] | number;
   totalPages: number;
   onTurning: (page?: number) => void;
 }
 
-const Component: React.FC<Props> = ({show, curPage, totalPages, onTurning}) => {
+const Component: React.FC<Props> = ({show, loading, curPage, totalPages, onTurning}) => {
   const [active, setActive] = useState(false);
 
   const switchActive = useCallback(() => {
@@ -32,7 +33,7 @@ const Component: React.FC<Props> = ({show, curPage, totalPages, onTurning}) => {
   const state = active ? 'on' : show ? 'show' : 'hide';
   const curPageStr = typeof curPage === 'number' ? curPage : curPage.join('-');
   return (
-    <View className={`${styles.root} ${state}`}>
+    <View className={`${styles.root} ${state} ${loading ? 'loading' : ''}`}>
       <View className="wrap">
         <View className="panel">
           <View className="refresh at-icon at-icon-reload" onClick={onRefresh} />

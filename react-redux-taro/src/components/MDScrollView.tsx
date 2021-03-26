@@ -3,13 +3,14 @@ import React, {ReactNode, PureComponent, ComponentType} from 'react';
 import {ScrollView, View} from '@tarojs/components';
 import Taro from '@tarojs/taro';
 
-interface ToolsProps {
+export interface ToolsProps {
   show: boolean;
+  loading: boolean;
   curPage: [number, number] | number;
   totalPages: number;
   onTurning: (page?: number) => void;
 }
-interface DataSource<T = any> {
+export interface DataSource<T = any> {
   sid: number;
   list: T[];
   page: [number, number] | number;
@@ -33,8 +34,9 @@ interface State<T = any> extends Required<DataSource<T>> {
   cacheDatasource: DataSource<T> | null;
   sourceCache: {[page: number]: DataSource<T>};
   lockState: State<T> | null;
-  loadingState: '' | 'next' | 'prev' | 'prev-reclaiming' | 'next-reclaiming';
+  actionState: '' | 'next' | 'prev' | 'prev-reclaiming' | 'next-reclaiming';
   scrollState: '' | 'up' | 'down';
+  loadingState: boolean;
   forceShowPrevMore: boolean;
 }
 
@@ -50,6 +52,8 @@ const defaultTopArea = (morePage: boolean, prevPage: number, loading: boolean) =
 const defaultBottomArea = (morePage: boolean, nextPage: number, loading: boolean) => {
   return morePage ? <View className={`loading-tips${loading ? ' loading' : ''}`}>Loading</View> : <View className="loading-tips">没有更多</View>;
 };
+
+const defaultTools: ComponentType<ToolsProps> = null as any;
 
 let instanceId = Date.now();
 
@@ -80,9 +84,10 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
         Object.assign(newState, {
           sourceCache,
           lockState: null,
-          loadingState: '',
+          actionState: '',
           scrollState: '',
-          sid: -1,
+          loadingState: false,
+          sid: datasource.sid,
           list: datasource.list,
           page: datasource.page,
           totalPages: datasource.totalPages,
@@ -90,10 +95,13 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
           firstSize: datasource.firstSize || 0,
           forceShowPrevMore: false,
         });
-      } else {
+        if (prevState.scrollTop === newState.scrollTop) {
+          newState.scrollTop += 1;
+        }
+      } else if (datasource.sid === prevState.sid) {
         const {list: curList, page, scrollState, sourceCache, sid} = prevState;
         const curPage = typeof page === 'number' ? page : 0;
-        if (datasource.sid === sid && curPage && (datasource.page === curPage - 1 || datasource.page === curPage + 1)) {
+        if (curPage && (datasource.page === curPage - 1 || datasource.page === curPage + 1)) {
           if (!sourceCache[datasource.page]) {
             sourceCache[datasource.page] = datasource;
           }
@@ -101,8 +109,9 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
           if (datasource.page === curPage - 1) {
             lockState = {
               lockState: null,
-              loadingState: 'prev-reclaiming',
+              actionState: 'prev-reclaiming',
               scrollState: '',
+              loadingState: false,
               list: [...curList, ...datasource.list],
               page: [datasource.page, curPage],
               firstSize: datasource.list.length,
@@ -111,8 +120,9 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
           } else {
             lockState = {
               lockState: null,
-              loadingState: 'next-reclaiming',
+              actionState: 'next-reclaiming',
               scrollState: '',
+              loadingState: false,
               list: [...curList, ...datasource.list],
               page: [curPage, datasource.page],
               firstSize: curList.length,
@@ -135,8 +145,9 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
     cacheDatasource: null,
     sourceCache: {},
     lockState: null,
-    loadingState: '',
+    actionState: '',
     scrollState: '',
+    loadingState: false,
     sid: -1,
     list: [],
     page: 0,
@@ -160,7 +171,7 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
 
   listComponentCache: MemoCache = {};
 
-  toolsComponentCache: MemoCache = {};
+  prevPageNum: [number, number] | number = 0;
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     const reclaiming = this.reclaiming;
@@ -176,11 +187,11 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
           });
       });
     } else {
-      const curLoadingState = this.state.loadingState;
-      const prevLoadingState = prevState.loadingState;
-      if (curLoadingState === 'next-reclaiming' && prevLoadingState === 'next') {
-        Taro.nextTick(() => this.setState({loadingState: ''}));
-      } else if (curLoadingState === 'prev-reclaiming' && prevLoadingState === 'prev') {
+      const curActionState = this.state.actionState;
+      const prevActionState = prevState.actionState;
+      if (curActionState === 'next-reclaiming' && prevActionState === 'next') {
+        Taro.nextTick(() => this.setState({actionState: ''}));
+      } else if (curActionState === 'prev-reclaiming' && prevActionState === 'prev') {
         Taro.nextTick(() => {
           Taro.createSelectorQuery()
             .select(iid)
@@ -193,7 +204,7 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
               const {list, firstSize = 0} = this.state;
               const firstList = list.slice(list.length - firstSize);
               const secondList = list.slice(0, list.length - firstSize);
-              this.setState({loadingState: '', scrollTop, list: [...firstList, ...secondList]});
+              this.setState({actionState: '', scrollTop, list: [...firstList, ...secondList]});
               Taro.nextTick(() => {
                 this.setState({forceShowPrevMore: false});
               });
@@ -208,15 +219,15 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
   }
 
   onScrollToLower = () => {
-    const {loadingState, page, list, firstSize, sourceCache, totalPages} = this.state;
-    if (loadingState === '' || loadingState === 'prev') {
+    const {actionState, page, list, firstSize, sourceCache, totalPages} = this.state;
+    if (actionState === '' || actionState === 'prev') {
       const secondPage = typeof page === 'object' ? page[1] : page;
       const secondList = typeof page === 'object' ? list.slice(firstSize) : list;
       if (secondPage < totalPages) {
         const sid = Date.now();
         const newState: Partial<State> = {
           sid,
-          loadingState: 'next',
+          actionState: 'next',
           lockState: null,
         };
         const nextPage = secondPage + 1;
@@ -224,17 +235,17 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
         if (cacheDatasource) {
           cacheDatasource = {...cacheDatasource, sid};
         }
-        if (loadingState === '') {
+        if (actionState === '') {
           Object.assign(newState, {list: secondList, page: secondPage});
           if (cacheDatasource) {
             this.reclaiming = () => this.setState({cacheDatasource});
           } else {
-            this.reclaiming = () => this.props.onTurning(nextPage, sid);
+            this.reclaiming = () => this.onTurning(nextPage, sid);
           }
         } else if (cacheDatasource) {
           Object.assign(newState, {cacheDatasource});
         } else {
-          this.props.onTurning(nextPage, sid);
+          this.onTurning(nextPage, sid);
         }
         this.setState(newState as State);
       }
@@ -242,15 +253,15 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
   };
 
   onScrollToUpper = () => {
-    const {loadingState, page, list, firstSize, sourceCache} = this.state;
-    if (loadingState === '' || loadingState === 'next') {
+    const {actionState, page, list, firstSize, sourceCache} = this.state;
+    if (actionState === '' || actionState === 'next') {
       const firstPage = typeof page === 'object' ? page[0] : page;
       const firstList = typeof page === 'object' ? list.slice(0, firstSize) : list;
       if (firstPage > 1) {
         const sid = Date.now();
         const newState: Partial<State> = {
           sid,
-          loadingState: 'prev',
+          actionState: 'prev',
           lockState: null,
         };
         const prevPage = firstPage - 1;
@@ -258,17 +269,17 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
         if (cacheDatasource) {
           cacheDatasource = {...cacheDatasource, sid};
         }
-        if (loadingState === '') {
+        if (actionState === '') {
           Object.assign(newState, {list: firstList, page: firstPage});
           if (cacheDatasource) {
             this.reclaiming = () => this.setState({cacheDatasource});
           } else {
-            this.reclaiming = () => this.props.onTurning(prevPage, sid);
+            this.reclaiming = () => this.onTurning(prevPage, sid);
           }
         } else if (cacheDatasource) {
           Object.assign(newState, {cacheDatasource});
         } else {
-          this.props.onTurning(prevPage, sid);
+          this.onTurning(prevPage, sid);
         }
         this.setState(newState as State);
       }
@@ -304,13 +315,18 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
     }
   };
 
+  onTurning = (page: [number, number] | number, sid: number) => {
+    this.setState({loadingState: true});
+    this.props.onTurning(page, sid);
+  };
+
   onToolsTurning = (page?: number) => {
     if (!page) {
-      this.props.onTurning(this.state.page, Date.now());
+      this.onTurning(this.state.page, Date.now());
     } else if (page < 0) {
-      this.props.onTurning(this.state.totalPages, Date.now());
+      this.onTurning(this.state.totalPages, Date.now());
     } else {
-      this.props.onTurning(page, Date.now());
+      this.onTurning(page, Date.now());
     }
   };
 
@@ -323,25 +339,30 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
   }
 
   render() {
-    const {className = 'g-scroll-view', children, tools, onTurning, topArea = defaultTopArea, bottomArea = defaultBottomArea} = this.props;
-    const {page, list, scrollTop, scrollState, loadingState, forceShowPrevMore, totalPages} = this.state;
+    const {className = 'g-scroll-view', children, tools, topArea = defaultTopArea, bottomArea = defaultBottomArea} = this.props;
+    const {page, list, scrollTop, scrollState, actionState, forceShowPrevMore, totalPages, loadingState} = this.state;
     const [firstPage, secondPage] = typeof page === 'object' ? page : [page, page];
     const iid = this.iid;
-
     const listComponent = this.useMemo(this.listComponentCache, () => children(list || []), [list]);
-    const Tools: ComponentType<ToolsProps> = null;
-    const toolsComponent = this.useMemo<ReactNode>(
-      this.toolsComponentCache,
-      () => Tools && <Tools curPage={page} totalPages={totalPages} show={!!scrollState} onTurning={this.onToolsTurning} />,
-      loadingState === '' ? [page, totalPages, scrollState] : this.toolsComponentCache.depes
-    );
+    const Tools: ComponentType<ToolsProps> | null = !tools ? null : typeof tools === 'boolean' ? defaultTools : tools;
+    if (actionState === '') {
+      this.prevPageNum = page;
+    }
 
     return (
       <>
-        {toolsComponent}
+        {Tools && (
+          <Tools
+            curPage={this.prevPageNum}
+            totalPages={totalPages}
+            show={!!scrollState || actionState !== ''}
+            onTurning={this.onToolsTurning}
+            loading={loadingState}
+          />
+        )}
         <ScrollView
           style={{height: '100%'}}
-          className={`${className} ${loadingState !== '' ? 'loading' : ''}`}
+          className={`${className} ${loadingState ? 'loading' : ''}`}
           scrollY
           scrollTop={scrollTop}
           onScroll={this.onScroll}
@@ -351,9 +372,9 @@ class Component<T> extends PureComponent<Props<T>, State<T>> {
           lowerThreshold={300}
         >
           <View id={iid}>
-            {topArea(firstPage > 1 || forceShowPrevMore, firstPage - 1, loadingState === 'prev' || loadingState === 'prev-reclaiming')}
+            {topArea(firstPage > 1 || forceShowPrevMore, firstPage - 1, actionState === 'prev' || actionState === 'prev-reclaiming')}
             {listComponent}
-            {bottomArea(secondPage < totalPages, secondPage + 1, loadingState === 'next' || loadingState === 'next-reclaiming')}
+            {bottomArea(secondPage < totalPages, secondPage + 1, actionState === 'next' || actionState === 'next-reclaiming')}
           </View>
         </ScrollView>
       </>

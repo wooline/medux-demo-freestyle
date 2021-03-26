@@ -1,4 +1,4 @@
-@PanelWidth: 410px;
+@PanelWidth: 400px;
 
 :global {
   :local(.root) {
@@ -28,6 +28,14 @@
         width: @PanelWidth;
       }
     }
+    &.loading {
+      .panel {
+        opacity: 0.8;
+      }
+      .trigger {
+        animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      }
+    }
     .trigger {
       position: absolute;
       width: 100px;
@@ -36,7 +44,7 @@
       background-color: #fff;
       border-radius: 100px;
       text-align: center;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
       font-size: 50px;
       color: #333;
     }
@@ -54,6 +62,7 @@
       height: 80px;
       line-height: 80px;
       margin-top: 12px;
+      padding-left: 8px;
       text-align: center;
       display: flex;
       justify-content: center;

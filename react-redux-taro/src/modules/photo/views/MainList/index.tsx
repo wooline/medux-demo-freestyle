@@ -4,7 +4,7 @@ import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
 import LoadingPanel from '@/src/components/LoadingPanel';
 import ScrollTool from '@/src/components/ScrollTool';
-import MDScrollView from '@/src/components/MDScrollView';
+import MDScrollView, {DataSource} from '@/src/components/MDScrollView';
 import {App, StaticServer} from '@/src/Global';
 import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
@@ -30,11 +30,12 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
   const onUnmount = useCallback((page: [number, number] | number, scrollTop: number) => {
     console.log(page, scrollTop);
   }, []);
-  const datasource: {list: any[]; page: [number, number] | number; firstSize?: number; sid: number} | null = useMemo(() => {
+
+  const datasource: DataSource | null = useMemo(() => {
     if (!listSearch || !list || !listSummary) {
       return null;
     }
-    return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize, sid: listVer};
+    return {list, page: listSummary.pageCurrent, firstSize: listSummary.firstSize, sid: listVer, totalPages: listSummary.totalPages};
   }, [listSearch, list, listSummary, listVer]);
 
   const children = useCallback((realList: ListItem[]) => {
@@ -68,7 +69,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     return <LoadingPanel />;
   }
   return (
-    <MDScrollView totalPages={listSummary.totalPages} datasource={datasource} onTurning={onTurning} onUnmount={onUnmount} tools={ScrollTool}>
+    <MDScrollView datasource={datasource} onTurning={onTurning} onUnmount={onUnmount} tools={ScrollTool}>
       {children}
     </MDScrollView>
   );
