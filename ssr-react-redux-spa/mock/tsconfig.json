@@ -20,7 +20,6 @@
     "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
-    "preserveConstEnums": false,
     "esModuleInterop": true,
     "baseUrl": "./",
     "rootDir": "./",

@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-const {App, Modules, Pagenames}: Facade = exportApp();
+const {App, Modules, Pagenames} = exportApp() as Facade;
 
 declare global {
   type APPState = Facade['App']['state'];

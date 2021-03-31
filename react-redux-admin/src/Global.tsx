@@ -3,7 +3,7 @@ import type {ModuleGetter, RouteParams, Pagename} from 'modules/config';
 
 type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename>;
 
-const {App, Modules, Pagenames}: Facade = exportApp();
+const {App, Modules, Pagenames} = exportApp() as Facade;
 
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {

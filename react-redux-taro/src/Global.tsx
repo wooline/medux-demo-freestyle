@@ -3,7 +3,7 @@ import type {ModuleGetter, RouteParams, Pagename} from './modules/config';
 
 type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename>;
 
-export const {App, Modules, Pagenames}: Facade = exportApp();
+export const {App, Modules, Pagenames} = exportApp() as Facade;
 
 const GlobalVar = process.GlobalVar;
 

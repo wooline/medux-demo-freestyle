@@ -24,7 +24,6 @@
     "alwaysStrict": true,
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
-    "preserveConstEnums": false,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "esModuleInterop": true,

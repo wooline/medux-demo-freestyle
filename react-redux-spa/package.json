@@ -32,8 +32,7 @@
     "@types/express": "~4.17.9"
   },
   "dependencies": {
-    "@medux/react-web-router": "~2.0.0-beta.3.25",
-    "@better-scroll/core": "^2.1.1",
+    "@medux/react-web-router": "~2.0.0-beta.3.27",
     "axios": "~0.21.0",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
@@ -47,7 +46,7 @@
     "@types/express": "~4.17.9",
     "@medux/dev-pkg": "~2.1.4",
     "@medux/dev-utils": "~3.0.8",
-    "@medux/dev-webpack": "~1.0.14",
+    "@medux/dev-webpack": "~1.0.17",
     "husky": "~4.3.0",
     "jest": "~26.6.3",
     "less": "~3.12.2",
