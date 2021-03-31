@@ -3,8 +3,8 @@ import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
 import LoadingPanel from '@/src/components/LoadingPanel';
-import ScrollTool from '@/src/components/ScrollTool';
-import MDScrollView, {DataSource} from '@/src/components/MDScrollView';
+// import ScrollTool from '@/src/components/ScrollTool';
+import PPScroll, {DataSource} from 'pp-scroll/taro';
 import {App, StaticServer} from '@/src/Global';
 import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
@@ -69,9 +69,9 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     return <LoadingPanel />;
   }
   return (
-    <MDScrollView datasource={datasource} onTurning={onTurning} onUnmount={onUnmount} tools={ScrollTool}>
+    <PPScroll className="aaaa" datasource={datasource} onTurning={onTurning} onUnmount={onUnmount}>
       {children}
-    </MDScrollView>
+    </PPScroll>
   );
 };
 

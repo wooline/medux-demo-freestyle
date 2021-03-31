@@ -66,7 +66,7 @@ const config = {
     },
   },
   h5: {
-    esnextModules: ['taro-ui'],
+    esnextModules: ['taro-ui', 'pp-scroll'],
     publicPath: '/',
     staticDirectory: 'static',
     router: {
@@ -87,6 +87,16 @@ const config = {
           generateScopedName,
         },
       },
+    },
+    webpackChain(chain) {
+      chain.resolve.plugin('MultiPlatformPlugin').tap((args) => {
+        return [
+          ...args,
+          {
+            include: ['pp-scroll'],
+          },
+        ];
+      });
     },
   },
 };

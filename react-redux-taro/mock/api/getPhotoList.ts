@@ -31,6 +31,6 @@ export = function (request: Request, response: Response, next: NextFunction) {
     },
     list: pageList[1] ? pageList[0].concat(pageList[1]) : pageList[0],
   };
-  setTimeout(() => response.json(result), 5000);
+  setTimeout(() => response.json(result), 1000);
   // response.json(result);
 };

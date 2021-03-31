@@ -4,6 +4,7 @@ import {buildApp, Store} from '@medux/react-taro-router';
 import {Provider} from '@medux/react-taro-router/lib/conect-redux';
 import {moduleGetter, locationTransform} from './modules/config';
 
+import 'pp-scroll/css/taro.css';
 import 'taro-ui/dist/style/components/flex.scss';
 import 'taro-ui/dist/style/components/icon.scss';
 import 'taro-ui/dist/style/components/button.scss';
