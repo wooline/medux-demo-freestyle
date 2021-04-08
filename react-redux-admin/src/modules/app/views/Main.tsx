@@ -15,7 +15,7 @@ const RegisterForm = App.loadView('account', 'registerForm');
 const V404 = <Result status="404" title="404" subTitle="Sorry, the page you visited does not exist." />;
 const V403 = <Result status="403" title="403" subTitle="Sorry, you are not authorized to access this page." />;
 interface StoreProps {
-  curUser: CurUser;
+  curUser?: CurUser;
   accountView?: AccountView;
   subView: RouteState['params'];
 }
@@ -25,13 +25,17 @@ interface DispatchProps {}
 const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({accountView, subView, curUser}) => {
   return (
     <ConfigProvider locale={zhCN}>
-      {accountView && !curUser.hasLogin && (
-        <div className={styles.dialog}>
-          {accountView === 'login' && <LoginForm />}
-          {accountView === 'register' && <RegisterForm />}
-        </div>
+      {curUser && (
+        <>
+          {accountView && !curUser.hasLogin && (
+            <div className={styles.dialog}>
+              {accountView === 'login' && <LoginForm />}
+              {accountView === 'register' && <RegisterForm />}
+            </div>
+          )}
+          <Switch elseView={V404}>{subView.adminLayout && (curUser.hasLogin ? <AdminLayout /> : V403)}</Switch>
+        </>
       )}
-      <Switch elseView={V404}>{subView.adminLayout && (curUser.hasLogin ? <AdminLayout /> : V403)}</Switch>
       <GlobalLoading />
     </ConfigProvider>
   );

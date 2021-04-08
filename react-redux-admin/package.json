@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "commit": "git-cz",
     "patchActions": "medux-patch-actions patch",
     "type": "tsc --noEmit -p ./src && tsc --noEmit -p ./mock",
     "eslint": "eslint --cache ./ && eslint --cache ./mock && eslint --cache ./src",
@@ -15,9 +16,20 @@
     "build": "yarn checkPro && yarn buildMock && cross-env NODE_ENV=production PROJ_ENV=local node build/build.js",
     "start": "yarn checkDev && cross-env NODE_ENV=development PROJ_ENV=local DEBUG=true ts-node -P mock/tsconfig.json -r tsconfig-paths/register build/start.js",
     "runLocal": "node ./dist/local/start.js",
+    "build:test": "cross-env NODE_TAG=cjs babel ./src/Global.tsx --out-dir ./aaa  --extensions \".ts,.tsx\"",
+    "babel:test": "BABEL_SHOW_CONFIG_FOR=./src/Global.tsx babel ./src/Global.tsx",
     "debug": "node --inspect=19248 --debug-brk"
   },
   "private": "true",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(ts|tsx|js|jsx)": "eslint",
+    "*.less": "stylelint"
+  },
   "workspaces": [
     "public"
   ],

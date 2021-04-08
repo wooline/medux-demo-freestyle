@@ -3,27 +3,13 @@ import {ActionTypes, BaseModuleHandlers, BaseModuleState, reducer, effect, Loadi
 import {AccountView, ProjectConfig, RouteParams, CurUser, LoginParams, api} from './entity';
 
 export interface ModuleState extends BaseModuleState<RouteParams> {
-  projectConfig: ProjectConfig;
-  curUser: CurUser;
-  loading: {
-    global: LoadingState;
-  };
+  projectConfig?: ProjectConfig;
+  curUser?: CurUser;
 }
 
 export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   constructor() {
-    super({
-      curUser: {
-        id: '',
-        username: 'guest',
-        hasLogin: false,
-        avatar: '',
-      },
-      projectConfig: {noticeTimer: 20},
-      loading: {
-        global: LoadingState.Stop,
-      },
-    });
+    super({});
   }
 
   @reducer
@@ -39,7 +25,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   @effect()
   public async login(args: LoginParams) {
     const curUser = await api.login(args);
-    if (this.state.curUser.hasLogin) {
+    if (this.state.curUser!.hasLogin) {
       App.router.nativeRouter.refresh();
     }
     this.dispatch(this.actions.putCurUser(curUser));
@@ -49,7 +35,7 @@ export class ModuleHandlers extends BaseModuleHandlers<ModuleState, APPState> {
   @effect()
   public async logout() {
     await api.logout();
-    if (this.state.curUser.hasLogin) {
+    if (this.state.curUser!.hasLogin) {
       App.router.nativeRouter.refresh();
     }
   }

@@ -100,7 +100,7 @@ const Component: React.FC<StoreProps & DispatchProps & OwnerProps> = ({curUser, 
 
 function mapStateToProps(appState: APPState): StoreProps {
   return {
-    curUser: appState.app!.curUser,
+    curUser: appState.app!.curUser!,
   };
 }
 

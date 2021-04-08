@@ -29,7 +29,6 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
           <View key={item.id} className="list-item" onClick={() => App.router.push({pagename: '/video/item', params: {video: {itemIdPre: item.id}}})}>
             <View className="list-pic" style={{backgroundImage: `url(${StaticServer + item.coverUrl})`}}>
               <View className="list-title">{item.title}</View>
-              <View className="listImg" />
               <View className="props">
                 <View className="at-icon at-icon-heart-2" /> {item.hot}
               </View>

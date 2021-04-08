@@ -31,13 +31,6 @@ export type RouteParams = typeof defaultRouteParams;
 
 export type PartialRouteParams = DeepPartial<RouteParams>;
 
-const pathnameIn = (pathname: string) => {
-  if (pathname === '/') {
-    return '/admin/home';
-  }
-  return pathname;
-};
-
 const pagenameMap = {
   '/admin': {
     argsToParams() {

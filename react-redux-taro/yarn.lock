@@ -1201,10 +1201,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@medux/core@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.27.tgz#93f9b4c10b8f8e1c7884b8cdcf89c762e5edfd31"
-  integrity sha512-yxVWgZvUpRefGnPZF8Gen9aNXovKGKH15rJA9FXC+SQo3o3Y9tYYCGLD92GyLm2okov+0RGeuEoiNp2A+CEYPg==
+"@medux/core@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.28.tgz#f689d038f649903cb575957ef2a58282535e104d"
+  integrity sha512-TJaC+J7+deiUMyHpRPlI/lfZF9jlWkvd2g7pD4VhZWsx13sRv4fULmdUkDfdgksT9oyeuJhy4dOGTW6VuuBWtQ==
   dependencies:
     "@babel/runtime" "~7.12.5"
     redux "^4.0.5"
@@ -1254,31 +1254,31 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-taro-router@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/react-taro-router/-/react-taro-router-2.0.0-beta.3.27.tgz#2b42f395f8868be3be828f4f9ca3f3346f2f48e8"
-  integrity sha512-TM9b3GldVcTeSwX4WrCgTKwxbDxw9avmHGTmE4C/lnOi9x4peQc7Vawc57fMSPf+60BPtD9iSPul3TXCLxMTeQ==
+"@medux/react-taro-router@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/react-taro-router/-/react-taro-router-2.0.0-beta.3.28.tgz#838ba9fa25b156e74c3b47e6bf1e87b6d4fdd71b"
+  integrity sha512-wWtidW/6JdLuERYh01Axb/zfcbb23rQe9Oge6ncWXARWe1vkR6EHUUhvpNthmjYBNeUT/wQDrvaHA/KGLCtQ2Q==
   dependencies:
-    "@medux/core" "^2.0.0-beta.3.27"
-    "@medux/route-mp" "^2.0.0-beta.3.27"
-    "@medux/route-web" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
+    "@medux/route-mp" "^2.0.0-beta.3.28"
+    "@medux/route-web" "^2.0.0-beta.3.28"
 
-"@medux/route-mp@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/route-mp/-/route-mp-2.0.0-beta.3.27.tgz#5cd6c692b1f974537e8d73207a2c6eb43d250c86"
-  integrity sha512-tz4UbIo+KxIN7gDO3KZ5X8VDvLk9B5eElAM5uq9JKcVbxgB0fQB3DeshXxxvBR46FMQcPonY3o0InSFOp5NgVQ==
+"@medux/route-mp@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/route-mp/-/route-mp-2.0.0-beta.3.28.tgz#6fdeda82c999a679b7a5b7bd86d5dd20ca02ba79"
+  integrity sha512-w8scn64vK/f9aWJGDnvw6aTnD3aqkCtKft8GCHLaneVM4yvJ6QugPNCKUWiHWOMcnCRtf2Xb3KiBayA9JQwsvg==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.27"
-    "@medux/route-web" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
+    "@medux/route-web" "^2.0.0-beta.3.28"
 
-"@medux/route-web@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.27.tgz#e6b63799390af4e26ad06eaed954c08bf6dbad6d"
-  integrity sha512-SraMfJj10sIESRFymLJGNH0rJO33r3xsvxRWNfyMTqTd40ltWtzLMBEj72CTR6Q7Y7t5jRNmRkdkBgQFrpnL+g==
+"@medux/route-web@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.28.tgz#0d3314b2132dd962330caab78b8ae3b86fb9db5d"
+  integrity sha512-Woe5/e6JrKTcz3gWecgxJ8N4X7mmv1XWD7s9bmiynBpCDwW11+g2lLor4FFQznyKjJJuSTm1wQj/mfhbUIRVLg==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
 
 "@medux/stylelint-config-recommended@^1.0.0":
   version "1.0.0"
@@ -6773,6 +6773,11 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
+memoize-one@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.1.1.tgz#047b6e3199b508eaec03504de71229b8eb1d75c0"
+  integrity sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
+
 memory-fs@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.4.1.tgz#3a9a20b8462523e447cfbc7e8bb80ed667bfc552"
@@ -8204,6 +8209,13 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.21
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+pp-scroll@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/pp-scroll/-/pp-scroll-1.0.5.tgz#53a737d5da0adf20962073dd408109ba4a20523e"
+  integrity sha512-wI8McKv5ZYDnn3U32u81cMPe6ZUcujnRdMLYCfoWJGR7CDBeD39ghFtoSK/XXtEor/ENcck4xcyJvxhMPq+LEQ==
+  dependencies:
+    memoize-one "^5.1.1"
 
 prelude-ls@^1.2.1:
   version "1.2.1"

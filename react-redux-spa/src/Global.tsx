@@ -1,5 +1,4 @@
-import React from 'react';
-import {exportApp, RootModuleFacade, FacadeExports, patchActions, setConfig} from '@medux/react-web-router';
+import {exportApp, RootModuleFacade, FacadeExports, patchActions} from '@medux/react-web-router';
 import {ModuleGetter, RouteParams, Pagename} from 'modules/config';
 
 type Facade = FacadeExports<RootModuleFacade<ModuleGetter>, RouteParams, Pagename>;

@@ -1,6 +1,7 @@
 import 'core-js/features/string/starts-with';
 import 'core-js/features/string/ends-with';
 import 'core-js/features/string/trim';
+import 'core-js/features/array/fill';
 import 'core-js/features/array/find';
 import 'core-js/features/array/find-index';
 import 'core-js/features/object/assign';

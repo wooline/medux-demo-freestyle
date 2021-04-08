@@ -104,10 +104,12 @@ export interface BaseResourceAPI {
 export class BaseListModuleHandlers<R extends CommonResource, S extends BaseListModuleState<CommonResource>> extends BaseModuleHandlers<S, APPState> {
   protected noneListSearch: R['ListSearch'];
 
-  constructor(initState: S, protected api: BaseResourceAPI, protected defaultListSearch: R['ListSearch']) {
+  protected defaultListSearch: R['ListSearch'];
+
+  constructor(initState: S, protected api: BaseResourceAPI) {
     super(initState);
-    this.defaultListSearch = defaultListSearch;
-    this.noneListSearch = Object.keys(defaultListSearch).reduce((prev, cur) => {
+    this.defaultListSearch = initState.listSearchPre;
+    this.noneListSearch = Object.keys(this.defaultListSearch).reduce((prev, cur) => {
       prev[cur] = undefined;
       return prev;
     }, {});

@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   extends: ['plugin:@medux/recommended/react'],
   env: {
-    browser: false,
+    browser: true,
     node: false,
   },
   parserOptions: {

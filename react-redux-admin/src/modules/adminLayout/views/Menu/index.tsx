@@ -2,7 +2,6 @@ import React from 'react';
 import {connectRedux} from '@medux/react-web-router/lib/conect-redux';
 import {Menu} from 'antd';
 import {DashboardOutlined, ProfileOutlined, TeamOutlined} from '@ant-design/icons';
-import ListKeyLink from 'components/ListKeyLink';
 import {MenuItem} from '../../entity';
 import styles from './index.m.less';
 
@@ -95,25 +94,28 @@ function filterDisable(data: MenuItem[]): MenuItem[] {
     .filter(Boolean) as any;
 }
 
-function generateMenu(menusData: MenuItem[], folderHandler: (item: {key: string}) => void) {
+function generateMenu(menusData: MenuItem[], folderHandler: (item: {key: string}) => void, itemHandler: (link: string) => void) {
   return menusData.map((item) => {
     const keys = typeof item.keys === 'string' ? [item.keys] : [...item.keys];
     const key = keys.shift() as string;
-    // const link = item.link || path;
-    const {icon, children, target, name} = item;
+    const {icon, children, name} = item;
     if (children && children.length) {
       return (
         <SubMenu icon={getIcon(icon)} title={name} key={key} onTitleClick={folderHandler}>
-          {generateMenu(children, folderHandler)}
+          {generateMenu(children, folderHandler, itemHandler)}
         </SubMenu>
       );
     }
     return (
-      <Menu.Item key={key} icon={getIcon(icon)}>
+      <Menu.Item key={key} icon={getIcon(icon)} onClick={() => itemHandler(item.link || '')}>
         {name}
       </Menu.Item>
     );
   });
+}
+interface MemoCache {
+  result?: any;
+  depes?: any[];
 }
 interface StoreProps {
   siderCollapsed: boolean;
@@ -183,6 +185,8 @@ class Component extends React.Component<StoreProps & OwnProps, State> {
     return null;
   }
 
+  menuComponentCache: MemoCache = {};
+
   constructor(props: StoreProps) {
     super(props);
     this.state = {
@@ -230,11 +234,24 @@ class Component extends React.Component<StoreProps & OwnProps, State> {
     }
   };
 
+  itemHandler = (link: string) => {
+    App.router.push(link);
+  };
+
+  useMemo<C>(cache: {result?: C; depes?: any[]}, callback: () => C, depes: any[] = []) {
+    if (!cache.result || depes.some((val, index) => val !== cache.depes![index])) {
+      cache.result = callback();
+    }
+    cache.depes = depes;
+    return cache.result;
+  }
+
   public render() {
     const {siderCollapsed} = this.props;
-    const {openKeys, selectedKey} = this.state;
+    const {openKeys, selectedKey, menus} = this.state;
     // Don't show popup menu when it is been collapsed
     const menuProps = siderCollapsed ? {} : {openKeys};
+    const menuComponent = this.useMemo(this.menuComponentCache, () => generateMenu(menus, this.folderHandler, this.itemHandler), [menus]);
     return (
       <Menu
         className={styles.root}
@@ -245,7 +262,7 @@ class Component extends React.Component<StoreProps & OwnProps, State> {
         {...menuProps}
         selectedKeys={[selectedKey]}
       >
-        {generateMenu(this.state.menus, this.folderHandler)}
+        {menuComponent}
       </Menu>
     );
   }
