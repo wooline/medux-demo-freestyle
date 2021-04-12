@@ -3,7 +3,7 @@ import {Dispatch} from '@medux/react-taro-router';
 import {connectRedux} from '@medux/react-taro-router/lib/conect-redux';
 import {View, Text} from '@tarojs/components';
 import LoadingPanel from '@/src/components/LoadingPanel';
-import PPScroll, {DataSource} from 'pp-scroll/taro';
+import PPScroll, {Datasource} from 'pp-scroll/taro';
 import {App, Modules, StaticServer} from '@/src/Global';
 import {ListItem, ListSearch, ListSummary} from '../../entity';
 import styles from './index.module.less';
@@ -22,18 +22,11 @@ interface DispatchProps {
 }
 
 const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, listSummary, listVer = 0, routeKey, routeAction, dispatch}) => {
-  const curDatasource = useRef<DataSource>();
-
-  const onDatasourceChange = useCallback((datasource: DataSource) => {
-    curDatasource.current = datasource;
-    console.log(datasource);
-  }, []);
-
-  useEffect(() => {
-    return App.router.addListener((data) => {
-      console.log(data, curDatasource.current);
-    });
-  }, []);
+  // useEffect(() => {
+  //   return App.router.addListener((data) => {
+  //     console.log(data, curDatasource.current);
+  //   });
+  // }, []);
 
   const onTurning = useCallback((page: [number, number] | number, sid: number) => {
     App.router.replace(
@@ -42,7 +35,7 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
     );
   }, []);
 
-  const datasource: DataSource | null = useMemo(() => {
+  const datasource: Datasource | null = useMemo(() => {
     if (!listSearch || !list || !listSummary) {
       return null;
     }
@@ -76,11 +69,38 @@ const Component: React.FC<StoreProps & DispatchProps> = ({listSearch, list, list
       </View>
     );
   }, []);
+
+  const scrollTimer = useRef<{timer: any; location: string}>({timer: 0, location: ''});
+
+  const onScroll = useCallback((scrollTop: number, direction: string, curDatasource: Datasource) => {
+    const location = `#${curDatasource.page}|${scrollTop}`;
+    console.log('onScroll', location);
+    const obj = scrollTimer.current;
+    obj.location = location;
+    if (!obj.timer) {
+      obj.timer = setTimeout(() => {
+        obj.timer = 0;
+        // history.replaceState(null, '', obj.location);
+      }, 1000);
+    }
+  }, []);
+
+  const onDatasourceChange = useCallback((curDatasource: Datasource, scrollTop: number) => {
+    const obj = scrollTimer.current;
+    const location = `#${curDatasource.page}|${scrollTop}`;
+    console.log('onDatasourceChange', location);
+    // history.replaceState(null, '', location);
+    if (obj.timer) {
+      clearTimeout(obj.timer);
+      obj.timer = 0;
+    }
+  }, []);
+
   if (!listSearch || !list || !listSummary || !datasource) {
     return <LoadingPanel />;
   }
   return (
-    <PPScroll datasource={datasource} onTurning={onTurning} onDatasourceChange={onDatasourceChange}>
+    <PPScroll datasource={datasource} onTurning={onTurning} onDatasourceChange={onDatasourceChange} onScroll={onScroll}>
       {children}
     </PPScroll>
   );

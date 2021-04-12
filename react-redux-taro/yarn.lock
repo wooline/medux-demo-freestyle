@@ -8210,10 +8210,10 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.21
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-pp-scroll@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/pp-scroll/-/pp-scroll-1.0.5.tgz#53a737d5da0adf20962073dd408109ba4a20523e"
-  integrity sha512-wI8McKv5ZYDnn3U32u81cMPe6ZUcujnRdMLYCfoWJGR7CDBeD39ghFtoSK/XXtEor/ENcck4xcyJvxhMPq+LEQ==
+pp-scroll@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pp-scroll/-/pp-scroll-1.1.0.tgz#a536ff06b8083bf9e92c7af319af80d8688fe4c0"
+  integrity sha512-97x8qMdJaZDfzlG1vFuEoQ9ljVxdq6bMgnyblvpH+du6FzEP5qS+QLWujCy9hU1g1zDyrrPGTlq7fSY0LcinJw==
   dependencies:
     memoize-one "^5.1.1"
 

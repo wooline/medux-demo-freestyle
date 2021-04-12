@@ -1258,10 +1258,10 @@
     babel-plugin-root-import "~6.6.0"
     core-js "*"
 
-"@medux/core@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.27.tgz#93f9b4c10b8f8e1c7884b8cdcf89c762e5edfd31"
-  integrity sha512-yxVWgZvUpRefGnPZF8Gen9aNXovKGKH15rJA9FXC+SQo3o3Y9tYYCGLD92GyLm2okov+0RGeuEoiNp2A+CEYPg==
+"@medux/core@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/core/-/core-2.0.0-beta.3.28.tgz#f689d038f649903cb575957ef2a58282535e104d"
+  integrity sha512-TJaC+J7+deiUMyHpRPlI/lfZF9jlWkvd2g7pD4VhZWsx13sRv4fULmdUkDfdgksT9oyeuJhy4dOGTW6VuuBWtQ==
   dependencies:
     "@babel/runtime" "~7.12.5"
     redux "^4.0.5"
@@ -1349,33 +1349,33 @@
     eslint-plugin-react "~7.21.5"
     eslint-plugin-react-hooks "~4.2.0"
 
-"@medux/react-web-router@~2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.27.tgz#1268a41a86fa501bf7b46dea3f64ad29285d649d"
-  integrity sha512-VG1XHv9OMeext3lhaWplkZVEu3eQBwHsv0iCTDVVEWTevxQGPkiXGjwFeUNJqMMgcMpC//8NtOSblKcngGDcJQ==
+"@medux/react-web-router@~2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/react-web-router/-/react-web-router-2.0.0-beta.3.28.tgz#c7f5e2ee1535f6bdb0c1dfa56ec4e2202a8664c1"
+  integrity sha512-L6yMTMf9QPGSggH14wTNsF2EYvNLb2xKYDPJh72xY40ZJkT59ULwUn4BIH7xcCxAQWYT86IAw56TYZO25Eht8Q==
   dependencies:
-    "@medux/core" "^2.0.0-beta.3.27"
-    "@medux/route-browser" "^2.0.0-beta.3.27"
-    "@medux/route-web" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
+    "@medux/route-browser" "^2.0.0-beta.3.28"
+    "@medux/route-web" "^2.0.0-beta.3.28"
 
-"@medux/route-browser@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/route-browser/-/route-browser-2.0.0-beta.3.27.tgz#2dec0d8d1452bfde4b2c55f9f149b90eb2596fe1"
-  integrity sha512-R8BiE62QFdAKRhKtEm5yUv4urhIqYSVCpjmizhe+ql0T+lnb4nXFSKCCF//dTydvwWCclMgbiyX77lOcPGm1eg==
+"@medux/route-browser@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/route-browser/-/route-browser-2.0.0-beta.3.28.tgz#65cb85bfee46875081a6c9d6b14c307f0cb89630"
+  integrity sha512-xb5u7tMTBDhvvdFg2z2Ysl9tEyrzZm3mnevjuQJCHOdXCkwjUZXhn5uqXRQOTmK+I6/72cpp30ogtnR8s72+Ug==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.27"
-    "@medux/route-web" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
+    "@medux/route-web" "^2.0.0-beta.3.28"
     "@types/history" "~4.7.7"
     history "~4.10.1"
 
-"@medux/route-web@^2.0.0-beta.3.27":
-  version "2.0.0-beta.3.27"
-  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.27.tgz#e6b63799390af4e26ad06eaed954c08bf6dbad6d"
-  integrity sha512-SraMfJj10sIESRFymLJGNH0rJO33r3xsvxRWNfyMTqTd40ltWtzLMBEj72CTR6Q7Y7t5jRNmRkdkBgQFrpnL+g==
+"@medux/route-web@^2.0.0-beta.3.28":
+  version "2.0.0-beta.3.28"
+  resolved "https://registry.yarnpkg.com/@medux/route-web/-/route-web-2.0.0-beta.3.28.tgz#0d3314b2132dd962330caab78b8ae3b86fb9db5d"
+  integrity sha512-Woe5/e6JrKTcz3gWecgxJ8N4X7mmv1XWD7s9bmiynBpCDwW11+g2lLor4FFQznyKjJJuSTm1wQj/mfhbUIRVLg==
   dependencies:
     "@babel/runtime" "~7.12.5"
-    "@medux/core" "^2.0.0-beta.3.27"
+    "@medux/core" "^2.0.0-beta.3.28"
 
 "@medux/stylelint-config-recommended@^1.0.0":
   version "1.0.0"

@@ -46,7 +46,7 @@
     "@tarojs/runtime": "3.0.24",
     "@tarojs/taro": "3.0.24",
     "@tarojs/react": "3.0.24",
-    "pp-scroll":"^1.0.5",
+    "pp-scroll":"^1.1.0",
     "taro-ui": "next",
     "react-redux": "^7.2.0",
     "react-dom": "^16.10.0",
